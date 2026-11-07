@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Plus,
@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import { useAuth } from "../context/AuthContext";
 import BlogPreviewModal from "../components/blog/BlogPreviewModal";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
 export default function AdminBlogListPage() {
   const { token } = useAuth();

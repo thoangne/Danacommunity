@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+﻿import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -11,7 +11,7 @@ import BlogArticlesGrid from "../components/blog/BlogArticlesGrid";
 import BlogCTASection from "../components/blog/BlogCTASection";
 import { BLOG_ARTICLES, type BlogArticle, type BlogMainCategoryType } from "../data/blogData";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
 export default function BlogPage() {
   const [searchParams, setSearchParams] = useSearchParams();

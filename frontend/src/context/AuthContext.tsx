@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+﻿import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { supabase, isSupabaseConfigured } from "../lib/supabase";
 import { toast } from "sonner";
 
@@ -30,7 +30,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const API_BASE = import.meta.env.VITE_API_URL || "/api";
 const STORAGE_KEY_USER = "champa_auth_user";
 const STORAGE_KEY_TOKEN = "champa_auth_token";
 

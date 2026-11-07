@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import {
   ArrowLeft,
@@ -20,7 +20,7 @@ import { toast } from "sonner";
 import { useAuth } from "../context/AuthContext";
 import BlogPreviewModal from "../components/blog/BlogPreviewModal";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
 const PRESET_COVER_IMAGES = [
   {

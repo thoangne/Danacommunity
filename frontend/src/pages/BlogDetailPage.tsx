@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+﻿import { useState, useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { X } from "lucide-react";
 import Header from "../components/Header";
@@ -13,7 +13,7 @@ import BlogDetailRelated from "../components/blog/BlogDetailRelated";
 import BlogDetailComments from "../components/blog/BlogDetailComments";
 import { getBlogDetailBySlug, type BlogDetailArticle } from "../data/blogDetailData";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
 export default function BlogDetailPage() {
   const { articleSlug } = useParams<{ articleSlug: string }>();

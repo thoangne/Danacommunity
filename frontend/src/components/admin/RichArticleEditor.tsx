@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+﻿import { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
   ArrowLeft,
@@ -25,7 +25,7 @@ import { useAuth } from "../../context/AuthContext";
 import MediaPickerModal from "./MediaPickerModal";
 import BlogPreviewModal from "../blog/BlogPreviewModal";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
 interface CategoryOption {
   id: string;
