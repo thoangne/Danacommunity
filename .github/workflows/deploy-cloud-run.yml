@@ -1,0 +1,102 @@
+name: Deploy to Google Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: cloud-run-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  PROJECT_ID: danacommunity
+  REGION: asia-southeast1
+  SERVICE_NAME: champa-web
+
+jobs:
+  deploy:
+    name: Build & Deploy to Cloud Run
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Generate Production env.yaml
+        env:
+          ENV_YAML_SECRET: ${{ secrets.ENV_YAML }}
+          DATABASE_URL_SECRET: ${{ secrets.DATABASE_URL }}
+          SUPABASE_URL_SECRET: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY_SECRET: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_ANON_KEY_SECRET: ${{ secrets.SUPABASE_ANON_KEY }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET }}
+          FRONTEND_URL_SECRET: ${{ secrets.FRONTEND_URL }}
+          BACKEND_URL_SECRET: ${{ secrets.BACKEND_URL }}
+          GOOGLE_CLIENT_ID_SECRET: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET_VAL: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_CALLBACK_URL_SECRET: ${{ secrets.GOOGLE_CALLBACK_URL }}
+          FACEBOOK_APP_ID_SECRET: ${{ secrets.FACEBOOK_APP_ID }}
+          FACEBOOK_APP_SECRET_VAL: ${{ secrets.FACEBOOK_APP_SECRET }}
+          FACEBOOK_CALLBACK_URL_SECRET: ${{ secrets.FACEBOOK_CALLBACK_URL }}
+        run: |
+          if [ -n "$ENV_YAML_SECRET" ]; then
+            echo "✅ Using single ENV_YAML secret..."
+            printf "%s\n" "$ENV_YAML_SECRET" > env.yaml
+          else
+            echo "ℹ️ Generating env.yaml from individual secrets..."
+            cat <<EOF > env.yaml
+NODE_ENV: "production"
+SUPABASE_STORAGE_BUCKET: "media"
+DATABASE_URL: "$DATABASE_URL_SECRET"
+SUPABASE_URL: "$SUPABASE_URL_SECRET"
+SUPABASE_SERVICE_ROLE_KEY: "$SUPABASE_SERVICE_ROLE_KEY_SECRET"
+SUPABASE_ANON_KEY: "$SUPABASE_ANON_KEY_SECRET"
+JWT_SECRET: "$JWT_SECRET_KEY"
+FRONTEND_URL: "$FRONTEND_URL_SECRET"
+BACKEND_URL: "$BACKEND_URL_SECRET"
+GOOGLE_CLIENT_ID: "$GOOGLE_CLIENT_ID_SECRET"
+GOOGLE_CLIENT_SECRET: "$GOOGLE_CLIENT_SECRET_VAL"
+GOOGLE_CALLBACK_URL: "$GOOGLE_CALLBACK_URL_SECRET"
+FACEBOOK_APP_ID: "$FACEBOOK_APP_ID_SECRET"
+FACEBOOK_APP_SECRET: "$FACEBOOK_APP_SECRET_VAL"
+FACEBOOK_CALLBACK_URL: "$FACEBOOK_CALLBACK_URL_SECRET"
+EOF
+          fi
+
+          # Sanity check: Ensure env.yaml was created and is not empty
+          if [ ! -s env.yaml ]; then
+            echo "❌ Error: env.yaml is empty! Please configure ENV_YAML or individual secrets in GitHub."
+            exit 1
+          fi
+          echo "✅ env.yaml successfully prepared."
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy ${{ env.SERVICE_NAME }} \
+            --source . \
+            --region ${{ env.REGION }} \
+            --project ${{ env.PROJECT_ID }} \
+            --allow-unauthenticated \
+            --env-vars-file env.yaml
+
+      - name: Output Service URL
+        run: |
+          echo "🎉 Service deployed successfully!"
+          gcloud run services describe ${{ env.SERVICE_NAME }} \
+            --region ${{ env.REGION }} \
+            --project ${{ env.PROJECT_ID }} \
+            --format="value(status.url)"
