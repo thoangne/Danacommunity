@@ -58,26 +58,25 @@ jobs:
             printf "%s\n" "$ENV_YAML_SECRET" > env.yaml
           else
             echo "ℹ️ Generating env.yaml from individual secrets..."
-            cat <<EOF > env.yaml
-NODE_ENV: "production"
-SUPABASE_STORAGE_BUCKET: "media"
-DATABASE_URL: "$DATABASE_URL_SECRET"
-SUPABASE_URL: "$SUPABASE_URL_SECRET"
-SUPABASE_SERVICE_ROLE_KEY: "$SUPABASE_SERVICE_ROLE_KEY_SECRET"
-SUPABASE_ANON_KEY: "$SUPABASE_ANON_KEY_SECRET"
-JWT_SECRET: "$JWT_SECRET_KEY"
-FRONTEND_URL: "$FRONTEND_URL_SECRET"
-BACKEND_URL: "$BACKEND_URL_SECRET"
-GOOGLE_CLIENT_ID: "$GOOGLE_CLIENT_ID_SECRET"
-GOOGLE_CLIENT_SECRET: "$GOOGLE_CLIENT_SECRET_VAL"
-GOOGLE_CALLBACK_URL: "$GOOGLE_CALLBACK_URL_SECRET"
-FACEBOOK_APP_ID: "$FACEBOOK_APP_ID_SECRET"
-FACEBOOK_APP_SECRET: "$FACEBOOK_APP_SECRET_VAL"
-FACEBOOK_CALLBACK_URL: "$FACEBOOK_CALLBACK_URL_SECRET"
-EOF
+            {
+              echo 'NODE_ENV: "production"'
+              echo 'SUPABASE_STORAGE_BUCKET: "media"'
+              echo "DATABASE_URL: \"$DATABASE_URL_SECRET\""
+              echo "SUPABASE_URL: \"$SUPABASE_URL_SECRET\""
+              echo "SUPABASE_SERVICE_ROLE_KEY: \"$SUPABASE_SERVICE_ROLE_KEY_SECRET\""
+              echo "SUPABASE_ANON_KEY: \"$SUPABASE_ANON_KEY_SECRET\""
+              echo "JWT_SECRET: \"$JWT_SECRET_KEY\""
+              echo "FRONTEND_URL: \"$FRONTEND_URL_SECRET\""
+              echo "BACKEND_URL: \"$BACKEND_URL_SECRET\""
+              echo "GOOGLE_CLIENT_ID: \"$GOOGLE_CLIENT_ID_SECRET\""
+              echo "GOOGLE_CLIENT_SECRET: \"$GOOGLE_CLIENT_SECRET_VAL\""
+              echo "GOOGLE_CALLBACK_URL: \"$GOOGLE_CALLBACK_URL_SECRET\""
+              echo "FACEBOOK_APP_ID: \"$FACEBOOK_APP_ID_SECRET\""
+              echo "FACEBOOK_APP_SECRET: \"$FACEBOOK_APP_SECRET_VAL\""
+              echo "FACEBOOK_CALLBACK_URL: \"$FACEBOOK_CALLBACK_URL_SECRET\""
+            } > env.yaml
           fi
 
-          # Sanity check: Ensure env.yaml was created and is not empty
           if [ ! -s env.yaml ]; then
             echo "❌ Error: env.yaml is empty! Please configure ENV_YAML or individual secrets in GitHub."
             exit 1
