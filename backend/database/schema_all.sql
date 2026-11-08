@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS public.profiles (
     phone_number VARCHAR(25),
     role VARCHAR(20) DEFAULT 'customer' CHECK (role IN ('customer', 'artisan', 'guide', 'admin')),
     provider VARCHAR(50) DEFAULT 'email',
+    email_verified BOOLEAN DEFAULT FALSE,
     bio TEXT,
     address TEXT,
     preferences JSONB DEFAULT '{}'::jsonb,
@@ -75,6 +76,24 @@ CREATE TRIGGER on_auth_user_created
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Public profiles are viewable by everyone" ON public.profiles FOR SELECT USING (true);
 CREATE POLICY "Users can update their own profile" ON public.profiles FOR UPDATE USING (auth.uid() = id);
+
+-- 1.1 OAUTH SOCIAL ACCOUNTS
+CREATE TABLE IF NOT EXISTS public.oauth_accounts (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+    provider VARCHAR(50) NOT NULL, -- 'google' | 'facebook'
+    provider_user_id VARCHAR(255) NOT NULL,
+    provider_email VARCHAR(255),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    CONSTRAINT uq_oauth_accounts_provider_uid UNIQUE (provider, provider_user_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_oauth_accounts_user_id ON public.oauth_accounts(user_id);
+CREATE INDEX IF NOT EXISTS idx_oauth_accounts_provider_uid ON public.oauth_accounts(provider, provider_user_id);
+
+ALTER TABLE public.oauth_accounts ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Users can view their own oauth accounts" ON public.oauth_accounts FOR SELECT USING (auth.uid() = user_id);
 
 -- 2. BLOGS & COMMENTS
 CREATE TABLE IF NOT EXISTS public.blog_categories (
