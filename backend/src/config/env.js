@@ -8,6 +8,22 @@ const NODE_ENV = process.env.NODE_ENV || "development";
 const PORT = parseInt(process.env.PORT, 10) || 5000;
 const DATABASE_URL = (process.env.DATABASE_URL || "").trim();
 
+// Application URLs
+const FRONTEND_URL = (process.env.FRONTEND_URL || "http://localhost:5173").trim().replace(/\/+$/, "");
+const BACKEND_URL = (process.env.BACKEND_URL || "http://localhost:5000").trim().replace(/\/+$/, "");
+
+// OAuth & Authentication credentials
+const JWT_SECRET = process.env.JWT_SECRET || (NODE_ENV === "production" ? "" : "champaweb_dev_jwt_secret_key_minimum_32_characters_long");
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d";
+
+const GOOGLE_CLIENT_ID = (process.env.GOOGLE_CLIENT_ID || "").trim();
+const GOOGLE_CLIENT_SECRET = (process.env.GOOGLE_CLIENT_SECRET || "").trim();
+const GOOGLE_CALLBACK_URL = (process.env.GOOGLE_CALLBACK_URL || `${BACKEND_URL}/api/auth/google/callback`).trim();
+
+const FACEBOOK_APP_ID = (process.env.FACEBOOK_APP_ID || "").trim();
+const FACEBOOK_APP_SECRET = (process.env.FACEBOOK_APP_SECRET || "").trim();
+const FACEBOOK_CALLBACK_URL = (process.env.FACEBOOK_CALLBACK_URL || `${BACKEND_URL}/api/auth/facebook/callback`).trim();
+
 /**
  * Validates required environment variables during application startup.
  * Fails fast if critical production configurations are missing or insecure.
@@ -39,11 +55,25 @@ function validateEnv() {
         errors.push("DATABASE_URL must be a valid PostgreSQL connection URI starting with postgresql:// or postgres://.");
       }
     }
+
+    if (!JWT_SECRET) {
+      errors.push("JWT_SECRET is required in production environment.");
+    }
   } else {
     // Development or test environment
     if (!DATABASE_URL) {
       console.warn(
         "⚠️ [DATABASE] DATABASE_URL is not set in backend/.env. Using default local development connection: postgresql://champa_user:champa_password@localhost:5432/champa_dev"
+      );
+    }
+    if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
+      console.warn(
+        "ℹ️ [OAUTH] GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET is not configured in backend/.env. Google login will require real credentials in live mode."
+      );
+    }
+    if (!FACEBOOK_APP_ID || !FACEBOOK_APP_SECRET) {
+      console.warn(
+        "ℹ️ [OAUTH] FACEBOOK_APP_ID or FACEBOOK_APP_SECRET is not configured in backend/.env. Facebook login will require real credentials in live mode."
       );
     }
   }
@@ -67,6 +97,16 @@ module.exports = {
   SUPABASE_URL: process.env.SUPABASE_URL || "",
   SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY || "",
   SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || "",
+  FRONTEND_URL,
+  BACKEND_URL,
+  JWT_SECRET,
+  JWT_EXPIRES_IN,
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
+  GOOGLE_CALLBACK_URL,
+  FACEBOOK_APP_ID,
+  FACEBOOK_APP_SECRET,
+  FACEBOOK_CALLBACK_URL,
   validateEnv,
 };
 
