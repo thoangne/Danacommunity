@@ -216,7 +216,7 @@ class AuthService {
           try {
             const profile = await db("profiles").where("id", user.id).orWhere("email", cleanEmail).first();
             if (profile?.role) role = profile.role;
-          } catch (_) {}
+          } catch (_) { }
         }
 
         return {
@@ -335,7 +335,7 @@ class AuthService {
         try {
           const profile = await db("profiles").where("id", user.id).orWhere("email", user.email).first();
           if (profile?.role) role = profile.role;
-        } catch (_) {}
+        } catch (_) { }
       }
 
       return {

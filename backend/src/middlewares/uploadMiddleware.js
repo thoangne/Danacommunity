@@ -30,7 +30,6 @@ const fileFilter = (req, file, cb) => {
     "image/png",
     "image/webp",
     "image/gif",
-    "image/svg+xml",
   ];
 
   if (allowedMimes.includes(file.mimetype)) {
@@ -38,7 +37,7 @@ const fileFilter = (req, file, cb) => {
   } else {
     cb(
       new Error(
-        "Định dạng tệp không được hỗ trợ! Vui lòng chỉ tải lên ảnh JPG, PNG, WEBP, GIF hoặc SVG."
+        "Định dạng tệp không được hỗ trợ! Vui lòng chỉ tải lên ảnh JPG, PNG, WEBP hoặc GIF (không hỗ trợ SVG vì lý do an toàn mã độc)."
       ),
       false
     );

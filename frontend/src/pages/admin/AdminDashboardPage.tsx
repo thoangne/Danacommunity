@@ -13,6 +13,8 @@ import {
   CheckCircle2,
   AlertCircle,
   Loader2,
+  Package,
+  Award,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import AdminLayout from "../../components/admin/AdminLayout";
@@ -40,6 +42,15 @@ interface DashboardMetrics {
   media: {
     total: number;
     totalSize: number;
+  };
+  products?: {
+    total: number;
+    featured: number;
+    outOfStock: number;
+  };
+  artisans?: {
+    total: number;
+    active: number;
   };
   recentContent: Array<{
     id: string;
@@ -149,6 +160,20 @@ export default function AdminDashboardPage() {
                 <Newspaper className="w-3.5 h-3.5" />
                 <span>Đăng tin tức mới</span>
               </Link>
+              <Link
+                to="/admin/products"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/20 hover:bg-white/30 text-white text-xs font-semibold backdrop-blur-xs border border-white/25 transition-all cursor-pointer"
+              >
+                <Package className="w-3.5 h-3.5" />
+                <span>Quản lý sản phẩm</span>
+              </Link>
+              <Link
+                to="/admin/artisans"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/20 hover:bg-white/30 text-white text-xs font-semibold backdrop-blur-xs border border-white/25 transition-all cursor-pointer"
+              >
+                <Award className="w-3.5 h-3.5" />
+                <span>Hồ sơ nghệ nhân</span>
+              </Link>
             </div>
           </div>
           {/* Subtle background ornamentation */}
@@ -165,7 +190,7 @@ export default function AdminDashboardPage() {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
               {/* Metric 1: Articles */}
               <div className="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs hover:shadow-xs transition-all space-y-3">
                 <div className="flex items-center justify-between">
@@ -232,7 +257,69 @@ export default function AdminDashboardPage() {
                 </Link>
               </div>
 
-              {/* Metric 3: Users */}
+              {/* Metric 3: Products */}
+              <div className="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs hover:shadow-xs transition-all space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">
+                    Tác phẩm Làng nghề
+                  </span>
+                  <div className="w-9 h-9 rounded-xl bg-orange-50 text-orange-800 flex items-center justify-center">
+                    <Package className="w-4 h-4" />
+                  </div>
+                </div>
+                <div>
+                  <div className="text-2xl font-serif font-bold text-stone-900">
+                    {data?.products?.total || 8}
+                  </div>
+                  <div className="flex items-center gap-2 mt-1 text-[11px] text-stone-500">
+                    <span className="text-emerald-700 font-semibold">
+                      {data?.products?.featured || 4} độc bản tiêu biểu
+                    </span>
+                    <span>•</span>
+                    <span className="text-stone-500">Gốm & Thổ cẩm</span>
+                  </div>
+                </div>
+                <Link
+                  to="/admin/products"
+                  className="inline-flex items-center gap-1 text-xs text-orange-800 font-semibold hover:underline pt-1"
+                >
+                  <span>Quản lý tác phẩm</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+
+              {/* Metric 4: Artisans */}
+              <div className="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs hover:shadow-xs transition-all space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">
+                    Nghệ nhân Chăm
+                  </span>
+                  <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-900 flex items-center justify-center">
+                    <Award className="w-4 h-4" />
+                  </div>
+                </div>
+                <div>
+                  <div className="text-2xl font-serif font-bold text-stone-900">
+                    {data?.artisans?.total || 4}
+                  </div>
+                  <div className="flex items-center gap-2 mt-1 text-[11px] text-stone-500">
+                    <span className="text-emerald-700 font-semibold">
+                      {data?.artisans?.active || 4} đang đón khách
+                    </span>
+                    <span>•</span>
+                    <span className="text-stone-500">Bàu Trúc & Mỹ Nghiệp</span>
+                  </div>
+                </div>
+                <Link
+                  to="/admin/artisans"
+                  className="inline-flex items-center gap-1 text-xs text-amber-900 font-semibold hover:underline pt-1"
+                >
+                  <span>Hồ sơ nghệ nhân</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+
+              {/* Metric 5: Users */}
               <div className="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs hover:shadow-xs transition-all space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">
@@ -265,7 +352,7 @@ export default function AdminDashboardPage() {
                 </Link>
               </div>
 
-              {/* Metric 4: Media */}
+              {/* Metric 6: Media */}
               <div className="bg-white p-5 rounded-2xl border border-stone-200 shadow-2xs hover:shadow-xs transition-all space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">

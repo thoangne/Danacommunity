@@ -11,6 +11,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Sparkles,
+  Package,
+  Award,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
@@ -74,6 +76,21 @@ export default function AdminSidebar({
           label: "Chuyên mục & Thẻ",
           href: "/admin/categories",
           icon: FolderTree,
+        },
+      ],
+    },
+    {
+      group: "LÀNG NGHỀ & NGHỆ NHÂN",
+      items: [
+        {
+          label: "Tác phẩm thủ công",
+          href: "/admin/products",
+          icon: Package,
+        },
+        {
+          label: "Hồ sơ nghệ nhân",
+          href: "/admin/artisans",
+          icon: Award,
         },
       ],
     },

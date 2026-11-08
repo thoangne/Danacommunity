@@ -27,6 +27,24 @@ const authenticateUser = async (req, res, next) => {
   }
 };
 
+const authenticateOptional = async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      const token = authHeader.split(" ")[1];
+      const user = await authService.verifyToken(token);
+      if (user) {
+        req.user = user;
+      }
+    }
+    next();
+  } catch {
+    next();
+  }
+};
+
 module.exports = {
   authenticateUser,
+  authenticateOptional,
 };
+

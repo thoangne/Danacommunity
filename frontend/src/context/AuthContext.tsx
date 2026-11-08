@@ -16,14 +16,18 @@ interface AuthContextType {
   token: string | null;
   isLoading: boolean;
   isAdmin: boolean;
+  isSuperAdmin: boolean;
+  isEditor: boolean;
+  isAuthorizedCMS: boolean;
   isAuthModalOpen: boolean;
   authModalTab: "login" | "register";
   openAuthModal: (tab?: "login" | "register") => void;
   closeAuthModal: () => void;
   login: (email: string, password: string) => Promise<boolean>;
   register: (email: string, password: string, fullName: string) => Promise<boolean>;
-  loginWithGoogle: () => Promise<void>;
-  loginWithFacebook: () => Promise<void>;
+  loginWithGoogle: (returnTo?: string) => Promise<void>;
+  loginWithFacebook: (returnTo?: string) => Promise<void>;
+  handleAuthSuccess: (token: string, initialUser?: UserProfile) => Promise<UserProfile | null>;
   resetPassword: (email: string) => Promise<boolean>;
   logout: () => Promise<void>;
 }
@@ -62,6 +66,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (isSupabaseConfigured()) {
           const { data: { session } } = await supabase.auth.getSession();
           if (session?.user) {
+            let roleFromStorage = "customer";
+            if (savedUser) {
+              try {
+                const parsed = JSON.parse(savedUser);
+                if (parsed && typeof parsed.role === "string") {
+                  roleFromStorage = parsed.role;
+                }
+              } catch {
+                roleFromStorage = "customer";
+              }
+            }
+
+            const mappedRole =
+              session.user.app_metadata?.role ||
+              session.user.user_metadata?.role ||
+              roleFromStorage;
+
             const mappedUser: UserProfile = {
               id: session.user.id,
               email: session.user.email || "",
@@ -75,6 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 session.user.user_metadata?.picture ||
                 "",
               provider: (session.user.app_metadata?.provider as any) || "email",
+              role: mappedRole,
             };
             setUser(mappedUser);
             setToken(session.access_token);
@@ -86,6 +108,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           const { data: authListener } = supabase.auth.onAuthStateChange(
             async (_event: any, session: any) => {
               if (session?.user) {
+                const mappedRole =
+                  session.user.app_metadata?.role ||
+                  session.user.user_metadata?.role ||
+                  "customer";
+
                 const mappedUser: UserProfile = {
                   id: session.user.id,
                   email: session.user.email || "",
@@ -99,6 +126,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     session.user.user_metadata?.picture ||
                     "",
                   provider: (session.user.app_metadata?.provider as any) || "email",
+                  role: mappedRole,
                 };
                 setUser(mappedUser);
                 setToken(session.access_token);
@@ -274,106 +302,86 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // 4. Đăng nhập bằng Google OAuth
-  const loginWithGoogle = async (): Promise<void> => {
+  // 4. Đăng nhập bằng Google OAuth 2.0 (Backend Authorization Code Flow)
+  const loginWithGoogle = async (returnTo?: string): Promise<void> => {
     setIsLoading(true);
     try {
-      if (isSupabaseConfigured()) {
-        const redirectUrl = `${window.location.origin}/auth/callback`;
-        const { error } = await supabase.auth.signInWithOAuth({
-          provider: "google",
-          options: {
-            redirectTo: redirectUrl,
-            queryParams: {
-              access_type: "offline",
-              prompt: "consent",
-            },
-          },
-        });
-
-        if (error) {
-          toast.error(`Lỗi Google OAuth: ${error.message}`);
-          setIsLoading(false);
-        }
-        return;
-      }
-
-      // Demo/Dev Fallback Mode cho môi trường chưa gắn API Key Google
-      const mockGoogleUser: UserProfile = {
-        id: `google-${Date.now()}`,
-        email: "google.chamuser@gmail.com",
-        fullName: "Google Explorer Champa",
-        avatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80",
-        provider: "google",
-      };
-
-      const mockToken = `mock-google-token-${Date.now()}`;
-      setUser(mockGoogleUser);
-      setToken(mockToken);
-      localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(mockGoogleUser));
-      localStorage.setItem(STORAGE_KEY_TOKEN, mockToken);
-
-      toast.success("Đăng nhập bằng Google thành công! (Chế độ mô phỏng)");
-      closeAuthModal();
-    } catch (err: any) {
+      const destination = returnTo || window.location.pathname;
+      window.location.href = `${API_BASE}/auth/google?returnTo=${encodeURIComponent(destination)}`;
+    } catch (err: unknown) {
       console.error("Google login error:", err);
-      toast.error(err?.message || "Đăng nhập Google thất bại.");
-    } finally {
+      toast.error(err instanceof Error ? err.message : "Không thể khởi tạo phiên đăng nhập Google.");
       setIsLoading(false);
     }
   };
 
-  // 5. Đăng nhập bằng Facebook OAuth
-  const loginWithFacebook = async (): Promise<void> => {
+  // 5. Đăng nhập bằng Facebook OAuth 2.0 (Backend Authorization Code Flow)
+  const loginWithFacebook = async (returnTo?: string): Promise<void> => {
     setIsLoading(true);
     try {
-      if (isSupabaseConfigured()) {
-        const redirectUrl = `${window.location.origin}/auth/callback`;
-        const { error } = await supabase.auth.signInWithOAuth({
-          provider: "facebook",
-          options: {
-            redirectTo: redirectUrl,
-            scopes: "email,public_profile",
-          },
-        });
+      const destination = returnTo || window.location.pathname;
+      window.location.href = `${API_BASE}/auth/facebook?returnTo=${encodeURIComponent(destination)}`;
+    } catch (err: unknown) {
+      console.error("Facebook login error:", err);
+      toast.error(err instanceof Error ? err.message : "Không thể khởi tạo phiên đăng nhập Facebook.");
+      setIsLoading(false);
+    }
+  };
 
-        if (error) {
-          toast.error(`Lỗi Facebook OAuth: ${error.message}`);
-          setIsLoading(false);
-        }
-        return;
+  // 5.1 Xử lý đồng bộ phiên đăng nhập thành công từ OAuth Callback
+  const handleAuthSuccess = async (accessToken: string, initialUser?: UserProfile): Promise<UserProfile | null> => {
+    setIsLoading(true);
+    try {
+      setToken(accessToken);
+      localStorage.setItem(STORAGE_KEY_TOKEN, accessToken);
+
+      if (initialUser) {
+        setUser(initialUser);
+        localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(initialUser));
       }
 
-      // Demo/Dev Fallback Mode cho môi trường chưa gắn API Key Facebook
-      const mockFbUser: UserProfile = {
-        id: `facebook-${Date.now()}`,
-        email: "fb.chamtraveler@facebook.com",
-        fullName: "Facebook Traveler Dana",
-        avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80",
-        provider: "facebook",
-      };
+      const response = await fetch(`${API_BASE}/auth/me`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          Accept: "application/json",
+        },
+      });
 
-      const mockToken = `mock-fb-token-${Date.now()}`;
-      setUser(mockFbUser);
-      setToken(mockToken);
-      localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(mockFbUser));
-      localStorage.setItem(STORAGE_KEY_TOKEN, mockToken);
+      if (response.ok) {
+        const resData = await response.json();
+        if (resData.success && resData.data?.user) {
+          const syncedUser = resData.data.user;
+          setUser(syncedUser);
+          localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(syncedUser));
+          return syncedUser;
+        }
+      }
 
-      toast.success("Đăng nhập bằng Facebook thành công! (Chế độ mô phỏng)");
-      closeAuthModal();
-    } catch (err: any) {
-      console.error("Facebook login error:", err);
-      toast.error(err?.message || "Đăng nhập Facebook thất bại.");
+      return initialUser || null;
+    } catch (err) {
+      console.error("Failed to sync user profile after OAuth:", err);
+      return initialUser || null;
     } finally {
       setIsLoading(false);
+      closeAuthModal();
     }
   };
 
   // 6. Đăng xuất
   const logout = async (): Promise<void> => {
     try {
+      if (token) {
+        await fetch(`${API_BASE}/auth/logout`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }).catch(() => {});
+      }
+
       if (isSupabaseConfigured()) {
-        await supabase.auth.signOut();
+        await supabase.auth.signOut().catch(() => {});
       }
     } catch (err) {
       console.error("SignOut error:", err);
@@ -413,7 +421,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const isAdmin = Boolean(user && (user.role === "admin" || user.email === "admin@champaweb.vn"));
+  const isSuperAdmin = Boolean(user && user.role === "super_admin");
+  const isEditor = Boolean(user && (user.role === "editor" || user.role === "admin" || user.role === "super_admin"));
+  const isAdmin = Boolean(user && (user.role === "admin" || user.role === "super_admin" || user.email === "admin@champaweb.vn"));
+  const isAuthorizedCMS = Boolean(user && (["super_admin", "admin", "editor"].includes(user.role || "") || user.email === "admin@champaweb.vn"));
 
   return (
     <AuthContext.Provider
@@ -422,6 +433,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         token,
         isLoading,
         isAdmin,
+        isSuperAdmin,
+        isEditor,
+        isAuthorizedCMS,
         isAuthModalOpen,
         authModalTab,
         openAuthModal,
@@ -430,6 +444,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         register,
         loginWithGoogle,
         loginWithFacebook,
+        handleAuthSuccess,
         resetPassword,
         logout,
       }}

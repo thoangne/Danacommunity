@@ -1,5 +1,6 @@
 const adminService = require("../services/adminService");
 const activityLogService = require("../services/activityLogService");
+const storageService = require("../services/storageService");
 
 class AdminController {
   // 1. Dashboard
@@ -205,18 +206,17 @@ class AdminController {
         });
       }
 
-      const file = req.file;
       const actor = req.user;
-      const fileUrl = `/uploads/${file.filename}`;
+      const uploadedInfo = await storageService.saveFile(req.file);
 
       const saved = await adminService.saveMediaFile(
         {
-          filename: file.filename,
-          originalName: file.originalname,
-          mimeType: file.mimetype,
-          size: file.size,
+          filename: uploadedInfo.filename,
+          originalName: uploadedInfo.originalName,
+          mimeType: uploadedInfo.mimeType,
+          size: uploadedInfo.size,
           dimensions: null,
-          url: fileUrl,
+          url: uploadedInfo.url,
         },
         actor
       );
@@ -396,6 +396,209 @@ class AdminController {
           page: result.page,
           limit: result.limit,
         },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // =========================================================================
+  // 8. ARTISANS MANAGEMENT (HỒ SƠ NGHỆ NHÂN CHĂM)
+  // =========================================================================
+  async getArtisans(req, res, next) {
+    try {
+      const { search, village, isActive, page, limit } = req.query;
+      const result = await adminService.getArtisans({
+        search: search || "",
+        village: village || "all",
+        isActive: isActive !== undefined ? isActive : "all",
+        page: page ? parseInt(page, 10) : 1,
+        limit: limit ? parseInt(limit, 10) : 15,
+      });
+
+      res.status(200).json({
+        success: true,
+        data: result.artisans,
+        pagination: {
+          total: result.total,
+          page: result.page,
+          limit: result.limit,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getArtisanById(req, res, next) {
+    try {
+      const { id } = req.params;
+      const artisan = await adminService.getArtisanById(id);
+      if (!artisan) {
+        return res.status(404).json({
+          success: false,
+          message: "Không tìm thấy hồ sơ nghệ nhân.",
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        data: artisan,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async createArtisan(req, res, next) {
+    try {
+      const data = req.body;
+      const actor = req.user;
+      const created = await adminService.createArtisan(data, actor);
+
+      res.status(201).json({
+        success: true,
+        message: "Tạo mới hồ sơ nghệ nhân thành công!",
+        data: created,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async updateArtisan(req, res, next) {
+    try {
+      const { id } = req.params;
+      const data = req.body;
+      const actor = req.user;
+      const updated = await adminService.updateArtisan(id, data, actor);
+
+      res.status(200).json({
+        success: true,
+        message: "Cập nhật hồ sơ nghệ nhân thành công!",
+        data: updated,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async deleteArtisan(req, res, next) {
+    try {
+      const { id } = req.params;
+      const actor = req.user;
+      const result = await adminService.deleteArtisan(id, actor);
+
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // =========================================================================
+  // 9. CRAFT PRODUCTS MANAGEMENT (TÁC PHẨM LÀNG NGHỀ)
+  // =========================================================================
+  async getProducts(req, res, next) {
+    try {
+      const { search, category, village, artisanId, isFeatured, page, limit } = req.query;
+      const result = await adminService.getProducts({
+        search: search || "",
+        category: category || "all",
+        village: village || "all",
+        artisanId: artisanId || "all",
+        isFeatured: isFeatured !== undefined ? isFeatured : "all",
+        page: page ? parseInt(page, 10) : 1,
+        limit: limit ? parseInt(limit, 10) : 12,
+      });
+
+      res.status(200).json({
+        success: true,
+        data: result.products,
+        pagination: {
+          total: result.total,
+          page: result.page,
+          limit: result.limit,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getProductById(req, res, next) {
+    try {
+      const { id } = req.params;
+      const product = await adminService.getProductById(id);
+      if (!product) {
+        return res.status(404).json({
+          success: false,
+          message: "Không tìm thấy tác phẩm thủ công.",
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        data: product,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async createProduct(req, res, next) {
+    try {
+      const data = req.body;
+      const actor = req.user;
+      const created = await adminService.createProduct(data, actor);
+
+      res.status(201).json({
+        success: true,
+        message: "Thêm mới tác phẩm làng nghề thành công!",
+        data: created,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async updateProduct(req, res, next) {
+    try {
+      const { id } = req.params;
+      const data = req.body;
+      const actor = req.user;
+      const updated = await adminService.updateProduct(id, data, actor);
+
+      res.status(200).json({
+        success: true,
+        message: "Cập nhật tác phẩm làng nghề thành công!",
+        data: updated,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async deleteProduct(req, res, next) {
+    try {
+      const { id } = req.params;
+      const actor = req.user;
+      const result = await adminService.deleteProduct(id, actor);
+
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  // =========================================================================
+  // 10. CRAFT CATEGORIES
+  // =========================================================================
+  async getCraftCategories(req, res, next) {
+    try {
+      const categories = await adminService.getCraftCategories();
+      res.status(200).json({
+        success: true,
+        data: categories,
       });
     } catch (error) {
       next(error);

@@ -13,16 +13,11 @@ import AudioPlayerBar from "../components/AudioPlayerBar";
 
 export default function DanaHome() {
   const [activeStation, setActiveStation] = useState<number>(1);
-  const [isAudioPlaying, setIsAudioPlaying] = useState<boolean>(false);
-
-  const toggleAudio = () => {
-    setIsAudioPlaying((prev) => !prev);
-  };
 
   return (
     <div className="bg-surface text-on-surface font-body-md flex flex-col min-h-screen">
-      {/* 1. Header (Navbar cố định trên cùng) */}
-      <Header onToggleAudio={toggleAudio} isAudioPlaying={isAudioPlaying} />
+      {/* 1. Header (Navbar cố định trên cùng, kết nối trực tiếp AudioContext) */}
+      <Header />
 
       {/* 2. Main Content Stream */}
       <main className="w-full pt-16 xl:pt-20 bg-surface flex flex-col">
@@ -52,7 +47,7 @@ export default function DanaHome() {
       </main>
 
       <Footer />
-      <AudioPlayerBar isOpen={isAudioPlaying} onClose={() => setIsAudioPlaying(false)} />
+      <AudioPlayerBar />
       <BottomNav />
     </div>
   );

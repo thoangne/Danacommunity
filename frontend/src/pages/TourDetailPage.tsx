@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   Calendar,
@@ -26,6 +26,7 @@ import {
   UtensilsCrossed,
   X,
   ChevronLeft,
+  Loader2,
 } from "lucide-react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -33,8 +34,12 @@ import BottomNav from "../components/BottomNav";
 import AudioPlayerBar from "../components/AudioPlayerBar";
 import { TOURS } from "../data/champaData";
 import { toast } from "../components/ui/sonner";
+import { useAuth } from "../context/AuthContext";
+
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 export default function TourDetailPage() {
+  const { user } = useAuth();
   const { tourSlug } = useParams<{ tourSlug: string }>();
 
   // Tìm tour theo slug hoặc mặc định tour 1
@@ -46,29 +51,36 @@ export default function TourDetailPage() {
   }, [tourSlug]);
 
   // State đặt tour
-  const [selectedDate, setSelectedDate] = useState("2025-05-15");
+  const [selectedDate, setSelectedDate] = useState("2026-12-01");
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
+  const [customerName, setCustomerName] = useState(user?.fullName || "");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [pickupNote, setPickupNote] = useState("");
+  const [isBookingSubmitting, setIsBookingSubmitting] = useState(false);
+  const [confirmedBookingCode, setConfirmedBookingCode] = useState<string | null>(null);
 
-  // State Audio
-  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  // State Audio trích đoạn văn hóa cục bộ của tour
   const [isPlayingLocalAudio, setIsPlayingLocalAudio] = useState(false);
 
   // State mở Modal Lightbox
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 
-  const photos =
-    tour.gallery && tour.gallery.length > 0
-      ? tour.gallery
-      : [
-          {
-            url: tour.image,
-            tag: tour.badge,
-            caption: tour.title,
-            subcaption: tour.description,
-          },
-        ];
+  const photos = useMemo(
+    () =>
+      tour.gallery && tour.gallery.length > 0
+        ? tour.gallery
+        : [
+            {
+              url: tour.image,
+              tag: tour.badge,
+              caption: tour.title,
+              subcaption: tour.description,
+            },
+          ],
+    [tour]
+  );
 
   const handleOpenLightbox = (index: number) => {
     setCurrentPhotoIndex(index);
@@ -105,11 +117,50 @@ export default function TourDetailPage() {
   const childPrice = tour.childPrice ?? 450000;
   const totalPrice = adults * adultPrice + children * childPrice;
 
-  const handleBooking = (e: React.FormEvent) => {
+  const handleBooking = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Đặt giữ chỗ thành công!", {
-      description: `${tour.title} • ${adults} người lớn, ${children} trẻ em • Ngày ${selectedDate}. Điều phối viên Dana sẽ liên hệ qua Zalo/Điện thoại ngay.`,
-    });
+    if (!customerName.trim() || !customerPhone.trim()) {
+      toast.error("Vui lòng cung cấp Họ tên và Số điện thoại liên hệ để giữ chỗ.");
+      return;
+    }
+
+    setIsBookingSubmitting(true);
+    try {
+      const token = localStorage.getItem("token") || localStorage.getItem("auth_token");
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+
+      const res = await fetch(`${API_BASE}/bookings`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          tour_slug: tour.slug,
+          tour_title: tour.title,
+          customer_name: customerName.trim(),
+          customer_phone: customerPhone.trim(),
+          pickup_note: pickupNote.trim(),
+          departure_date: selectedDate,
+          adults,
+          children,
+          total_price: totalPrice,
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        const code = data.data?.bookingCode || data.data?.booking?.booking_code;
+        setConfirmedBookingCode(code);
+        toast.success("Đặt giữ chỗ thành công!", {
+          description: `Mã đặt chỗ: ${code} • ${adults} người lớn, ${children} trẻ em • Ngày ${selectedDate}. Điều phối viên Dana sẽ liên hệ qua Zalo/SĐT ${customerPhone} ngay.`,
+        });
+      } else {
+        toast.error(data.message || "Không thể đặt tour. Vui lòng kiểm tra lại thông tin.");
+      }
+    } catch {
+      toast.error("Lỗi kết nối máy chủ khi đặt tour. Vui lòng thử lại sau.");
+    } finally {
+      setIsBookingSubmitting(false);
+    }
   };
 
   const handleContactZalo = () => {
@@ -120,10 +171,7 @@ export default function TourDetailPage() {
 
   return (
     <div className="bg-surface font-body-md text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col">
-      <Header
-        onToggleAudio={() => setIsAudioPlaying(!isAudioPlaying)}
-        isAudioPlaying={isAudioPlaying}
-      />
+      <Header />
 
       <main className="w-full pt-16 xl:pt-20 bg-surface flex-1">
         {/* Top Heritage Breadcrumb & Title Section */}
@@ -835,139 +883,222 @@ export default function TourDetailPage() {
 
                 <div className="w-full h-px bg-surface-variant/60"></div>
 
-                {/* Booking Form */}
-                <form className="flex flex-col gap-space-sm" onSubmit={handleBooking}>
-                  {/* Date Picker */}
-                  <div className="flex flex-col gap-1">
-                    <label className="font-label-md text-xs text-on-surface font-semibold flex items-center justify-between">
-                      <span>Chọn Ngày Khởi Hành</span>
-                      <span className="text-secondary font-label-sm text-[11px]">Hàng ngày</span>
-                    </label>
-                    <div className="relative flex items-center">
-                      <Calendar className="absolute left-3 text-outline h-4 w-4 pointer-events-none" />
+                {/* Booking Confirmation Success Card */}
+                {confirmedBookingCode ? (
+                  <div className="p-space-md rounded-2xl bg-primary/10 border border-primary/30 flex flex-col gap-3">
+                    <div className="flex items-center gap-2 text-primary font-serif font-bold text-base">
+                      <CheckCircle className="h-5 w-5 text-primary" />
+                      <span>Đặt Giữ Chỗ Thành Công!</span>
+                    </div>
+                    <div className="p-3 bg-white/80 rounded-xl border border-primary/20 flex flex-col gap-1">
+                      <span className="font-label-sm text-xs text-on-surface-variant uppercase tracking-wider">
+                        Mã Xác Nhận Đặt Tour:
+                      </span>
+                      <span className="font-mono text-xl font-extrabold text-primary tracking-wide">
+                        {confirmedBookingCode}
+                      </span>
+                    </div>
+                    <p className="font-body-sm text-xs text-on-surface-variant leading-relaxed">
+                      Điều phối viên bản địa sẽ liên hệ trực tiếp qua số{" "}
+                      <strong className="text-on-surface font-semibold">{customerPhone}</strong> trong vòng 15 phút để xác nhận điểm đón tại Phan Rang.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setConfirmedBookingCode(null)}
+                      className="w-full py-2.5 rounded-xl bg-primary text-on-primary font-label-md text-xs font-semibold hover:bg-primary-container transition-colors"
+                    >
+                      Đặt thêm lượt trải nghiệm khác
+                    </button>
+                  </div>
+                ) : (
+                  /* Booking Form */
+                  <form className="flex flex-col gap-space-sm" onSubmit={handleBooking}>
+                    {/* Date Picker */}
+                    <div className="flex flex-col gap-1">
+                      <label className="font-label-md text-xs text-on-surface font-semibold flex items-center justify-between">
+                        <span>Chọn Ngày Khởi Hành</span>
+                        <span className="text-secondary font-label-sm text-[11px]">Hàng ngày</span>
+                      </label>
+                      <div className="relative flex items-center">
+                        <Calendar className="absolute left-3 text-outline h-4 w-4 pointer-events-none" />
+                        <input
+                          className="w-full pl-10 pr-3 py-2.5 rounded-xl bg-surface text-on-surface font-body-md text-sm focus:outline-none focus:ring-1 focus:ring-primary shadow-sm border border-outline-variant/30"
+                          type="date"
+                          value={selectedDate}
+                          onChange={(e) => setSelectedDate(e.target.value)}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Customer Info Inputs */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-xs">
+                      <div className="flex flex-col gap-1">
+                        <label className="font-label-md text-xs text-on-surface font-semibold">
+                          Họ và tên du khách *
+                        </label>
+                        <input
+                          className="w-full px-3 py-2 rounded-xl bg-surface text-on-surface font-body-md text-xs focus:outline-none focus:ring-1 focus:ring-primary shadow-sm border border-outline-variant/30"
+                          type="text"
+                          required
+                          placeholder="Nguyễn Văn A..."
+                          value={customerName}
+                          onChange={(e) => setCustomerName(e.target.value)}
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <label className="font-label-md text-xs text-on-surface font-semibold">
+                          Số điện thoại / Zalo *
+                        </label>
+                        <input
+                          className="w-full px-3 py-2 rounded-xl bg-surface text-on-surface font-body-md text-xs focus:outline-none focus:ring-1 focus:ring-primary shadow-sm border border-outline-variant/30"
+                          type="tel"
+                          required
+                          placeholder="0918 388 998..."
+                          value={customerPhone}
+                          onChange={(e) => setCustomerPhone(e.target.value)}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Pickup Location Note */}
+                    <div className="flex flex-col gap-1">
+                      <label className="font-label-md text-xs text-on-surface font-semibold">
+                        Khách sạn hoặc điểm đón dự kiến
+                      </label>
                       <input
-                        className="w-full pl-10 pr-3 py-2.5 rounded-xl bg-surface text-on-surface font-body-md text-sm focus:outline-none focus:ring-1 focus:ring-primary shadow-sm border border-outline-variant/30"
-                        type="date"
-                        value={selectedDate}
-                        onChange={(e) => setSelectedDate(e.target.value)}
+                        className="w-full px-3 py-2 rounded-xl bg-surface text-on-surface font-body-md text-xs focus:outline-none focus:ring-1 focus:ring-primary shadow-sm border border-outline-variant/30"
+                        type="text"
+                        placeholder="Khách sạn Sài Gòn - Ninh Chữ, Resort..."
+                        value={pickupNote}
+                        onChange={(e) => setPickupNote(e.target.value)}
                       />
                     </div>
-                  </div>
 
-                  {/* Guest Stepper */}
-                  <div className="flex flex-col gap-1">
-                    <label className="font-label-md text-xs text-on-surface font-semibold">Số Lượng Du Khách</label>
-                    <div className="grid grid-cols-2 gap-space-xs">
-                      {/* Adults Stepper */}
-                      <div className="p-2.5 rounded-xl bg-surface flex items-center justify-between shadow-sm border border-outline-variant/30">
-                        <div>
-                          <span className="font-label-md text-xs text-on-surface block font-medium">Người lớn</span>
-                          <span className="font-body-sm text-[11px] text-on-surface-variant">Từ 12 tuổi</span>
+                    {/* Guest Stepper */}
+                    <div className="flex flex-col gap-1">
+                      <label className="font-label-md text-xs text-on-surface font-semibold">Số Lượng Du Khách</label>
+                      <div className="grid grid-cols-2 gap-space-xs">
+                        {/* Adults Stepper */}
+                        <div className="p-2.5 rounded-xl bg-surface flex items-center justify-between shadow-sm border border-outline-variant/30">
+                          <div>
+                            <span className="font-label-md text-xs text-on-surface block font-medium">Người lớn</span>
+                            <span className="font-body-sm text-[11px] text-on-surface-variant">Từ 12 tuổi</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setAdults((prev) => Math.max(1, prev - 1))}
+                              className="w-7 h-7 rounded-lg bg-surface-container-high hover:bg-surface-variant flex items-center justify-center text-on-surface text-xs font-bold transition-colors"
+                            >
+                              <Minus className="h-3 w-3" />
+                            </button>
+                            <span className="font-title-md text-sm text-on-surface font-bold w-4 text-center">
+                              {adults}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => setAdults((prev) => prev + 1)}
+                              className="w-7 h-7 rounded-lg bg-surface-container-high hover:bg-surface-variant flex items-center justify-center text-on-surface text-xs font-bold transition-colors"
+                            >
+                              <Plus className="h-3 w-3" />
+                            </button>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={() => setAdults((prev) => Math.max(1, prev - 1))}
-                            className="w-7 h-7 rounded-lg bg-surface-container-high hover:bg-surface-variant flex items-center justify-center text-on-surface text-xs font-bold transition-colors"
-                          >
-                            <Minus className="h-3 w-3" />
-                          </button>
-                          <span className="font-title-md text-sm text-on-surface font-bold w-4 text-center">
-                            {adults}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => setAdults((prev) => prev + 1)}
-                            className="w-7 h-7 rounded-lg bg-surface-container-high hover:bg-surface-variant flex items-center justify-center text-on-surface text-xs font-bold transition-colors"
-                          >
-                            <Plus className="h-3 w-3" />
-                          </button>
-                        </div>
-                      </div>
 
-                      {/* Children Stepper */}
-                      <div className="p-2.5 rounded-xl bg-surface flex items-center justify-between shadow-sm border border-outline-variant/30">
-                        <div>
-                          <span className="font-label-md text-xs text-on-surface block font-medium">Trẻ em</span>
-                          <span className="font-body-sm text-[11px] text-on-surface-variant">6 - 11 tuổi</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={() => setChildren((prev) => Math.max(0, prev - 1))}
-                            className="w-7 h-7 rounded-lg bg-surface-container-high hover:bg-surface-variant flex items-center justify-center text-on-surface text-xs font-bold transition-colors"
-                          >
-                            <Minus className="h-3 w-3" />
-                          </button>
-                          <span className="font-title-md text-sm text-on-surface font-bold w-4 text-center">
-                            {children}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => setChildren((prev) => prev + 1)}
-                            className="w-7 h-7 rounded-lg bg-surface-container-high hover:bg-surface-variant flex items-center justify-center text-on-surface text-xs font-bold transition-colors"
-                          >
-                            <Plus className="h-3 w-3" />
-                          </button>
+                        {/* Children Stepper */}
+                        <div className="p-2.5 rounded-xl bg-surface flex items-center justify-between shadow-sm border border-outline-variant/30">
+                          <div>
+                            <span className="font-label-md text-xs text-on-surface block font-medium">Trẻ em</span>
+                            <span className="font-body-sm text-[11px] text-on-surface-variant">6 - 11 tuổi</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setChildren((prev) => Math.max(0, prev - 1))}
+                              className="w-7 h-7 rounded-lg bg-surface-container-high hover:bg-surface-variant flex items-center justify-center text-on-surface text-xs font-bold transition-colors"
+                            >
+                              <Minus className="h-3 w-3" />
+                            </button>
+                            <span className="font-title-md text-sm text-on-surface font-bold w-4 text-center">
+                              {children}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => setChildren((prev) => prev + 1)}
+                              className="w-7 h-7 rounded-lg bg-surface-container-high hover:bg-surface-variant flex items-center justify-center text-on-surface text-xs font-bold transition-colors"
+                            >
+                              <Plus className="h-3 w-3" />
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Price Breakdown Summary */}
-                  <div className="p-space-sm rounded-xl bg-surface-container-low flex flex-col gap-1 text-on-surface-variant font-body-sm text-xs mt-1 border border-outline-variant/20">
-                    <div className="flex justify-between">
-                      <span>
-                        Người lớn ({adults} khách × {adultPrice.toLocaleString("vi-VN")}đ)
-                      </span>
-                      <span className="text-on-surface font-medium">
-                        {(adults * adultPrice).toLocaleString("vi-VN")}đ
-                      </span>
-                    </div>
-                    {children > 0 && (
+                    {/* Price Breakdown Summary */}
+                    <div className="p-space-sm rounded-xl bg-surface-container-low flex flex-col gap-1 text-on-surface-variant font-body-sm text-xs mt-1 border border-outline-variant/20">
                       <div className="flex justify-between">
                         <span>
-                          Trẻ em ({children} khách × {childPrice.toLocaleString("vi-VN")}đ)
+                          Người lớn ({adults} khách × {adultPrice.toLocaleString("vi-VN")}đ)
                         </span>
                         <span className="text-on-surface font-medium">
-                          {(children * childPrice).toLocaleString("vi-VN")}đ
+                          {(adults * adultPrice).toLocaleString("vi-VN")}đ
                         </span>
                       </div>
-                    )}
-                    <div className="flex justify-between">
-                      <span>Workshop gốm & tác phẩm mang về</span>
-                      <span className="text-secondary font-medium">Đã bao gồm</span>
+                      {children > 0 && (
+                        <div className="flex justify-between">
+                          <span>
+                            Trẻ em ({children} khách × {childPrice.toLocaleString("vi-VN")}đ)
+                          </span>
+                          <span className="text-on-surface font-medium">
+                            {(children * childPrice).toLocaleString("vi-VN")}đ
+                          </span>
+                        </div>
+                      )}
+                      <div className="flex justify-between">
+                        <span>Workshop gốm & tác phẩm mang về</span>
+                        <span className="text-secondary font-medium">Đã bao gồm</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Bữa trưa gia đình Chăm 6 món</span>
+                        <span className="text-secondary font-medium">Đã bao gồm</span>
+                      </div>
+                      <div className="w-full h-px bg-surface-variant/60 my-1"></div>
+                      <div className="flex justify-between font-serif text-base text-on-surface font-bold">
+                        <span>Tổng chi phí:</span>
+                        <span className="text-primary text-lg">{totalPrice.toLocaleString("vi-VN")}đ</span>
+                      </div>
                     </div>
-                    <div className="flex justify-between">
-                      <span>Bữa trưa gia đình Chăm 6 món</span>
-                      <span className="text-secondary font-medium">Đã bao gồm</span>
-                    </div>
-                    <div className="w-full h-px bg-surface-variant/60 my-1"></div>
-                    <div className="flex justify-between font-serif text-base text-on-surface font-bold">
-                      <span>Tổng chi phí:</span>
-                      <span className="text-primary text-lg">{totalPrice.toLocaleString("vi-VN")}đ</span>
-                    </div>
-                  </div>
 
-                  {/* Primary Booking CTA */}
-                  <button
-                    className="w-full mt-2 py-3.5 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-label-lg text-sm uppercase tracking-wider font-semibold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
-                    type="submit"
-                  >
-                    <CheckCircle className="h-4 w-4" />
-                    <span>Đặt Giữ Chỗ Ngay</span>
-                  </button>
+                    {/* Primary Booking CTA */}
+                    <button
+                      className="w-full mt-2 py-3.5 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-label-lg text-sm uppercase tracking-wider font-semibold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                      type="submit"
+                      disabled={isBookingSubmitting}
+                    >
+                      {isBookingSubmitting ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          <span>Đang gửi xác nhận...</span>
+                        </>
+                      ) : (
+                        <>
+                          <CheckCircle className="h-4 w-4" />
+                          <span>Đặt Giữ Chỗ Ngay</span>
+                        </>
+                      )}
+                    </button>
 
-                  {/* Secondary Contact CTA */}
-                  <button
-                    onClick={handleContactZalo}
-                    className="w-full py-2.5 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-xs font-semibold transition-colors flex items-center justify-center gap-2"
-                    type="button"
-                  >
-                    <Phone className="h-4 w-4 text-secondary" />
-                    <span>Tư Vấn Nhanh Qua Zalo / Hotline Di Sản</span>
-                  </button>
-                </form>
+                    {/* Secondary Contact CTA */}
+                    <button
+                      onClick={handleContactZalo}
+                      className="w-full py-2.5 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-xs font-semibold transition-colors flex items-center justify-center gap-2"
+                      type="button"
+                    >
+                      <Phone className="h-4 w-4 text-secondary" />
+                      <span>Tư Vấn Nhanh Qua Zalo / Hotline Di Sản</span>
+                    </button>
+                  </form>
+                )}
 
                 {/* Reassurance Checklist */}
                 <div className="flex flex-col gap-2 pt-space-xs text-on-surface-variant font-body-sm text-xs border-t border-surface-container/60">
@@ -1212,10 +1343,7 @@ export default function TourDetailPage() {
       )}
 
       <Footer />
-      <AudioPlayerBar
-        isOpen={isAudioPlaying}
-        onClose={() => setIsAudioPlaying(false)}
-      />
+      <AudioPlayerBar />
       <BottomNav />
     </div>
   );
