@@ -1,4 +1,5 @@
 const postService = require("../services/postService");
+const activityLogService = require("../services/activityLogService");
 
 class PostController {
   // 1. Công khai: Lấy danh sách bài viết đã xuất bản
@@ -73,6 +74,15 @@ class PostController {
 
       const createdPost = await postService.createPost(postData, authorUser);
 
+      await activityLogService.logActivity({
+        actor: authorUser,
+        action: "ARTICLE_CREATE",
+        targetType: createdPost.mainCategory === "tin-tuc" ? "news" : "article",
+        targetId: createdPost.id,
+        targetTitle: createdPost.title,
+        details: { via: "legacy_api", slug: createdPost.slug },
+      });
+
       res.status(201).json({
         success: true,
         message:
@@ -95,6 +105,15 @@ class PostController {
 
       const updated = await postService.updatePost(id, postData, authorUser);
 
+      await activityLogService.logActivity({
+        actor: authorUser,
+        action: "ARTICLE_UPDATE",
+        targetType: updated.mainCategory === "tin-tuc" ? "news" : "article",
+        targetId: id,
+        targetTitle: updated.title,
+        details: { via: "legacy_api", status: updated.status },
+      });
+
       res.status(200).json({
         success: true,
         message: "Cập nhật bài viết thành công!",
@@ -109,7 +128,17 @@ class PostController {
   async deletePost(req, res, next) {
     try {
       const { id } = req.params;
+      const authorUser = req.user;
       const result = await postService.deletePost(id);
+
+      await activityLogService.logActivity({
+        actor: authorUser,
+        action: "ARTICLE_DELETE",
+        targetType: "article",
+        targetId: id,
+        targetTitle: `ID: ${id}`,
+        details: { via: "legacy_api" },
+      });
 
       res.status(200).json(result);
     } catch (error) {

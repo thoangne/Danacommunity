@@ -18,8 +18,8 @@ const requireRole = (allowedRoles = []) => {
     const userRole = req.user.role || "customer";
     const userEmail = req.user.email || "";
 
-    // Super Admin hoặc email quản trị viên mặc định luôn có toàn quyền
-    const isSuperOrAdmin = userRole === "admin" || userRole === "super_admin" || userEmail === "admin@champaweb.vn";
+    // Super Admin hoặc Admin luôn có toàn quyền trong hệ thống
+    const isSuperOrAdmin = userRole === "admin" || userRole === "super_admin";
 
     if (isSuperOrAdmin || roles.includes(userRole)) {
       return next();

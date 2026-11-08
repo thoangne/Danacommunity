@@ -16,6 +16,9 @@ interface AuthContextType {
   token: string | null;
   isLoading: boolean;
   isAdmin: boolean;
+  isSuperAdmin: boolean;
+  isEditor: boolean;
+  isAuthorizedCMS: boolean;
   isAuthModalOpen: boolean;
   authModalTab: "login" | "register";
   openAuthModal: (tab?: "login" | "register") => void;
@@ -63,6 +66,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (isSupabaseConfigured()) {
           const { data: { session } } = await supabase.auth.getSession();
           if (session?.user) {
+            let roleFromStorage = "customer";
+            if (savedUser) {
+              try {
+                const parsed = JSON.parse(savedUser);
+                if (parsed && typeof parsed.role === "string") {
+                  roleFromStorage = parsed.role;
+                }
+              } catch {
+                roleFromStorage = "customer";
+              }
+            }
+
+            const mappedRole =
+              session.user.app_metadata?.role ||
+              session.user.user_metadata?.role ||
+              roleFromStorage;
+
             const mappedUser: UserProfile = {
               id: session.user.id,
               email: session.user.email || "",
@@ -76,6 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 session.user.user_metadata?.picture ||
                 "",
               provider: (session.user.app_metadata?.provider as any) || "email",
+              role: mappedRole,
             };
             setUser(mappedUser);
             setToken(session.access_token);
@@ -87,6 +108,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           const { data: authListener } = supabase.auth.onAuthStateChange(
             async (_event: any, session: any) => {
               if (session?.user) {
+                const mappedRole =
+                  session.user.app_metadata?.role ||
+                  session.user.user_metadata?.role ||
+                  "customer";
+
                 const mappedUser: UserProfile = {
                   id: session.user.id,
                   email: session.user.email || "",
@@ -100,6 +126,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     session.user.user_metadata?.picture ||
                     "",
                   provider: (session.user.app_metadata?.provider as any) || "email",
+                  role: mappedRole,
                 };
                 setUser(mappedUser);
                 setToken(session.access_token);
@@ -394,7 +421,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const isAdmin = Boolean(user && (user.role === "admin" || user.email === "admin@champaweb.vn"));
+  const isSuperAdmin = Boolean(user && user.role === "super_admin");
+  const isEditor = Boolean(user && (user.role === "editor" || user.role === "admin" || user.role === "super_admin"));
+  const isAdmin = Boolean(user && (user.role === "admin" || user.role === "super_admin" || user.email === "admin@champaweb.vn"));
+  const isAuthorizedCMS = Boolean(user && (["super_admin", "admin", "editor"].includes(user.role || "") || user.email === "admin@champaweb.vn"));
 
   return (
     <AuthContext.Provider
@@ -403,6 +433,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         token,
         isLoading,
         isAdmin,
+        isSuperAdmin,
+        isEditor,
+        isAuthorizedCMS,
         isAuthModalOpen,
         authModalTab,
         openAuthModal,

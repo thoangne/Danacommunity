@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { lazy, Suspense } from "react";
 import DanaHome from "./pages/DanaHome";
 import TourListPage from "./pages/TourListPage";
 import TourDetailPage from "./pages/TourDetailPage";
@@ -13,20 +14,32 @@ import AuthModal from "./components/auth/AuthModal";
 import { Toaster } from "./components/ui/sonner";
 import { AudioProvider } from "./lib/AudioContext";
 import { AuthProvider } from "./context/AuthContext";
+import { Loader2 } from "lucide-react";
 
-// Admin CMS Modules
-import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
-import AdminArticlesPage from "./pages/admin/AdminArticlesPage";
-import AdminArticleCreatePage from "./pages/admin/AdminArticleCreatePage";
-import AdminArticleEditPage from "./pages/admin/AdminArticleEditPage";
-import AdminNewsPage from "./pages/admin/AdminNewsPage";
-import AdminNewsCreatePage from "./pages/admin/AdminNewsCreatePage";
-import AdminNewsEditPage from "./pages/admin/AdminNewsEditPage";
-import AdminCategoriesPage from "./pages/admin/AdminCategoriesPage";
-import AdminMediaPage from "./pages/admin/AdminMediaPage";
-import AdminUsersPage from "./pages/admin/AdminUsersPage";
-import AdminActivityLogsPage from "./pages/admin/AdminActivityLogsPage";
-import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
+// Admin CMS Modules (Tách chunk Lazy Load giúp giảm kích thước bundle trang người dùng)
+const AdminDashboardPage = lazy(() => import("./pages/admin/AdminDashboardPage"));
+const AdminArticlesPage = lazy(() => import("./pages/admin/AdminArticlesPage"));
+const AdminArticleCreatePage = lazy(() => import("./pages/admin/AdminArticleCreatePage"));
+const AdminArticleEditPage = lazy(() => import("./pages/admin/AdminArticleEditPage"));
+const AdminNewsPage = lazy(() => import("./pages/admin/AdminNewsPage"));
+const AdminNewsCreatePage = lazy(() => import("./pages/admin/AdminNewsCreatePage"));
+const AdminNewsEditPage = lazy(() => import("./pages/admin/AdminNewsEditPage"));
+const AdminCategoriesPage = lazy(() => import("./pages/admin/AdminCategoriesPage"));
+const AdminMediaPage = lazy(() => import("./pages/admin/AdminMediaPage"));
+const AdminUsersPage = lazy(() => import("./pages/admin/AdminUsersPage"));
+const AdminActivityLogsPage = lazy(() => import("./pages/admin/AdminActivityLogsPage"));
+const AdminSettingsPage = lazy(() => import("./pages/admin/AdminSettingsPage"));
+
+function AdminPageLoader() {
+  return (
+    <div className="min-h-screen bg-[#FFF8F6] flex flex-col items-center justify-center gap-3">
+      <Loader2 className="w-8 h-8 text-[#8F4E00] animate-spin" />
+      <span className="font-serif text-xs text-stone-600 tracking-wider">
+        Đang nạp phân hệ Quản trị ChampaWeb...
+      </span>
+    </div>
+  );
+}
 
 export default function App() {
   return (
@@ -59,19 +72,19 @@ export default function App() {
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/di-san" element={<BlogPage />} />
 
-            {/* Hệ thống Quản trị Nội dung Toàn diện (CMS Admin Management) */}
-            <Route path="/admin" element={<AdminDashboardPage />} />
-            <Route path="/admin/articles" element={<AdminArticlesPage />} />
-            <Route path="/admin/articles/create" element={<AdminArticleCreatePage />} />
-            <Route path="/admin/articles/edit/:id" element={<AdminArticleEditPage />} />
-            <Route path="/admin/news" element={<AdminNewsPage />} />
-            <Route path="/admin/news/create" element={<AdminNewsCreatePage />} />
-            <Route path="/admin/news/edit/:id" element={<AdminNewsEditPage />} />
-            <Route path="/admin/categories" element={<AdminCategoriesPage />} />
-            <Route path="/admin/media" element={<AdminMediaPage />} />
-            <Route path="/admin/users" element={<AdminUsersPage />} />
-            <Route path="/admin/activity-logs" element={<AdminActivityLogsPage />} />
-            <Route path="/admin/settings" element={<AdminSettingsPage />} />
+            {/* Hệ thống Quản trị Nội dung Toàn diện (CMS Admin Management - Code Splitted) */}
+            <Route path="/admin" element={<Suspense fallback={<AdminPageLoader />}><AdminDashboardPage /></Suspense>} />
+            <Route path="/admin/articles" element={<Suspense fallback={<AdminPageLoader />}><AdminArticlesPage /></Suspense>} />
+            <Route path="/admin/articles/create" element={<Suspense fallback={<AdminPageLoader />}><AdminArticleCreatePage /></Suspense>} />
+            <Route path="/admin/articles/edit/:id" element={<Suspense fallback={<AdminPageLoader />}><AdminArticleEditPage /></Suspense>} />
+            <Route path="/admin/news" element={<Suspense fallback={<AdminPageLoader />}><AdminNewsPage /></Suspense>} />
+            <Route path="/admin/news/create" element={<Suspense fallback={<AdminPageLoader />}><AdminNewsCreatePage /></Suspense>} />
+            <Route path="/admin/news/edit/:id" element={<Suspense fallback={<AdminPageLoader />}><AdminNewsEditPage /></Suspense>} />
+            <Route path="/admin/categories" element={<Suspense fallback={<AdminPageLoader />}><AdminCategoriesPage /></Suspense>} />
+            <Route path="/admin/media" element={<Suspense fallback={<AdminPageLoader />}><AdminMediaPage /></Suspense>} />
+            <Route path="/admin/users" element={<Suspense fallback={<AdminPageLoader />}><AdminUsersPage /></Suspense>} />
+            <Route path="/admin/activity-logs" element={<Suspense fallback={<AdminPageLoader />}><AdminActivityLogsPage /></Suspense>} />
+            <Route path="/admin/settings" element={<Suspense fallback={<AdminPageLoader />}><AdminSettingsPage /></Suspense>} />
 
             {/* Tương thích ngược các tuyến đường quản trị cũ */}
             <Route path="/admin/blog" element={<Navigate to="/admin/articles" replace />} />

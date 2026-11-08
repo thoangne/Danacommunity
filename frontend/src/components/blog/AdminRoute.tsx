@@ -1,5 +1,5 @@
 import { type ReactNode } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { ShieldAlert, Loader2 } from "lucide-react";
 
@@ -8,8 +8,7 @@ interface AdminRouteProps {
 }
 
 export default function AdminRoute({ children }: AdminRouteProps) {
-  const { user, isAdmin, isLoading, openAuthModal } = useAuth();
-  const location = useLocation();
+  const { user, isAdmin, isAuthorizedCMS, isLoading, openAuthModal } = useAuth();
 
   if (isLoading) {
     return (
@@ -39,20 +38,27 @@ export default function AdminRoute({ children }: AdminRouteProps) {
           <div className="flex flex-col sm:flex-row gap-3 w-full mt-2">
             <button
               onClick={() => openAuthModal("login")}
-              className="flex-1 py-3 px-4 rounded-xl bg-primary text-white font-semibold text-sm hover:bg-primary/90 transition-all shadow-md"
+              className="flex-1 py-3 px-4 rounded-xl bg-primary text-white font-semibold text-sm hover:bg-primary/90 transition-all shadow-md cursor-pointer"
               type="button"
             >
               Đăng nhập Quản trị
             </button>
-            <Navigate to="/bai-viet" state={{ from: location }} replace={false} />
+            <Link
+              to="/bai-viet"
+              className="flex-1 py-3 px-4 rounded-xl border border-stone-200 hover:bg-stone-50 text-stone-700 font-semibold text-sm transition-all text-center"
+            >
+              Quay lại Blog
+            </Link>
           </div>
         </div>
       </div>
     );
   }
 
-  // 2. Đã đăng nhập nhưng không phải admin
-  if (!isAdmin) {
+  // 2. Đã đăng nhập nhưng không có vai trò quản trị (chỉ super_admin, admin, editor được phép)
+  const isAllowed = Boolean(isAdmin || isAuthorizedCMS);
+
+  if (!isAllowed) {
     return (
       <div className="min-h-screen bg-surface flex flex-col items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-3xl p-8 shadow-xl border border-error/30 text-center flex flex-col items-center gap-4">
@@ -63,14 +69,14 @@ export default function AdminRoute({ children }: AdminRouteProps) {
             Từ chối Truy cập (403 Forbidden)
           </h2>
           <p className="font-body-md text-sm text-on-surface-variant leading-relaxed">
-            Tài khoản <strong className="text-on-surface">{user.email}</strong> không có vai trò Quản trị viên (Admin). Bạn không được phép tạo hoặc chỉnh sửa nội dung bài viết.
+            Tài khoản <strong className="text-on-surface">{user.email}</strong> (vai trò: {user.role || "customer"}) không có quyền truy cập trung tâm quản trị. Chỉ Quản trị viên (Admin/Super Admin) và Ban biên tập (Editor) mới được phép truy cập.
           </p>
-          <a
-            href="/bai-viet"
-            className="w-full py-3 px-4 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-semibold text-sm transition-all"
+          <Link
+            to="/bai-viet"
+            className="w-full py-3 px-4 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-semibold text-sm transition-all text-center"
           >
             Quay lại trang Blog di sản
-          </a>
+          </Link>
         </div>
       </div>
     );

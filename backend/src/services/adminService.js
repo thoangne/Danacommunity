@@ -2,70 +2,81 @@ const fs = require("fs");
 const path = require("path");
 const { db } = require("../config/db");
 const activityLogService = require("./activityLogService");
+const storageService = require("./storageService");
 
 class AdminService {
   // =========================================================================
-  // 1. DASHBOARD METRICS
+  // 1. DASHBOARD METRICS (CONCURRENT FETCHING VIA PROMISE.ALL)
   // =========================================================================
   async getDashboardMetrics() {
     try {
       if (db) {
-        // Tổng bài viết văn hóa / lịch sử
-        const articleCount = await db("blog_articles")
-          .whereIn("main_category", ["van-hoa", "lich-su"])
-          .select(
-            db.raw("COUNT(*) as total"),
-            db.raw("COUNT(CASE WHEN is_published = true THEN 1 END) as published"),
-            db.raw("COUNT(CASE WHEN is_published = false OR status = 'draft' THEN 1 END) as draft"),
-            db.raw("COALESCE(SUM(views_count), 0) as total_views")
-          )
-          .first();
+        const [
+          articleCount,
+          newsCount,
+          userCount,
+          mediaCount,
+          recentContent,
+          recentActivity,
+          topViewed,
+        ] = await Promise.all([
+          // Tổng bài viết văn hóa / lịch sử
+          db("blog_articles")
+            .whereIn("main_category", ["van-hoa", "lich-su"])
+            .select(
+              db.raw("COUNT(*) as total"),
+              db.raw("COUNT(CASE WHEN is_published = true THEN 1 END) as published"),
+              db.raw("COUNT(CASE WHEN is_published = false OR status = 'draft' THEN 1 END) as draft"),
+              db.raw("COALESCE(SUM(views_count), 0) as total_views")
+            )
+            .first(),
 
-        // Tổng bài viết tin tức
-        const newsCount = await db("blog_articles")
-          .where("main_category", "tin-tuc")
-          .select(
-            db.raw("COUNT(*) as total"),
-            db.raw("COUNT(CASE WHEN is_published = true THEN 1 END) as published"),
-            db.raw("COUNT(CASE WHEN is_published = false OR status = 'draft' THEN 1 END) as draft")
-          )
-          .first();
+          // Tổng bài viết tin tức
+          db("blog_articles")
+            .where("main_category", "tin-tuc")
+            .select(
+              db.raw("COUNT(*) as total"),
+              db.raw("COUNT(CASE WHEN is_published = true THEN 1 END) as published"),
+              db.raw("COUNT(CASE WHEN is_published = false OR status = 'draft' THEN 1 END) as draft")
+            )
+            .first(),
 
-        // Tổng người dùng
-        const userCount = await db("profiles")
-          .select(
-            db.raw("COUNT(*) as total"),
-            db.raw("COUNT(CASE WHEN role IN ('admin', 'super_admin') THEN 1 END) as admins"),
-            db.raw("COUNT(CASE WHEN role = 'editor' THEN 1 END) as editors"),
-            db.raw("COUNT(CASE WHEN status = 'active' OR status IS NULL THEN 1 END) as active")
-          )
-          .first();
+          // Tổng người dùng
+          db("profiles")
+            .select(
+              db.raw("COUNT(*) as total"),
+              db.raw("COUNT(CASE WHEN role IN ('admin', 'super_admin') THEN 1 END) as admins"),
+              db.raw("COUNT(CASE WHEN role = 'editor' THEN 1 END) as editors"),
+              db.raw("COUNT(CASE WHEN status = 'active' OR status IS NULL THEN 1 END) as active")
+            )
+            .first(),
 
-        // Tổng media
-        const mediaCount = await db("media_files")
-          .select(
-            db.raw("COUNT(*) as total"),
-            db.raw("COALESCE(SUM(size), 0) as total_size")
-          )
-          .first();
+          // Tổng media
+          db("media_files")
+            .select(
+              db.raw("COUNT(*) as total"),
+              db.raw("COALESCE(SUM(size), 0) as total_size")
+            )
+            .first(),
 
-        // Nội dung cập nhật gần đây
-        const recentContent = await db("blog_articles")
-          .select("id", "title", "slug", "main_category", "is_published", "status", "views_count", "updated_at")
-          .orderBy("updated_at", "desc")
-          .limit(6);
+          // Nội dung cập nhật gần đây
+          db("blog_articles")
+            .select("id", "title", "slug", "main_category", "is_published", "status", "views_count", "updated_at")
+            .orderBy("updated_at", "desc")
+            .limit(6),
 
-        // Hoạt động gần đây
-        const recentActivity = await db("activity_logs")
-          .select("*")
-          .orderBy("created_at", "desc")
-          .limit(8);
+          // Hoạt động gần đây
+          db("activity_logs")
+            .select("*")
+            .orderBy("created_at", "desc")
+            .limit(8),
 
-        // Xu hướng xem theo thời gian (hoặc lượt xem bài viết top)
-        const topViewed = await db("blog_articles")
-          .select("id", "title", "slug", "views_count", "main_category")
-          .orderBy("views_count", "desc")
-          .limit(5);
+          // Xu hướng xem theo thời gian (hoặc lượt xem bài viết top)
+          db("blog_articles")
+            .select("id", "title", "slug", "views_count", "main_category")
+            .orderBy("views_count", "desc")
+            .limit(5),
+        ]);
 
         return {
           articles: {
@@ -214,6 +225,27 @@ class AdminService {
     };
   }
 
+  async _syncArticleTags(trx, articleId, tagsArray) {
+    if (!Array.isArray(tagsArray)) return;
+
+    const cleanTags = tagsArray
+      .filter((t) => typeof t === "string" && t.trim())
+      .map((t) => ({ name: t.trim(), slug: this._slugify(t.trim()) }));
+
+    await trx("article_tags").where("article_id", articleId).delete();
+
+    for (const item of cleanTags) {
+      let tag = await trx("tags").where("slug", item.slug).first();
+      if (!tag) {
+        const [newTag] = await trx("tags").insert({ name: item.name, slug: item.slug }).returning("*");
+        tag = newTag;
+      }
+      if (tag) {
+        await trx("article_tags").insert({ article_id: articleId, tag_id: tag.id }).onConflict().ignore();
+      }
+    }
+  }
+
   async createArticle(data, actor) {
     if (!data.title || !data.title.trim()) {
       throw new Error("Tiêu đề bài viết không được để trống!");
@@ -222,14 +254,6 @@ class AdminService {
     const title = data.title.trim();
     const rawSlug = data.slug && data.slug.trim() ? data.slug : title;
     let slug = this._slugify(rawSlug);
-
-    // Kiểm tra trùng lặp slug
-    if (db) {
-      const existing = await db("blog_articles").where("slug", slug).first();
-      if (existing) {
-        slug = `${slug}-${Date.now().toString().slice(-4)}`;
-      }
-    }
 
     const isPublished = data.status === "published";
     const authorId = actor?.id && !actor.id.startsWith("usr-") ? actor.id : null;
@@ -261,28 +285,23 @@ class AdminService {
       updated_at: new Date(),
     };
 
-    let createdId = null;
+    let createdRecord = null;
     if (db) {
-      const [inserted] = await db("blog_articles").insert(newRecord).returning("*");
-      createdId = inserted.id;
-
-      // Xử lý tags nếu có
-      if (Array.isArray(data.tags) && data.tags.length > 0) {
-        for (const tagName of data.tags) {
-          if (typeof tagName === "string" && tagName.trim()) {
-            const cleanTag = tagName.trim();
-            const tagSlug = this._slugify(cleanTag);
-            let tag = await db("tags").where("slug", tagSlug).first();
-            if (!tag) {
-              const [newTag] = await db("tags").insert({ name: cleanTag, slug: tagSlug }).returning("*");
-              tag = newTag;
-            }
-            if (tag) {
-              await db("article_tags").insert({ article_id: createdId, tag_id: tag.id }).onConflict().ignore();
-            }
-          }
+      createdRecord = await db.transaction(async (trx) => {
+        const existing = await trx("blog_articles").where("slug", slug).first();
+        if (existing) {
+          slug = `${slug}-${Date.now().toString().slice(-4)}`;
+          newRecord.slug = slug;
         }
-      }
+
+        const [inserted] = await trx("blog_articles").insert(newRecord).returning("*");
+        if (Array.isArray(data.tags) && data.tags.length > 0) {
+          await this._syncArticleTags(trx, inserted.id, data.tags);
+        }
+        return inserted;
+      });
+    } else {
+      createdRecord = { id: `art-${Date.now()}`, ...newRecord };
     }
 
     // Ghi log hoạt động
@@ -290,113 +309,102 @@ class AdminService {
       actor,
       action: "ARTICLE_CREATE",
       targetType: newRecord.main_category === "tin-tuc" ? "news" : "article",
-      targetId: createdId,
+      targetId: createdRecord.id,
       targetTitle: newRecord.title,
       details: { slug: newRecord.slug, status: newRecord.status, category: newRecord.main_category },
     });
 
-    return { id: createdId, ...newRecord };
+    return createdRecord;
   }
 
   async updateArticle(id, data, actor) {
     if (!db) throw new Error("Cơ sở dữ liệu chưa sẵn sàng!");
 
-    const existing = await db("blog_articles").where("id", id).first();
-    if (!existing) {
-      const err = new Error("Không tìm thấy bài viết để cập nhật!");
-      err.status = 404;
-      throw err;
-    }
-
-    let slug = existing.slug;
-    if (data.slug && data.slug.trim()) {
-      const newSlug = this._slugify(data.slug);
-      if (newSlug !== existing.slug) {
-        const conflict = await db("blog_articles").where("slug", newSlug).whereNot("id", id).first();
-        slug = conflict ? `${newSlug}-${Date.now().toString().slice(-4)}` : newSlug;
+    return await db.transaction(async (trx) => {
+      const existing = await trx("blog_articles").where("id", id).first();
+      if (!existing) {
+        const err = new Error("Không tìm thấy bài viết để cập nhật!");
+        err.status = 404;
+        throw err;
       }
-    }
 
-    const isPublished = data.status ? data.status === "published" : existing.is_published;
-
-    const updatePayload = {
-      title: data.title ? data.title.trim() : existing.title,
-      slug,
-      summary: data.excerpt !== undefined ? data.excerpt.trim() : (data.summary !== undefined ? data.summary.trim() : existing.summary),
-      content: data.content !== undefined ? data.content : existing.content,
-      featured_image: data.coverImage !== undefined ? data.coverImage : (data.featured_image !== undefined ? data.featured_image : existing.featured_image),
-      main_category: data.mainCategory || data.main_category || existing.main_category,
-      category_id: data.category_id !== undefined ? data.category_id : existing.category_id,
-      badge: data.badge !== undefined ? data.badge : existing.badge,
-      badge_class: data.badgeClass !== undefined ? data.badgeClass : existing.badge_class,
-      field_location: data.fieldLocation !== undefined ? data.fieldLocation : existing.field_location,
-      read_time: data.readTime || data.read_time || (data.content ? this._calculateReadTime(data.content) : existing.read_time),
-      author_name: data.authorName || existing.author_name,
-      is_published: isPublished,
-      status: data.status || (isPublished ? "published" : "draft"),
-      seo_title: data.seoTitle !== undefined ? data.seoTitle : (data.seo_title !== undefined ? data.seo_title : existing.seo_title),
-      seo_description: data.seoDescription !== undefined ? data.seoDescription : (data.seo_description !== undefined ? data.seo_description : existing.seo_description),
-      scheduled_at: data.scheduledAt !== undefined ? data.scheduledAt : (data.scheduled_at !== undefined ? data.scheduled_at : existing.scheduled_at),
-      updated_at: new Date(),
-    };
-
-    const [updated] = await db("blog_articles").where("id", id).update(updatePayload).returning("*");
-
-    // Cập nhật tags nếu được truyền
-    if (Array.isArray(data.tags)) {
-      await db("article_tags").where("article_id", id).delete();
-      for (const tagName of data.tags) {
-        if (typeof tagName === "string" && tagName.trim()) {
-          const cleanTag = tagName.trim();
-          const tagSlug = this._slugify(cleanTag);
-          let tag = await db("tags").where("slug", tagSlug).first();
-          if (!tag) {
-            const [newTag] = await db("tags").insert({ name: cleanTag, slug: tagSlug }).returning("*");
-            tag = newTag;
-          }
-          if (tag) {
-            await db("article_tags").insert({ article_id: id, tag_id: tag.id }).onConflict().ignore();
-          }
+      let slug = existing.slug;
+      if (data.slug && data.slug.trim()) {
+        const newSlug = this._slugify(data.slug);
+        if (newSlug !== existing.slug) {
+          const conflict = await trx("blog_articles").where("slug", newSlug).whereNot("id", id).first();
+          slug = conflict ? `${newSlug}-${Date.now().toString().slice(-4)}` : newSlug;
         }
       }
-    }
 
-    // Ghi log
-    await activityLogService.logActivity({
-      actor,
-      action: "ARTICLE_UPDATE",
-      targetType: updated.main_category === "tin-tuc" ? "news" : "article",
-      targetId: id,
-      targetTitle: updated.title,
-      details: { status: updated.status, is_published: updated.is_published },
+      const isPublished = data.status ? data.status === "published" : existing.is_published;
+
+      const updatePayload = {
+        title: data.title ? data.title.trim() : existing.title,
+        slug,
+        summary: data.excerpt !== undefined ? data.excerpt.trim() : (data.summary !== undefined ? data.summary.trim() : existing.summary),
+        content: data.content !== undefined ? data.content : existing.content,
+        featured_image: data.coverImage !== undefined ? data.coverImage : (data.featured_image !== undefined ? data.featured_image : existing.featured_image),
+        main_category: data.mainCategory || data.main_category || existing.main_category,
+        category_id: data.category_id !== undefined ? data.category_id : existing.category_id,
+        badge: data.badge !== undefined ? data.badge : existing.badge,
+        badge_class: data.badgeClass !== undefined ? data.badgeClass : existing.badge_class,
+        field_location: data.fieldLocation !== undefined ? data.fieldLocation : existing.field_location,
+        read_time: data.readTime || data.read_time || (data.content ? this._calculateReadTime(data.content) : existing.read_time),
+        author_name: data.authorName || existing.author_name,
+        is_published: isPublished,
+        status: data.status || (isPublished ? "published" : "draft"),
+        seo_title: data.seoTitle !== undefined ? data.seoTitle : (data.seo_title !== undefined ? data.seo_title : existing.seo_title),
+        seo_description: data.seoDescription !== undefined ? data.seoDescription : (data.seo_description !== undefined ? data.seo_description : existing.seo_description),
+        scheduled_at: data.scheduledAt !== undefined ? data.scheduledAt : (data.scheduled_at !== undefined ? data.scheduled_at : existing.scheduled_at),
+        updated_at: new Date(),
+      };
+
+      const [updated] = await trx("blog_articles").where("id", id).update(updatePayload).returning("*");
+
+      if (Array.isArray(data.tags)) {
+        await this._syncArticleTags(trx, id, data.tags);
+      }
+
+      // Ghi log
+      await activityLogService.logActivity({
+        actor,
+        action: "ARTICLE_UPDATE",
+        targetType: updated.main_category === "tin-tuc" ? "news" : "article",
+        targetId: id,
+        targetTitle: updated.title,
+        details: { status: updated.status, is_published: updated.is_published },
+      });
+
+      return updated;
     });
-
-    return updated;
   }
 
   async deleteArticle(id, actor) {
     if (!db) throw new Error("Cơ sở dữ liệu chưa sẵn sàng!");
 
-    const article = await db("blog_articles").where("id", id).first();
-    if (!article) {
-      const err = new Error("Không tìm thấy bài viết để xóa!");
-      err.status = 404;
-      throw err;
-    }
+    return await db.transaction(async (trx) => {
+      const article = await trx("blog_articles").where("id", id).first();
+      if (!article) {
+        const err = new Error("Không tìm thấy bài viết để xóa!");
+        err.status = 404;
+        throw err;
+      }
 
-    await db("article_tags").where("article_id", id).delete();
-    await db("blog_articles").where("id", id).delete();
+      await trx("article_tags").where("article_id", id).delete();
+      await trx("blog_articles").where("id", id).delete();
 
-    await activityLogService.logActivity({
-      actor,
-      action: "ARTICLE_DELETE",
-      targetType: article.main_category === "tin-tuc" ? "news" : "article",
-      targetId: id,
-      targetTitle: article.title,
-      details: { slug: article.slug },
+      await activityLogService.logActivity({
+        actor,
+        action: "ARTICLE_DELETE",
+        targetType: article.main_category === "tin-tuc" ? "news" : "article",
+        targetId: id,
+        targetTitle: article.title,
+        details: { slug: article.slug },
+      });
+
+      return { success: true, message: `Đã xóa bài viết "${article.title}" thành công.` };
     });
-
-    return { success: true, message: `Đã xóa bài viết "${article.title}" thành công.` };
   }
 
   async toggleArticlePublish(id, isPublished, actor) {
@@ -497,13 +505,31 @@ class AdminService {
       throw err;
     }
 
-    // Bảo vệ phòng ngừa tự khóa tài khoản (Self-lockout protection)
-    if (actor && actor.id === id) {
+    const actorRole = actor?.role || "customer";
+    const isSelf = Boolean(
+      (actor && actor.id === id) ||
+      (actor && actor.email && targetUser.email && actor.email.toLowerCase() === targetUser.email.toLowerCase())
+    );
+
+    // 1. Bảo vệ phòng ngừa tự khóa tài khoản (Self-lockout protection)
+    if (isSelf) {
       if (updateData.status && updateData.status !== "active") {
         throw new Error("Bảo mật: Bạn không thể tự đình chỉ tài khoản quản trị của chính mình!");
       }
-      if (updateData.role && updateData.role !== targetUser.role && targetUser.role === "admin") {
+      if (updateData.role && updateData.role !== targetUser.role && (targetUser.role === "admin" || targetUser.role === "super_admin")) {
         throw new Error("Bảo mật: Bạn không thể tự hạ quyền quản trị viên của chính mình!");
+      }
+    }
+
+    // 2. Kiểm soát phân cấp đặc quyền (Role Hierarchy Enforcement)
+    if (updateData.role && updateData.role !== targetUser.role) {
+      // Chỉ super_admin mới có quyền chỉ định hoặc thay đổi vai trò super_admin
+      if (updateData.role === "super_admin" && actorRole !== "super_admin") {
+        throw new Error("Bảo mật: Chỉ Quản trị viên tối cao (Super Admin) mới có quyền chỉ định vai trò Super Admin!");
+      }
+      // Người không phải super_admin không thể thay đổi vai trò của một super_admin khác
+      if (targetUser.role === "super_admin" && actorRole !== "super_admin") {
+        throw new Error("Bảo mật: Bạn không có quyền sửa đổi thông tin của Quản trị viên tối cao!");
       }
     }
 
@@ -629,19 +655,13 @@ class AdminService {
       throw err;
     }
 
-    // Xóa file vật lý trên ổ đĩa nếu nằm trong /uploads
-    if (media.url && media.url.startsWith("/uploads/")) {
-      const filePath = path.join(__dirname, "../../", media.url);
-      if (fs.existsSync(filePath)) {
-        try {
-          fs.unlinkSync(filePath);
-        } catch (e) {
-          console.warn("Không thể xóa file vật lý:", e.message);
-        }
-      }
-    }
-
+    // Xóa bản ghi trong database trước
     await db("media_files").where("id", id).delete();
+
+    // Dọn dẹp tệp vật lý hoặc đám mây qua storageService
+    if (media.url) {
+      await storageService.deleteFile(media.url);
+    }
 
     await activityLogService.logActivity({
       actor,

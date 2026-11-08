@@ -23,7 +23,7 @@ app.use(
       if (!origin || allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
-      return callback(null, true);
+      return callback(new Error("Truy cập bị từ chối bởi chính sách CORS"));
     },
     credentials: true,
   })
@@ -31,12 +31,20 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Phục vụ tài nguyên tĩnh Media uploads
+// Phục vụ tài nguyên tĩnh Media uploads với các tiêu chuẩn an ninh
 const uploadsPath = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadsPath)) {
   fs.mkdirSync(uploadsPath, { recursive: true });
 }
-app.use("/uploads", express.static(uploadsPath));
+app.use(
+  "/uploads",
+  (req, res, next) => {
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.setHeader("Content-Security-Policy", "default-src 'none'; style-src 'unsafe-inline'; sandbox");
+    next();
+  },
+  express.static(uploadsPath)
+);
 
 // Định tuyến API chính
 app.use("/api", routes);

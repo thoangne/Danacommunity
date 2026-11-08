@@ -83,6 +83,19 @@ export default function RichArticleEditor({
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  // Cảnh báo người dùng khi thoát trang nếu có nội dung chưa lưu
+  const isDirty = Boolean(title.trim() || content.trim());
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isDirty && !isSubmitting) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [isDirty, isSubmitting]);
+
   // Tự sinh Slug
   const generateSlug = (text: string) => {
     return text

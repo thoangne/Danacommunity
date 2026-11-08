@@ -821,20 +821,22 @@ class AuthService {
       }
     }
 
-    // 4.3 Fallback tìm kiếm theo chuỗi token cũ trong mock users
-    for (const user of this.mockUsers.values()) {
-      if (token.includes(user.id)) {
-        return {
-          id: user.id,
-          email: user.email,
-          fullName: user.fullName,
-          avatarUrl: user.avatarUrl,
-          provider: user.provider,
-          role: user.role,
-          status: user.status || "active",
-          emailVerified: Boolean(user.emailVerified),
-          oauthAccounts: [],
-        };
+    // 4.3 Fallback chỉ dành riêng cho môi trường kiểm thử tự động (NODE_ENV === "test")
+    if (process.env.NODE_ENV === "test") {
+      for (const user of this.mockUsers.values()) {
+        if (token === `mock-test-token-${user.id}`) {
+          return {
+            id: user.id,
+            email: user.email,
+            fullName: user.fullName,
+            avatarUrl: user.avatarUrl,
+            provider: user.provider,
+            role: user.role,
+            status: user.status || "active",
+            emailVerified: Boolean(user.emailVerified),
+            oauthAccounts: [],
+          };
+        }
       }
     }
 

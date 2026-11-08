@@ -1,5 +1,6 @@
 const adminService = require("../services/adminService");
 const activityLogService = require("../services/activityLogService");
+const storageService = require("../services/storageService");
 
 class AdminController {
   // 1. Dashboard
@@ -205,18 +206,17 @@ class AdminController {
         });
       }
 
-      const file = req.file;
       const actor = req.user;
-      const fileUrl = `/uploads/${file.filename}`;
+      const uploadedInfo = await storageService.saveFile(req.file);
 
       const saved = await adminService.saveMediaFile(
         {
-          filename: file.filename,
-          originalName: file.originalname,
-          mimeType: file.mimetype,
-          size: file.size,
+          filename: uploadedInfo.filename,
+          originalName: uploadedInfo.originalName,
+          mimeType: uploadedInfo.mimeType,
+          size: uploadedInfo.size,
           dimensions: null,
-          url: fileUrl,
+          url: uploadedInfo.url,
         },
         actor
       );
