@@ -46,5 +46,22 @@ router.put("/settings", requireRole(["admin"]), adminController.updateSettings);
 // 7. Activity Logs (Chỉ Admin)
 router.get("/activity-logs", requireRole(["admin"]), adminController.getActivityLogs);
 
+// 8. Artisans Management (Nghệ nhân Chăm - Admin & Editor tạo/sửa, Admin xóa)
+router.get("/artisans", requireRole(["admin", "editor"]), adminController.getArtisans);
+router.get("/artisans/:id", requireRole(["admin", "editor"]), adminController.getArtisanById);
+router.post("/artisans", requireRole(["admin", "editor"]), adminController.createArtisan);
+router.put("/artisans/:id", requireRole(["admin", "editor"]), adminController.updateArtisan);
+router.delete("/artisans/:id", requireRole(["admin"]), adminController.deleteArtisan);
+
+// 9. Craft Products Management (Tác phẩm làng nghề - Admin & Editor tạo/sửa, Admin xóa)
+router.get("/products", requireRole(["admin", "editor"]), adminController.getProducts);
+router.get("/products/:id", requireRole(["admin", "editor"]), adminController.getProductById);
+router.post("/products", requireRole(["admin", "editor"]), adminController.createProduct);
+router.put("/products/:id", requireRole(["admin", "editor"]), adminController.updateProduct);
+router.delete("/products/:id", requireRole(["admin"]), adminController.deleteProduct);
+
+// 10. Craft Categories
+router.get("/craft-categories", requireRole(["admin", "editor"]), adminController.getCraftCategories);
+
 module.exports = router;
 

@@ -1,20 +1,42 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { Link } from "react-router-dom";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { Mail, MapPin, Phone, Loader2 } from "lucide-react";
 import { LOGO_URL } from "../data/champaData";
 import { toast } from "./ui/sonner";
 
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
 export default function Footer() {
   const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubscribe = (e: FormEvent) => {
+  const handleSubscribe = async (e: FormEvent) => {
     e.preventDefault();
-    if (!email) return;
-    toast.success("Đăng ký nhận bản tin thành công!", {
-      description: `Bản tin chuyên đề văn hóa Panduranga định kỳ sẽ được gửi tới: ${email}`,
-    });
-    setEmail("");
+    if (!email.trim() || isSubmitting) return;
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch(`${API_BASE}/newsletter/subscribe`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), source: "footer_newsletter" }),
+      });
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        toast.success("Đăng ký nhận bản tin thành công!", {
+          description: `Bản tin chuyên đề văn hóa Panduranga định kỳ sẽ được gửi tới: ${email}`,
+        });
+        setEmail("");
+      } else {
+        toast.error(data.message || "Không thể đăng ký nhận bản tin. Vui lòng thử lại.");
+      }
+    } catch {
+      toast.error("Lỗi kết nối máy chủ. Vui lòng kiểm tra lại đường truyền.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -125,10 +147,12 @@ export default function Footer() {
                 onChange={(e) => setEmail(e.target.value)}
               />
               <button
-                className="px-space-md py-2.5 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-label-md text-xs uppercase tracking-wider transition-colors font-semibold shrink-0 shadow-sm"
+                className="px-space-md py-2.5 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-label-md text-xs uppercase tracking-wider transition-colors font-semibold shrink-0 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
                 type="submit"
+                disabled={isSubmitting}
               >
-                Đăng ký
+                {isSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                <span>{isSubmitting ? "Đang gửi..." : "Đăng ký"}</span>
               </button>
             </form>
 
