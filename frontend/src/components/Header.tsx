@@ -236,29 +236,29 @@ export default function Header({ onToggleAudio, isAudioPlaying }: HeaderProps) {
           : "bg-[#FAF9F6]/80 backdrop-blur-xs border-b border-[#DEDAD2]/40"
       }`}
     >
-      <div className="w-full max-w-[1680px] mx-auto h-20 px-4 sm:px-6 lg:px-8 xl:px-12 flex items-center justify-between gap-4">
+      <div className="w-full max-w-[1680px] mx-auto h-16 xl:h-20 px-3 sm:px-6 lg:px-8 xl:px-12 flex items-center justify-between gap-2 sm:gap-4">
         {/* ========================================================
             1. VÙNG TRÁI: ĐỊNH DANH THƯƠNG HIỆU (BRAND EXPERIENCE)
             Logo nguyên bản sắc nét, phân cấp chữ sa thạch & than chì
         ======================================================== */}
-        <div className="flex items-center shrink-0">
+        <div className="flex items-center shrink-0 min-w-0">
           <Link
-            className="flex items-center gap-3 sm:gap-3.5 group select-none whitespace-nowrap py-1"
+            className="flex items-center gap-2 sm:gap-3.5 group select-none py-1"
             to="/"
             onClick={() => handleNavClick("/")}
             title="Dana Community Tourism - Panduranga Heritage"
           >
             <img
               alt="Logo Dana - Di sản & Văn hóa Chăm"
-              className="h-10 sm:h-11 xl:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.03] shrink-0"
+              className="h-9 sm:h-11 xl:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.03] shrink-0"
               src={LOGO_URL}
               loading="eager"
             />
-            <div className="flex flex-col text-left whitespace-nowrap">
-              <span className="text-[15px] xl:text-[16px] text-[#24231F] font-bold tracking-tight leading-snug group-hover:text-[#8F4E00] transition-colors">
-                Dana Community Tourism
+            <div className="flex flex-col text-left min-w-0">
+              <span className="text-[13px] sm:text-[15px] xl:text-[16px] text-[#24231F] font-bold tracking-tight leading-snug group-hover:text-[#8F4E00] transition-colors truncate">
+                Dana Community<span className="hidden sm:inline"> Tourism</span>
               </span>
-              <span className="font-serif text-[12px] xl:text-[13px] text-[#77716A] leading-tight font-normal italic mt-0.5 tracking-wide">
+              <span className="hidden sm:inline font-serif text-[11px] xl:text-[13px] text-[#77716A] leading-tight font-normal italic mt-0.5 tracking-wide truncate">
                 Panduranga Heritage
               </span>
             </div>
@@ -378,11 +378,11 @@ export default function Header({ onToggleAudio, isAudioPlaying }: HeaderProps) {
             3. VÙNG PHẢI: HÀNH ĐỘNG TINH GIẢN (CURATED ACTIONS)
             Acoustic Pill Saranai, Nút Đăng nhập Than chì, Chuyển ngữ Slash
         ======================================================== */}
-        <div className="flex items-center gap-2 sm:gap-2.5 xl:gap-3.5 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2.5 xl:gap-3.5 shrink-0">
           {/* 3.1 Nút âm thanh Saranai - Acoustic Pill thanh lịch, KHÔNG nhấp nháy giật mắt */}
           <button
             onClick={handleAudioToggle}
-            className={`flex items-center justify-center gap-2 px-3 py-1.5 xl:px-3.5 xl:py-2 rounded-full border text-xs transition-all duration-200 cursor-pointer ${
+            className={`flex items-center justify-center gap-1.5 sm:gap-2 h-8 sm:h-9 px-2 sm:px-3 xl:px-3.5 rounded-full border text-xs transition-all duration-200 cursor-pointer ${
               currentIsPlaying
                 ? "bg-[#8F4E00]/10 border-[#8F4E00]/40 text-[#8F4E00] shadow-2xs font-semibold"
                 : "bg-transparent hover:bg-stone-200/40 border-[#DEDAD2] text-[#77716A] hover:text-[#24231F] font-medium"
@@ -422,10 +422,10 @@ export default function Header({ onToggleAudio, isAudioPlaying }: HeaderProps) {
             <button
               type="button"
               onClick={() => openAuthModal("login")}
-              className="inline-flex items-center gap-1.5 h-9 px-3.5 sm:px-4 rounded-full bg-[#24231F] hover:bg-[#8F4E00] text-[#FAF9F6] font-medium text-xs tracking-wide transition-all duration-200 shadow-2xs hover:shadow-xs cursor-pointer shrink-0"
+              className="inline-flex items-center gap-1.5 h-8 sm:h-9 px-2.5 sm:px-4 rounded-full bg-[#24231F] hover:bg-[#8F4E00] text-[#FAF9F6] font-medium text-xs tracking-wide transition-all duration-200 shadow-2xs hover:shadow-xs cursor-pointer shrink-0"
             >
-              <LogIn className="h-3.5 w-3.5" />
-              <span>{language === "vi" ? "Đăng nhập" : "Sign In"}</span>
+              <LogIn className="h-3.5 w-3.5 shrink-0" />
+              <span className="hidden xs:inline">{language === "vi" ? "Đăng nhập" : "Sign In"}</span>
             </button>
           ) : (
             <div className="relative inline-block shrink-0" ref={userMenuRef}>
@@ -516,7 +516,7 @@ export default function Header({ onToggleAudio, isAudioPlaying }: HeaderProps) {
           )}
 
           {/* 3.3 Chuyển ngữ tối giản (Slash Toggle VI / EN) */}
-          <div className="flex items-center text-[11px] font-semibold tracking-wider text-[#77716A] px-2 py-1 rounded-full border border-[#DEDAD2] bg-[#FAF9F6] shrink-0 select-none">
+          <div className="hidden sm:flex items-center text-[11px] font-semibold tracking-wider text-[#77716A] px-2 py-1 rounded-full border border-[#DEDAD2] bg-[#FAF9F6] shrink-0 select-none">
             <button
               type="button"
               onClick={() => handleLanguageChange("vi")}
@@ -544,7 +544,7 @@ export default function Header({ onToggleAudio, isAudioPlaying }: HeaderProps) {
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden h-9 w-9 rounded-full shrink-0 text-[#24231F] hover:bg-stone-200/50 border border-[#DEDAD2]"
+            className="lg:hidden h-8 w-8 sm:h-9 sm:w-9 rounded-full shrink-0 text-[#24231F] hover:bg-stone-200/50 border border-[#DEDAD2]"
             aria-label={mobileMenuOpen ? "Đóng danh mục" : "Mở danh mục"}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
@@ -558,7 +558,7 @@ export default function Header({ onToggleAudio, isAudioPlaying }: HeaderProps) {
           Mục lục nghệ thuật có đánh số thứ tự 01, 02, 03...
       ======================================================== */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-[#FAF9F6] border-t border-[#DEDAD2] px-6 py-6 flex flex-col gap-4 shadow-2xl animate-in slide-in-from-top-2 duration-200 max-h-[calc(100vh-5rem)] overflow-y-auto">
+        <div className="lg:hidden bg-[#FAF9F6] border-t border-[#DEDAD2] px-4 sm:px-6 py-5 sm:py-6 flex flex-col gap-4 shadow-2xl animate-in slide-in-from-top-2 duration-200 max-h-[calc(100vh-4rem)] xl:max-h-[calc(100vh-5rem)] overflow-y-auto">
           {/* Header Mobile Drawer */}
           <div className="flex items-center justify-between pb-3 border-b border-[#DEDAD2]/80">
             <span className="font-serif italic text-xs tracking-wider text-[#77716A]">

@@ -128,11 +128,6 @@ export default function Footer() {
               </div>
             </div>
 
-            <p className="font-body-md text-sm text-on-surface-variant leading-relaxed">
-              {siteInfo.description ||
-                "Cổng thông tin bảo tồn và du lịch văn hóa Champa độc bản. Chúng tôi phục dựng ký ức đền tháp, nhịp thở gốm Bàu Trúc, sắc thổ cẩm Mỹ Nghiệp và kết nối lữ khách cùng di sản sống của vùng đất Panduranga huyền thoại."}
-            </p>
-
             <div className="flex items-center gap-2 text-xs text-secondary font-medium">
               <Sparkles className="h-3.5 w-3.5 text-primary" />
               <span>{siteInfo.tagline}</span>

@@ -161,10 +161,11 @@ export default function HeritageMap({
                     href={station.googleMapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-1.5 w-full py-1 px-2 rounded-lg bg-primary hover:bg-primary/90 text-white text-[11px] font-bold shadow-xs transition-colors"
+                    style={{ color: "#000000" }}
+                    className="inline-flex items-center justify-center gap-1.5 w-full py-1.5 px-3 rounded-lg bg-stone-100 hover:bg-stone-200 !text-black text-[11px] font-bold border border-stone-300 shadow-2xs transition-colors no-underline"
                   >
-                    <span>Mở Google Maps chỉ đường</span>
-                    <ExternalLink className="w-3 h-3" />
+                    <span style={{ color: "#000000" }} className="!text-black font-bold">Mở Google Maps chỉ đường</span>
+                    <ExternalLink className="w-3 h-3 !text-black shrink-0" style={{ color: "#000000" }} />
                   </a>
                 )}
               </div>
