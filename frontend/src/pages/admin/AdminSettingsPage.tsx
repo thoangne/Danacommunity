@@ -36,6 +36,16 @@ export interface CarouselSlideItem {
   isActive: boolean;
 }
 
+const DEFAULT_SITE_INFO = {
+  siteName: "ChampaWeb • Dana Community",
+  tagline: "Bảo tồn & phát huy giá trị di sản văn hóa Champa",
+  description:
+    "Cổng thông tin chuyên sâu về khảo cứu lịch sử, kiến trúc đền tháp Kalan, làng nghề gốm cổ Bàu Trúc, dệt thổ cẩm Mỹ Nghiệp và du lịch di sản cộng đồng Chăm.",
+  contactEmail: "admin@danacommunity.vn",
+  contactPhone: "0976 029 004",
+  address: "Thôn Chất Thường, Xã Phước Hậu, Huyện Ninh Phước, Tỉnh Ninh Thuận",
+};
+
 export default function AdminSettingsPage() {
   const { token } = useAuth();
   const [activeTab, setActiveTab] = useState<"site" | "seo" | "social" | "carousel">("site");
@@ -43,12 +53,12 @@ export default function AdminSettingsPage() {
   const [isSaving, setIsSaving] = useState(false);
 
   // 1. Site Info
-  const [siteName, setSiteName] = useState("");
-  const [tagline, setTagline] = useState("");
-  const [description, setDescription] = useState("");
-  const [contactEmail, setContactEmail] = useState("");
-  const [contactPhone, setContactPhone] = useState("");
-  const [address, setAddress] = useState("");
+  const [siteName, setSiteName] = useState(DEFAULT_SITE_INFO.siteName);
+  const [tagline, setTagline] = useState(DEFAULT_SITE_INFO.tagline);
+  const [description, setDescription] = useState(DEFAULT_SITE_INFO.description);
+  const [contactEmail, setContactEmail] = useState(DEFAULT_SITE_INFO.contactEmail);
+  const [contactPhone, setContactPhone] = useState(DEFAULT_SITE_INFO.contactPhone);
+  const [address, setAddress] = useState(DEFAULT_SITE_INFO.address);
 
   // 2. SEO Defaults
   const [metaTitle, setMetaTitle] = useState("");
@@ -86,12 +96,13 @@ export default function AdminSettingsPage() {
         if (data.success && data.data) {
           const s = data.data;
           if (s.site_info) {
-            setSiteName(s.site_info.siteName || "");
-            setTagline(s.site_info.tagline || "");
-            setDescription(s.site_info.description || "");
-            setContactEmail(s.site_info.contactEmail || "");
-            setContactPhone(s.site_info.contactPhone || "");
-            setAddress(s.site_info.address || "");
+            const isPlaceholder = s.site_info.contactEmail === "contact@champaweb.vn";
+            setSiteName(isPlaceholder ? DEFAULT_SITE_INFO.siteName : (s.site_info.siteName || DEFAULT_SITE_INFO.siteName));
+            setTagline(isPlaceholder ? DEFAULT_SITE_INFO.tagline : (s.site_info.tagline || DEFAULT_SITE_INFO.tagline));
+            setDescription(isPlaceholder ? DEFAULT_SITE_INFO.description : (s.site_info.description || DEFAULT_SITE_INFO.description));
+            setContactEmail(isPlaceholder ? DEFAULT_SITE_INFO.contactEmail : (s.site_info.contactEmail || DEFAULT_SITE_INFO.contactEmail));
+            setContactPhone(isPlaceholder ? DEFAULT_SITE_INFO.contactPhone : (s.site_info.contactPhone || DEFAULT_SITE_INFO.contactPhone));
+            setAddress(isPlaceholder ? DEFAULT_SITE_INFO.address : (s.site_info.address || DEFAULT_SITE_INFO.address));
           }
           if (s.seo_defaults) {
             setMetaTitle(s.seo_defaults.metaTitle || "");
@@ -553,7 +564,7 @@ export default function AdminSettingsPage() {
                       required
                       value={siteName}
                       onChange={(e) => setSiteName(e.target.value)}
-                      placeholder="ChampaWeb - Nền tảng Di sản & Du lịch Văn hóa Champa"
+                      placeholder="ChampaWeb • Dana Community"
                       className="w-full px-4 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:border-[#8F4E00]"
                     />
                   </div>
@@ -566,7 +577,7 @@ export default function AdminSettingsPage() {
                       type="text"
                       value={tagline}
                       onChange={(e) => setTagline(e.target.value)}
-                      placeholder="Bảo tồn & phát huy giá trị di sản Panduranga - Baoh Dana"
+                      placeholder="Bảo tồn & phát huy giá trị di sản văn hóa Champa"
                       className="w-full px-4 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:border-[#8F4E00]"
                     />
                   </div>
@@ -579,7 +590,7 @@ export default function AdminSettingsPage() {
                       rows={3}
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
-                      placeholder="Cổng thông tin chuyên sâu về khảo cứu lịch sử, kiến trúc đền tháp, làng nghề gốm Bàu Trúc, dệt Mỹ Nghiệp..."
+                      placeholder="Cổng thông tin chuyên sâu về khảo cứu lịch sử, kiến trúc đền tháp Kalan, làng nghề gốm cổ Bàu Trúc, dệt thổ cẩm Mỹ Nghiệp và du lịch di sản cộng đồng Chăm."
                       className="w-full px-4 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:border-[#8F4E00] resize-none"
                     />
                   </div>
@@ -593,7 +604,7 @@ export default function AdminSettingsPage() {
                       type="email"
                       value={contactEmail}
                       onChange={(e) => setContactEmail(e.target.value)}
-                      placeholder="contact@champaweb.vn"
+                      placeholder="admin@danacommunity.vn"
                       className="w-full px-4 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:border-[#8F4E00]"
                     />
                   </div>
@@ -607,7 +618,7 @@ export default function AdminSettingsPage() {
                       type="text"
                       value={contactPhone}
                       onChange={(e) => setContactPhone(e.target.value)}
-                      placeholder="+84 259 382 3456"
+                      placeholder="0976 029 004"
                       className="w-full px-4 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:border-[#8F4E00]"
                     />
                   </div>
@@ -621,7 +632,7 @@ export default function AdminSettingsPage() {
                       type="text"
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
-                      placeholder="Palei Hamu Craok (Bàu Trúc), Phước Dân, Ninh Phước, Ninh Thuận"
+                      placeholder="Thôn Chất Thường, Xã Phước Hậu, Huyện Ninh Phước, Tỉnh Ninh Thuận"
                       className="w-full px-4 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:border-[#8F4E00]"
                     />
                   </div>

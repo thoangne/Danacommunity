@@ -79,14 +79,14 @@ exports.up = async function (knex) {
       {
         key: "site_info",
         value: JSON.stringify({
-          siteName: "ChampaWeb - Nền tảng Di sản & Du lịch Văn hóa Champa",
-          tagline: "Bảo tồn & phát huy giá trị di sản Panduranga - Baoh Dana",
-          description: "Cổng thông tin chuyên sâu về khảo cứu lịch sử, kiến trúc đền tháp, làng nghề gốm Bàu Trúc, dệt thổ cẩm Mỹ Nghiệp và du lịch cộng đồng Chăm.",
-          contactEmail: "contact@champaweb.vn",
-          contactPhone: "+84 259 382 3456",
-          address: "Palei Hamu Craok (Bàu Trúc), Phước Dân, Ninh Phước, Ninh Thuận",
+          siteName: "ChampaWeb • Dana Community",
+          tagline: "Bảo tồn & phát huy giá trị di sản văn hóa Champa",
+          description: "Cổng thông tin chuyên sâu về khảo cứu lịch sử, kiến trúc đền tháp Kalan, làng nghề gốm cổ Bàu Trúc, dệt thổ cẩm Mỹ Nghiệp và du lịch di sản cộng đồng Chăm.",
+          contactEmail: "admin@danacommunity.vn",
+          contactPhone: "0976 029 004",
+          address: "Thôn Chất Thường, Xã Phước Hậu, Huyện Ninh Phước, Tỉnh Ninh Thuận",
         }),
-        description: "Thông tin cơ bản website và liên hệ",
+        description: "Thông tin cơ bản website và liên hệ thực tế",
       },
       {
         key: "seo_defaults",

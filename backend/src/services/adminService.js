@@ -55,6 +55,16 @@ const DEFAULT_CAROUSEL_SLIDES = [
   },
 ];
 
+const DEFAULT_SITE_INFO = {
+  siteName: "ChampaWeb • Dana Community",
+  tagline: "Bảo tồn & phát huy giá trị di sản văn hóa Champa",
+  description:
+    "Cổng thông tin chuyên sâu về khảo cứu lịch sử, kiến trúc đền tháp Kalan, làng nghề gốm cổ Bàu Trúc, dệt thổ cẩm Mỹ Nghiệp và du lịch di sản cộng đồng Chăm.",
+  contactEmail: "admin@danacommunity.vn",
+  contactPhone: "0976 029 004",
+  address: "Thôn Chất Thường, Xã Phước Hậu, Huyện Ninh Phước, Tỉnh Ninh Thuận",
+};
+
 class AdminService {
   constructor() {
     this.mockArtisans = new Map([
@@ -1232,12 +1242,25 @@ class AdminService {
       rows.forEach((r) => {
         settings[r.key] = typeof r.value === "string" ? JSON.parse(r.value) : r.value;
       });
+      if (!settings.site_info || settings.site_info.contactEmail === "contact@champaweb.vn") {
+        settings.site_info = {
+          ...DEFAULT_SITE_INFO,
+          ...(settings.site_info || {}),
+          siteName: DEFAULT_SITE_INFO.siteName,
+          tagline: DEFAULT_SITE_INFO.tagline,
+          description: DEFAULT_SITE_INFO.description,
+          contactEmail: DEFAULT_SITE_INFO.contactEmail,
+          contactPhone: DEFAULT_SITE_INFO.contactPhone,
+          address: DEFAULT_SITE_INFO.address,
+        };
+      }
       if (!settings.home_carousel || !Array.isArray(settings.home_carousel) || settings.home_carousel.length === 0) {
         settings.home_carousel = DEFAULT_CAROUSEL_SLIDES;
       }
       return settings;
     }
     return {
+      site_info: DEFAULT_SITE_INFO,
       home_carousel: DEFAULT_CAROUSEL_SLIDES,
     };
   }
