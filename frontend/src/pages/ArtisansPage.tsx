@@ -32,7 +32,7 @@ export default function ArtisansPage() {
   const [selectedVillage, setSelectedVillage] = useState<string>("all");
 
   // State Modal đặt hẹn ghé thăm xưởng
-  const [bookingArtisan, setBookingArtisan] = useState<any | null>(null);
+  const [bookingArtisan, setBookingArtisan] = useState<(typeof ARTISANS)[0] | null>(null);
   const [bookingForm, setBookingForm] = useState({
     name: "",
     phone: "",
@@ -215,10 +215,10 @@ export default function ArtisansPage() {
                 <article
                   key={artisan.id}
                   id={`artisan-${artisan.id}`}
-                  className="rounded-3xl bg-surface-container-lowest border border-outline-variant/30 hover:border-primary/40 shadow-sm hover:shadow-lg transition-all duration-300 p-space-md sm:p-space-lg xl:p-space-xl scroll-mt-28"
+                  className="rounded-2xl sm:rounded-3xl bg-surface-container-lowest border border-outline-variant/30 hover:border-primary/40 shadow-xs sm:shadow-sm hover:shadow-lg transition-all duration-300 p-3.5 sm:p-space-lg xl:p-space-xl scroll-mt-28"
                 >
                   <div
-                    className={`grid grid-cols-1 lg:grid-cols-12 gap-gutter items-center ${
+                    className={`grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-gutter items-center ${
                       isEven ? "lg:flex-row-reverse" : ""
                     }`}
                   >
@@ -229,7 +229,7 @@ export default function ArtisansPage() {
                       }`}
                     >
                       {/* Ảnh chân dung lớn */}
-                      <div className="relative aspect-[3/4] sm:aspect-[4/5] rounded-3xl overflow-hidden bg-surface-container-high shadow-md">
+                      <div className="relative aspect-[16/10] sm:aspect-[4/5] max-h-56 sm:max-h-none rounded-2xl sm:rounded-3xl overflow-hidden bg-surface-container-high shadow-md">
                         <img
                           src={artisan.image}
                           alt={artisan.name}
@@ -239,20 +239,20 @@ export default function ArtisansPage() {
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
                         {/* Huy hiệu trên ảnh */}
-                        <div className="absolute top-3 left-3">
+                        <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3">
                           <span
-                            className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-xs ${artisan.badgeClass}`}
+                            className={`px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider shadow-xs ${artisan.badgeClass}`}
                           >
                             {artisan.title}
                           </span>
                         </div>
 
                         {/* Chú thích làng nghề góc dưới */}
-                        <div className="absolute bottom-3 left-3 right-3 text-white">
-                          <span className="text-[11px] font-semibold text-primary-fixed uppercase tracking-wider block">
+                        <div className="absolute bottom-2.5 left-2.5 right-2.5 sm:bottom-3 sm:left-3 sm:right-3 text-white">
+                          <span className="text-[10px] sm:text-[11px] font-semibold text-primary-fixed uppercase tracking-wider block">
                             {artisan.village}
                           </span>
-                          <span className="font-serif text-lg font-bold">
+                          <span className="font-serif text-base sm:text-lg font-bold">
                             {artisan.experience}
                           </span>
                         </div>
@@ -281,31 +281,31 @@ export default function ArtisansPage() {
                     >
                       <div>
                         {/* Specialty pill */}
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="text-xs font-bold text-secondary flex items-center gap-1 uppercase tracking-wider">
-                            <Sparkles className="w-3.5 h-3.5" />
+                        <div className="flex items-center gap-2 mb-1 sm:mb-2">
+                          <span className="text-[11px] sm:text-xs font-bold text-secondary flex items-center gap-1 uppercase tracking-wider">
+                            <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                             {artisan.specialty || "Nghệ nhân truyền thống Champa"}
                           </span>
                         </div>
 
                         {/* Tên nghệ nhân */}
-                        <h2 className="font-serif text-3xl xl:text-4xl font-bold text-on-surface">
+                        <h2 className="font-serif text-xl sm:text-3xl xl:text-4xl font-bold text-on-surface">
                           {artisan.name}
                         </h2>
-                        <p className="text-xs sm:text-sm text-secondary font-semibold mt-1">
+                        <p className="text-[11px] sm:text-sm text-secondary font-semibold mt-0.5 sm:mt-1">
                           {artisan.title} • {artisan.village}
                         </p>
 
                         {/* Khối Trích dẫn Thiền định (Quote Box) */}
-                        <div className="my-space-md p-space-md rounded-2xl bg-surface-container-low border border-outline-variant/30 relative">
-                          <Quote className="absolute right-3 top-3 h-8 w-8 text-primary/15" />
-                          <p className="font-serif text-sm sm:text-base text-on-surface italic leading-relaxed pr-6">
+                        <div className="my-2 sm:my-space-md p-2.5 sm:p-space-md rounded-xl sm:rounded-2xl bg-surface-container-low border border-outline-variant/30 relative">
+                          <Quote className="absolute right-2.5 top-2.5 h-5 w-5 sm:h-8 sm:w-8 text-primary/15" />
+                          <p className="font-serif text-xs sm:text-base text-on-surface italic leading-relaxed pr-5 sm:pr-6 line-clamp-2 sm:line-clamp-none">
                             {artisan.quote}
                           </p>
                         </div>
 
                         {/* Tiểu sử chi tiết */}
-                        <p className="font-body-md text-xs sm:text-sm text-on-surface-variant leading-relaxed mb-space-sm">
+                        <p className="font-body-md text-xs sm:text-sm text-on-surface-variant leading-relaxed mb-2 sm:mb-space-sm line-clamp-3 sm:line-clamp-none">
                           {artisan.bio}
                         </p>
 

@@ -4,6 +4,57 @@ const { db } = require("../config/db");
 const activityLogService = require("./activityLogService");
 const storageService = require("./storageService");
 
+const DEFAULT_CAROUSEL_SLIDES = [
+  {
+    id: 1,
+    title: "Tháp Cổ Po Klong Garai - Đỉnh Cao Nghệ Thuật Champa",
+    subtitle: "Kalan ngàn năm trên đồi Trầu - Đô thành Panduranga",
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuBWzz5wVWN2Rre_bf3lzTZ89szZW61A19gyuIM1D6eHB2bgjSvLJ2IjqYRR2_FvWNOaiuYH_mZKTaaCYHyrAo6Y-MHZRm5QMjTQqVYlWO-UTZpP7j-38TvaXGvTC0E43MbjaK6OcYizspkYPA97vZ7ux2qQedU074FLdyFMB7zxmwJM_GGaJUJxVOmC--t3UtTdUYuMj2PhxbPFLX9SyKZLF-p5BPhi_fHZpOUSInajqnNWFka72rYwew=s0",
+    link: "/kham-pha/thap-po-klong-garai",
+    order: 1,
+    isActive: true,
+  },
+  {
+    id: 2,
+    title: "Làng Gốm Bàu Trúc - Kỹ Nghệ Đất Nung Không Bàn Xoay",
+    subtitle: "Di sản văn hóa phi vật thể đại diện nhân loại UNESCO",
+    image: "/images/dana-life/IMG_9911.JPG",
+    link: "/san-pham?village=bau-truc",
+    order: 2,
+    isActive: true,
+  },
+  {
+    id: 3,
+    title: "Làng Dệt Thổ Cẩm Mỹ Nghiệp - Sợi Chỉ Vàng Katê",
+    subtitle: "Hoa văn cổ hoàng cung dệt từ thảo mộc thiên nhiên",
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuDXDHM6yk37AcZTWKD2kHI9jPGZKP1I4JY5yxSnfX4BbftErgSz5JHk80zz2TUzC_obO4A9NMXDFx8yx6BPBGmoGhCEaCXQvDZl1oXbqVoWkpJ3biH8-ERIAfE760E73pitqQdKh1Cszx9wZVscKNWrs_AhSvA-Knlo8t0FpNAlnZWyKlwoQFLeUtM0rrVeqUM5MhUYT5g8PyjacjFmVVYeo1XjeHE7PUh2mJzLoBrzGxvfV-vafEjkXA=s0",
+    link: "/san-pham?village=my-nghiep",
+    order: 3,
+    isActive: true,
+  },
+  {
+    id: 4,
+    title: "Đền Tháp Po Rome - Vị Vua Cuối Cùng Trên Đồi Đá",
+    subtitle: "Dấu ấn vương triều và nghi thức tế lễ cổ truyền",
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuAzljZH7__gmKglHYhA2NZtHh2wp1_j6eufhB24fW5dLEg6Q3iVPhcklfXTyfQfftG0s3kkeFa45XwJi0fI0t965d-lV9hy3Bp86bWdiRgQjJMFwqoPZzvC1Puek_bg_vu8Hy90bDTysgtbAXLReE5kLRMopjTkjh5Fgl-uWE2PDhyzuKEA3B_xFsrORw9XqbKdNdrSvBBD0BLP1ezotbfBBmrZCZNeWb86lbUY2kjNCncvJkPSIpv7pA=s0",
+    link: "/bai-viet",
+    order: 4,
+    isActive: true,
+  },
+  {
+    id: 5,
+    title: "Đồng Cừu An Hải & Đồi Cát Nam Cương Trầm Mặc",
+    subtitle: "Cảnh sắc thiên nhiên Panduranga nguyên sơ đầy quyến rũ",
+    image: "/images/dana-life/IMG_3237.JPG",
+    link: "/tour",
+    order: 5,
+    isActive: true,
+  },
+];
+
 class AdminService {
   constructor() {
     this.mockArtisans = new Map([
@@ -1104,6 +1155,49 @@ class AdminService {
     return created;
   }
 
+  async updateTag(id, data, actor) {
+    if (!db) throw new Error("Cơ sở dữ liệu chưa sẵn sàng!");
+
+    const tag = await db("tags").where("id", id).first();
+    if (!tag) {
+      const err = new Error("Thẻ không tồn tại!");
+      err.status = 404;
+      throw err;
+    }
+
+    const name = data.name?.trim();
+    if (!name) throw new Error("Tên thẻ không được để trống!");
+    const slug = data.slug?.trim() ? this._slugify(data.slug) : this._slugify(name);
+
+    // Kiểm tra trùng lặp với thẻ khác
+    const conflict = await db("tags")
+      .where((builder) => builder.where("name", name).orWhere("slug", slug))
+      .whereNot("id", id)
+      .first();
+
+    if (conflict) {
+      const err = new Error(`Thẻ "${name}" hoặc đường dẫn "${slug}" đã tồn tại!`);
+      err.status = 400;
+      throw err;
+    }
+
+    const [updated] = await db("tags")
+      .where("id", id)
+      .update({ name, slug })
+      .returning("*");
+
+    await activityLogService.logActivity({
+      actor,
+      action: "TAG_UPDATE",
+      targetType: "tag",
+      targetId: String(id),
+      targetTitle: name,
+      details: { old_name: tag.name, new_name: name, old_slug: tag.slug, new_slug: slug },
+    });
+
+    return updated;
+  }
+
   async deleteTag(id, actor) {
     if (!db) throw new Error("Cơ sở dữ liệu chưa sẵn sàng!");
 
@@ -1138,9 +1232,26 @@ class AdminService {
       rows.forEach((r) => {
         settings[r.key] = typeof r.value === "string" ? JSON.parse(r.value) : r.value;
       });
+      if (!settings.home_carousel || !Array.isArray(settings.home_carousel) || settings.home_carousel.length === 0) {
+        settings.home_carousel = DEFAULT_CAROUSEL_SLIDES;
+      }
       return settings;
     }
-    return {};
+    return {
+      home_carousel: DEFAULT_CAROUSEL_SLIDES,
+    };
+  }
+
+  async getPublicSettings() {
+    const settings = await this.getSettings();
+    return {
+      site_info: settings.site_info || null,
+      seo_defaults: settings.seo_defaults || null,
+      social_links: settings.social_links || null,
+      home_carousel: Array.isArray(settings.home_carousel)
+        ? settings.home_carousel.filter((s) => s.isActive !== false)
+        : DEFAULT_CAROUSEL_SLIDES,
+    };
   }
 
   async updateSettings(key, value, actor) {

@@ -329,6 +329,23 @@ class AdminController {
     }
   }
 
+  async updateTag(req, res, next) {
+    try {
+      const { id } = req.params;
+      const data = req.body;
+      const actor = req.user;
+      const updated = await adminService.updateTag(id, data, actor);
+
+      res.status(200).json({
+        success: true,
+        message: "Cập nhật thẻ thành công!",
+        data: updated,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async deleteTag(req, res, next) {
     try {
       const { id } = req.params;
@@ -345,6 +362,18 @@ class AdminController {
   async getSettings(req, res, next) {
     try {
       const settings = await adminService.getSettings();
+      res.status(200).json({
+        success: true,
+        data: settings,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getPublicSettings(req, res, next) {
+    try {
+      const settings = await adminService.getPublicSettings();
       res.status(200).json({
         success: true,
         data: settings,

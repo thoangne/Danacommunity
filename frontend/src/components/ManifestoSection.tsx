@@ -27,7 +27,7 @@ export default function ManifestoSection() {
         </div>
 
         {/* Philosophy Heading & Core Statement */}
-        <div className="max-w-3xl mx-auto text-center mb-space-xl">
+        <div className="max-w-3xl mx-auto text-center mb-0 md:mb-space-xl">
           <span className="font-label-md text-label-md uppercase tracking-widest text-secondary font-bold block mb-space-xs">
             Triết lý Dana • Di sản trong từng nhịp thở
           </span>
@@ -43,8 +43,8 @@ export default function ManifestoSection() {
           </p>
         </div>
 
-        {/* 3 Impact Metric Cards Desktop Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+        {/* 3 Impact Metric Cards Grid - Ẩn trên màn hình Smartphone (SP), hiển thị từ breakpoint md (Tablet/Desktop) */}
+        <div className="hidden md:grid md:grid-cols-3 gap-gutter">
           {MANIFESTO_METRICS.map((metric) => {
             const IconComponent =
               METRIC_ICONS[metric.icon as keyof typeof METRIC_ICONS] ?? Handshake;

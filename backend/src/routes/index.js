@@ -7,6 +7,7 @@ const authRoutes = require("./authRoutes");
 const postRoutes = require("./postRoute");
 const adminRoutes = require("./adminRoutes");
 const craftRoutes = require("./craftRoutes");
+const adminController = require("../controllers/adminController");
 const { testConnection } = require("../config/db");
 const { NODE_ENV } = require("../config/env");
 
@@ -16,6 +17,9 @@ router.use("/newsletter", newsletterRoutes);
 router.use("/posts", postRoutes);
 router.use("/admin", adminRoutes);
 router.use("/craft", craftRoutes);
+
+// Public settings endpoint (Carousel, Site Info, Social Links, SEO)
+router.get("/settings/public", adminController.getPublicSettings);
 
 /**
  * Health check endpoint.

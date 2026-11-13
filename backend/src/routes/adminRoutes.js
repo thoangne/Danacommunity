@@ -37,6 +37,7 @@ router.delete("/categories/:id", requireRole(["admin"]), adminController.deleteC
 
 router.get("/tags", requireRole(["admin", "editor"]), adminController.getTags);
 router.post("/tags", requireRole(["admin", "editor"]), adminController.createTag);
+router.put("/tags/:id", requireRole(["admin", "editor"]), adminController.updateTag);
 router.delete("/tags/:id", requireRole(["admin"]), adminController.deleteTag);
 
 // 6. Site Settings (Chỉ Admin)

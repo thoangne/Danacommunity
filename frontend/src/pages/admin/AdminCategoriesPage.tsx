@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   FolderTree,
   Tag,
@@ -55,6 +55,10 @@ export default function AdminCategoriesPage() {
   const [tagSearch, setTagSearch] = useState("");
   const [newTagName, setNewTagName] = useState("");
   const [isTagSubmitting, setIsTagSubmitting] = useState(false);
+  const [isTagModalOpen, setIsTagModalOpen] = useState(false);
+  const [editingTag, setEditingTag] = useState<TagItem | null>(null);
+  const [editTagName, setEditTagName] = useState("");
+  const [isEditingTagSubmitting, setIsEditingTagSubmitting] = useState(false);
 
   // Fetch Categories
   const fetchCategories = async () => {
@@ -247,6 +251,42 @@ export default function AdminCategoriesPage() {
       }
     } catch {
       toast.error("Lỗi xóa thẻ.");
+    }
+  };
+
+  // Edit Tag
+  const openEditTagModal = (tag: TagItem) => {
+    setEditingTag(tag);
+    setEditTagName(tag.name);
+    setIsTagModalOpen(true);
+  };
+
+  const handleUpdateTag = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingTag || !editTagName.trim()) return;
+
+    setIsEditingTagSubmitting(true);
+    try {
+      const res = await fetch(`${API_BASE}/admin/tags/${editingTag.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token || ""}`,
+        },
+        body: JSON.stringify({ name: editTagName.trim() }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        toast.success(`Đã cập nhật thẻ thành #${editTagName.trim()}!`);
+        setIsTagModalOpen(false);
+        fetchTags();
+      } else {
+        toast.error(data.message || "Cập nhật thẻ thất bại.");
+      }
+    } catch {
+      toast.error("Lỗi cập nhật thẻ.");
+    } finally {
+      setIsEditingTagSubmitting(false);
     }
   };
 
@@ -460,6 +500,14 @@ export default function AdminCategoriesPage() {
                       <span className="text-[10px] text-stone-400 font-mono">({tag.article_count})</span>
                       <button
                         type="button"
+                        onClick={() => openEditTagModal(tag)}
+                        className="text-stone-400 hover:text-[#8F4E00] transition-colors cursor-pointer"
+                        title="Chỉnh sửa tên thẻ"
+                      >
+                        <Edit className="w-3 h-3" />
+                      </button>
+                      <button
+                        type="button"
                         onClick={() => handleDeleteTag(tag)}
                         className="text-stone-300 hover:text-red-600 transition-colors cursor-pointer"
                         title="Xóa thẻ"
@@ -588,6 +636,63 @@ export default function AdminCategoriesPage() {
                     className="px-5 py-2 rounded-xl bg-[#8F4E00] hover:bg-[#8F4E00]/90 text-white text-xs font-semibold shadow-xs cursor-pointer"
                   >
                     {editingCategory ? "Cập nhật" : "Tạo chuyên mục"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Tag Edit Modal */}
+        {isTagModalOpen && editingTag && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
+            <div className="w-full max-w-sm bg-white rounded-2xl shadow-2xl border border-stone-200 overflow-hidden">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-stone-200 bg-[#FAF9F6]">
+                <h3 className="font-serif text-base font-bold text-stone-900">
+                  Chỉnh sửa thẻ #{editingTag.name}
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setIsTagModalOpen(false)}
+                  className="text-stone-400 hover:text-stone-700 cursor-pointer"
+                >
+                  &times;
+                </button>
+              </div>
+
+              <form onSubmit={handleUpdateTag} className="p-6 space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-stone-700 mb-1">
+                    Tên thẻ mới <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={editTagName}
+                    onChange={(e) => setEditTagName(e.target.value)}
+                    className="w-full px-3.5 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:border-[#8F4E00]"
+                    placeholder="Ví dụ: Đền tháp Kalan"
+                  />
+                  <p className="text-[11px] text-stone-400 mt-1">
+                    Đường dẫn (slug) sẽ tự động cập nhật. Đang có {editingTag.article_count} bài viết gắn thẻ này.
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-4 border-t border-stone-200">
+                  <button
+                    type="button"
+                    onClick={() => setIsTagModalOpen(false)}
+                    className="px-4 py-2 text-xs font-semibold text-stone-600 hover:text-stone-900 cursor-pointer"
+                  >
+                    Hủy
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isEditingTagSubmitting}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-xl bg-[#8F4E00] hover:bg-[#8F4E00]/90 text-white cursor-pointer shadow-xs disabled:opacity-50"
+                  >
+                    {isEditingTagSubmitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                    <span>Lưu thay đổi</span>
                   </button>
                 </div>
               </form>

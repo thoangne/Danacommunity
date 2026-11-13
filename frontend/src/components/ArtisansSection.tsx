@@ -30,15 +30,15 @@ export default function ArtisansSection() {
         </div>
 
         {/* Feature Split Section: Spotlight Master Artisans */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-gutter">
           {ARTISANS.map((artisan) => (
             <div
               key={artisan.name}
-              className="p-space-lg rounded-2xl bg-surface-container-low shadow-md flex flex-col justify-between border border-outline-variant/30 hover:shadow-lg transition-all"
+              className="p-3.5 sm:p-space-lg rounded-2xl bg-surface-container-low shadow-sm sm:shadow-md flex flex-col justify-between border border-outline-variant/30 hover:shadow-lg transition-all"
             >
               <div>
-                <div className="grid grid-cols-1 sm:grid-cols-12 gap-space-md mb-space-md items-center">
-                  <div className="sm:col-span-5 h-56 rounded-xl overflow-hidden bg-surface-container-high shadow-inner">
+                <div className="flex flex-row sm:grid sm:grid-cols-12 gap-3 sm:gap-space-md mb-2.5 sm:mb-space-md items-start sm:items-center">
+                  <div className="w-24 h-28 sm:w-auto sm:h-56 sm:col-span-5 rounded-xl overflow-hidden bg-surface-container-high shadow-inner shrink-0">
                     <img
                       className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                       alt={artisan.name}
@@ -47,42 +47,42 @@ export default function ArtisansSection() {
                     />
                   </div>
 
-                  <div className="sm:col-span-7">
+                  <div className="flex-1 sm:col-span-7 min-w-0">
                     <span
-                      className={`px-space-xs py-0.5 rounded font-label-sm text-[11px] uppercase font-bold tracking-wider ${artisan.badgeClass}`}
+                      className={`px-1.5 sm:px-space-xs py-0.5 rounded font-label-sm text-[10px] sm:text-[11px] uppercase font-bold tracking-wider inline-block ${artisan.badgeClass}`}
                     >
                       {artisan.title}
                     </span>
-                    <h3 className="font-serif text-2xl text-on-surface mt-space-xs font-semibold">
+                    <h3 className="font-serif text-base sm:text-2xl text-on-surface mt-0.5 sm:mt-space-xs font-semibold leading-snug truncate sm:whitespace-normal">
                       {artisan.name}
                     </h3>
-                    <p className="font-label-md text-xs text-secondary mt-0.5 font-semibold">
+                    <p className="font-label-md text-[11px] sm:text-xs text-secondary mt-0.5 font-semibold line-clamp-1">
                       {artisan.experience}
                     </p>
 
-                    <div className="mt-space-sm p-space-sm rounded-xl bg-surface-container-lowest shadow-sm border border-outline-variant/20 relative">
-                      <Quote className="absolute right-2 top-2 h-5 w-5 text-primary/15" />
-                      <p className="font-body-sm text-xs xl:text-sm text-on-surface-variant italic leading-relaxed pr-3">
+                    <div className="mt-1.5 sm:mt-space-sm p-1.5 sm:p-space-sm rounded-lg sm:rounded-xl bg-surface-container-lowest shadow-xs sm:shadow-sm border border-outline-variant/20 relative">
+                      <Quote className="absolute right-1.5 top-1.5 h-3.5 w-3.5 sm:h-5 sm:w-5 text-primary/15" />
+                      <p className="font-body-sm text-[11px] sm:text-xs xl:text-sm text-on-surface-variant italic leading-relaxed pr-2 sm:pr-3 line-clamp-2 sm:line-clamp-none">
                         {artisan.quote}
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <p className="font-body-md text-sm xl:text-base text-on-surface-variant leading-relaxed">
+                <p className="font-body-md text-xs sm:text-sm xl:text-base text-on-surface-variant leading-relaxed line-clamp-2 sm:line-clamp-none mt-2 sm:mt-0">
                   {artisan.bio}
                 </p>
               </div>
 
-              <div className="pt-space-md mt-space-md flex flex-wrap items-center justify-between gap-2 border-t border-surface-container/60">
-                <span className="font-body-sm text-xs text-on-surface-variant font-medium">
+              <div className="pt-2 sm:pt-space-md mt-2 sm:mt-space-md flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 border-t border-surface-container/60 text-[11px] sm:text-xs">
+                <span className="font-body-sm text-[11px] sm:text-xs text-on-surface-variant font-medium line-clamp-1">
                   {artisan.schedule}
                 </span>
                 <Link
                   to={`/nghe-nhan#artisan-${artisan.id}`}
-                  className="font-label-md text-xs text-primary font-bold hover:underline flex items-center gap-1"
+                  className="font-label-md text-[11px] sm:text-xs text-primary font-bold hover:underline flex items-center gap-1 shrink-0"
                 >
-                  <span>Xem chân dung chi tiết</span>
+                  <span>Xem chi tiết</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </div>

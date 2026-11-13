@@ -40,7 +40,7 @@ export default function BlogArticlesGrid({ articles }: BlogArticlesGridProps) {
             </span>
             <select
               value={sortOption}
-              onChange={(e) => setSortOption(e.target.value as any)}
+              onChange={(e) => setSortOption(e.target.value as "newest" | "readTime" | "popular")}
               className="px-3 py-2 bg-surface-container rounded-xl text-on-surface text-xs xl:text-sm font-semibold border border-outline-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer"
             >
               <option value="newest">Mới biên khảo nhất</option>
@@ -61,14 +61,14 @@ export default function BlogArticlesGrid({ articles }: BlogArticlesGridProps) {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-gutter">
             {articles.map((post) => (
               <article
                 key={post.id}
                 onClick={() => handleReadArticle(post.slug)}
-                className="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group border border-outline-variant/30 hover:-translate-y-1 cursor-pointer"
+                className="bg-surface-container-lowest rounded-xl sm:rounded-2xl overflow-hidden shadow-xs sm:shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group border border-outline-variant/30 hover:-translate-y-1 cursor-pointer"
               >
-                <div className="relative h-52 overflow-hidden bg-surface-container">
+                <div className="relative h-36 sm:h-52 overflow-hidden bg-surface-container">
                   <img
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     alt={post.title}
@@ -76,34 +76,34 @@ export default function BlogArticlesGrid({ articles }: BlogArticlesGridProps) {
                     loading="lazy"
                   />
                   <span
-                    className={`absolute top-3 left-3 px-3 py-1 rounded-full font-label-sm text-[11px] font-bold uppercase tracking-wider backdrop-blur-md shadow-sm ${post.badgeClass}`}
+                    className={`absolute top-2 left-2 sm:top-3 sm:left-3 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full font-label-sm text-[10px] sm:text-[11px] font-bold uppercase tracking-wider backdrop-blur-md shadow-sm ${post.badgeClass}`}
                   >
                     {post.badge}
                   </span>
                 </div>
 
-                <div className="p-space-md flex flex-col flex-1 justify-between gap-space-sm">
-                  <div className="flex flex-col gap-space-xs">
-                    <div className="flex items-center gap-2 text-outline text-xs">
+                <div className="p-3 sm:p-space-md flex flex-col flex-1 justify-between gap-2 sm:gap-space-sm">
+                  <div className="flex flex-col gap-1 sm:gap-space-xs">
+                    <div className="flex items-center gap-1.5 sm:gap-2 text-outline text-[11px] sm:text-xs">
                       <span>{post.fieldLocation}</span>
                       <span>•</span>
                       <span>{post.readTime}</span>
                     </div>
 
-                    <h3 className="font-title-lg text-lg text-on-surface group-hover:text-primary transition-colors leading-snug font-semibold line-clamp-2">
+                    <h3 className="font-title-lg text-base sm:text-lg text-on-surface group-hover:text-primary transition-colors leading-snug font-semibold line-clamp-2">
                       {post.title}
                     </h3>
 
-                    <p className="font-body-sm text-sm text-on-surface-variant line-clamp-3 leading-relaxed">
+                    <p className="font-body-sm text-xs sm:text-sm text-on-surface-variant line-clamp-2 sm:line-clamp-3 leading-relaxed">
                       {post.desc}
                     </p>
                   </div>
 
-                  <div className="pt-space-xs flex items-center justify-between border-t border-surface-container/60 mt-space-xs text-xs">
-                    <span className="text-outline">Tác giả: {post.author}</span>
-                    <span className="text-primary font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                  <div className="pt-2 sm:pt-space-xs flex items-center justify-between border-t border-surface-container/60 mt-1 sm:mt-space-xs text-[11px] sm:text-xs">
+                    <span className="text-outline truncate max-w-[150px]">Tác giả: {post.author}</span>
+                    <span className="text-primary font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform shrink-0">
                       <span>Đọc bài</span>
-                      <ArrowRight className="h-3.5 w-3.5" />
+                      <ArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                     </span>
                   </div>
                 </div>
