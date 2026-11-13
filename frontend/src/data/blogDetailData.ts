@@ -56,6 +56,149 @@ export interface BlogDetailArticle {
 }
 
 export const DETAILED_ARTICLES: Record<string, BlogDetailArticle> = {
+  "thuyet-minh-du-lich-cong-dong-palei-baoh-dana": {
+    id: "thuyet-minh-du-lich-cong-dong-palei-baoh-dana",
+    slug: "thuyet-minh-du-lich-cong-dong-palei-baoh-dana",
+    title: "Bài Thuyết Minh Tuyến Du Lịch Cộng Đồng Chăm: Hành Trình 8 Điểm Chạm Di Sản Palei Baoh Dana",
+    subtitle: "Khảo cứu điền dã kết nối đền tháp Kalan cổ kính, công trình trị thủy ngàn năm, thắng cảnh linh thiêng và các làng nghề cổ truyền mẫu hệ.",
+    mainCategory: "van-hoa",
+    categoryLabel: "Cẩm Nang Thuyết Minh Tuyến Điểm",
+    code: "BAOH-DANA-TOUR-008",
+    badge: "Bài Thuyết Minh Trọng Tâm",
+    badgeClass: "bg-primary text-on-primary",
+    readTime: "16 phút đọc",
+    date: "14/11/2026",
+    author: "Cộng đồng Chăm Palei Baoh Dana",
+    authorRole: "Hội đồng Nghệ nhân & Ban Cố vấn Du lịch Cộng đồng Dana",
+    authorInitials: "BD",
+    fieldLocation: "Huyện Ninh Phước & TP. Phan Rang - Tháp Chàm, Tỉnh Ninh Thuận",
+    coverImage: "https://lh3.googleusercontent.com/aida-public/AB6AXuBWzz5wVWN2Rre_bf3lzTZ89szZW61A19gyuIM1D6eHB2bgjSvLJ2IjqYRR2_FvWNOaiuYH_mZKTaaCYHyrAo6Y-MHZRm5QMjTQqVYlWO-UTZpP7j-38TvaXGvTC0E43MbjaK6OcYizspkYPA97vZ7ux2qQedU074FLdyFMB7zxmwJM_GGaJUJxVOmC--t3UtTdUYuMj2PhxbPFLX9SyKZLF-p5BPhi_fHZpOUSInajqnNWFka72rYwew",
+    coverCaption: "Tuyến du lịch cộng đồng Palei Baoh Dana: Nơi di sản vật thể và phi vật thể của nền văn minh Champa hòa quyện cùng đời sống bản địa.",
+    coverSource: "Kho lưu trữ tư liệu Dana Community Tourism Heritage",
+    audioTitle: "Thuyết minh Toàn cảnh: Tuyến Di sản Palei Baoh Dana",
+    audioDuration: "08:45",
+    epigraphyQuote: {
+      chamText: "ꨚꨤꨯꨮꨢꨳ ꨝꨯꨱꨨ ꨕꨩꨘꨩ - ꨕꨯꨭꨣ ꨕꨰꨘꨳ ꨘꨰꨘꨳ ꨌꨩꨠ",
+      translation: "Đất Mẹ Panduranga nuôi nấng người Chăm bằng hạt phù sa sông Dinh, ngọn lửa nung gốm đỏ và tấm lòng thủy chung gìn giữ nguồn cội cha ông qua ngàn năm dâu bể.",
+      source: "Trích trường ca Akayet Champa truyền khẩu của các bô lão làng Palei Baoh Dana",
+    },
+    chapters: [
+      {
+        id: "tram-1",
+        number: "01",
+        categoryTag: "Kiến trúc Kalan • Di tích Quốc gia Đặc biệt",
+        title: "Đền tháp Po Klaong Garay - Đỉnh cao nghệ thuật kiến trúc gạch nung",
+        content: [
+          "Đền tháp Po Klaong Garay là một trong những công trình kiến trúc Champa tiêu biểu và đẹp nhất còn tồn tại ở Việt Nam. Di tích nằm trên đồi Trầu thuộc phường Đô Vinh, tỉnh Ninh Thuận. Đây không chỉ là một địa điểm du lịch nổi tiếng mà còn là biểu tượng văn hóa, lịch sử của đồng bào Chăm ở khu vực Nam Trung Bộ.",
+          "Tháp được xây dựng vào cuối thế kỷ XIII, đầu thế kỷ XIV dưới thời vua Chăm Jaya Simhavarman III để thờ vua Po Klaong Garay. Theo truyền thuyết dân gian, Po Klaong Garay là một vị vua anh minh, có nhiều công lao trong việc phát triển sản xuất nông nghiệp, xây dựng hệ thống thủy lợi và chăm lo đời sống nhân dân. Sau khi qua đời, ông được người dân tôn kính như một vị thần bảo hộ.",
+          "Quần thể đền tháp Po Klaong Garay gồm ba công trình chính: tháp Chính, tháp Cổng và tháp Lửa. Trong đó, tháp Chính cao khoảng 20 mét, là nơi đặt tượng và thờ vua Po Klaong Garay. Các công trình đều được xây dựng bằng gạch nung với kỹ thuật ghép gạch độc đáo mà đến nay vẫn còn nhiều điều bí ẩn. Những hoa văn, phù điêu được chạm khắc tinh xảo trên thân tháp thể hiện trình độ nghệ thuật và kỹ thuật xây dựng đặc sắc của người Chăm cổ.",
+          "Không chỉ có giá trị về mặt kiến trúc, đền tháp Po Klaong Garay còn mang ý nghĩa to lớn về văn hóa và tín ngưỡng. Hằng năm, nơi đây diễn ra nhiều hoạt động lễ hội truyền thống của đồng bào Chăm, nổi bật nhất là Lễ hội Katê. Vào dịp này, người dân tổ chức các nghi lễ trang trọng để tưởng nhớ tổ tiên, cầu mong mưa thuận gió hòa, mùa màng bội thu và cuộc sống ấm no, hạnh phúc.",
+          "Ngày nay, đền tháp Po Klaong Garay đã được công nhận là một di tích lịch sử văn hóa có giá trị đặc biệt, thu hút đông đảo du khách trong và ngoài nước đến tham quan, tìm hiểu. Công trình không chỉ góp phần bảo tồn bản sắc văn hóa dân tộc Chăm mà còn là niềm tự hào của người dân Ninh Thuận nói riêng và Việt Nam nói chung."
+        ],
+        quote: {
+          text: "Đền tháp Po Klaong Garay là minh chứng sinh động cho sự phát triển rực rỡ của nền văn minh Champa xưa. Với vẻ đẹp cổ kính, độc đáo cùng những giá trị lịch sử, văn hóa sâu sắc, nơi đây xứng đáng là một trong những di sản quý báu cần được gìn giữ và phát huy cho các thế hệ mai sau.",
+          author: "Lời thuyết minh di sản bản địa",
+        }
+      },
+      {
+        id: "tram-2",
+        number: "02",
+        categoryTag: "Công trình Trị thủy Cổ • Sông Dinh",
+        title: "Đập thuỷ lợi Nha Trinh - Mạch nguồn trù phú của đồng bằng khô hạn",
+        content: [
+          "Vùng đất Ninh Thuận nổi tiếng với khí hậu khô nóng quanh năm, vì vậy các công trình thủy lợi có vai trò đặc biệt quan trọng đối với đời sống và sản xuất của người dân. Trong số đó, đập Nha Trinh là một công trình thủy lợi tiêu biểu, góp phần cung cấp nguồn nước phục vụ nông nghiệp và sinh hoạt cho nhân dân địa phương.",
+          "Đập Nha Trinh nằm trên địa bàn tỉnh Ninh Thuận, thuộc lưu vực sông Dinh. Đây là một trong những công trình thủy lợi có ý nghĩa quan trọng đối với sự phát triển kinh tế, xã hội của địa phương. Được xây dựng nhằm mục đích điều tiết nguồn nước, đập giúp tích trữ nước vào mùa mưa và cung cấp nước tưới cho đồng ruộng trong mùa khô, góp phần giảm thiểu tình trạng hạn hán thường xuyên xảy ra ở vùng đất này.",
+          "Với kết cấu kiên cố và hệ thống kênh mương dẫn nước được xây dựng đồng bộ, đập Nha Trinh đã mang lại nhiều lợi ích thiết thực cho người dân. Nguồn nước từ đập giúp hàng nghìn héc-ta đất nông nghiệp được tưới tiêu đầy đủ, tạo điều kiện thuận lợi cho việc trồng lúa, nho, táo và nhiều loại cây trồng khác. Nhờ đó, năng suất cây trồng được nâng cao, đời sống của người dân ngày càng được cải thiện.",
+          "Không chỉ có giá trị về mặt kinh tế, đập Nha Trinh còn góp phần bảo vệ môi trường và cân bằng hệ sinh thái trong khu vực. Hồ nước rộng lớn phía sau đập tạo nên cảnh quan thiên nhiên tươi đẹp, là nơi sinh sống của nhiều loài động thực vật. Vào những thời điểm nước đầy, mặt hồ trong xanh phản chiếu bầu trời và núi đồi xung quanh, tạo nên một khung cảnh thơ mộng, thu hút nhiều người đến tham quan và ngắm cảnh.",
+          "Đập Nha Trinh còn là minh chứng cho sự nỗ lực của người Chăm trong việc chinh phục thiên nhiên và thích ứng với điều kiện khí hậu khắc nghiệt. Công trình do vua Po Klaong Garay tổ chức thi công không chỉ mang lại nguồn nước quý giá mà còn góp phần thúc đẩy sự phát triển bền vững của ngành nông nghiệp địa phương."
+        ]
+      },
+      {
+        id: "tram-3",
+        number: "03",
+        categoryTag: "Thắng cảnh Tự nhiên • Địa danh Huyền tích",
+        title: "Núi Đá Trắng - Cek Yang Patao: Dấu ấn hoang sơ và thiêng liêng",
+        content: [
+          "Ninh Thuận là vùng đất nổi tiếng với những thắng cảnh thiên nhiên độc đáo, mang vẻ đẹp vừa hoang sơ vừa hùng vĩ. Trong số đó, núi Đá Trắng ở thôn Như Bình, xã Phước Hữu là một địa danh quen thuộc đối với người dân địa phương và là điểm nhấn nổi bật của vùng quê đầy nắng gió này.",
+          "Núi Đá Trắng (Cek Yang Patao) nằm ở phía nam huyện Ninh Phước, thuộc địa bàn xã Phước Hữu. Từ xa nhìn lại, ngọn núi nổi bật với những vách đá và khối đá lớn có màu trắng tuyết, phản chiếu ánh nắng mặt trời, tạo nên vẻ đẹp riêng biệt. Chính đặc điểm đó đã làm nên tên gọi “Đá Trắng” của ngọn núi.",
+          "Ngọn núi không quá cao nhưng có địa hình khá đặc biệt. Trải qua hàng triệu năm phong hóa dưới tác động của nắng, gió và mưa, các khối đá trên núi đã hình thành nhiều hình dạng độc đáo. Vào những buổi sáng sớm hoặc chiều tà, khi ánh nắng chiếu lên sườn núi, cảnh vật trở nên lung linh và thơ mộng. Xung quanh núi là những cánh đồng, vườn cây và những làng quê yên bình, tạo nên bức tranh thiên nhiên hài hòa, hấp dẫn.",
+          "Không chỉ có giá trị về cảnh quan, núi Đá Trắng còn gắn bó mật thiết với đời sống của người dân địa phương. Từ bao đời nay, ngọn núi được xem như một biểu tượng quen thuộc của thôn Như Bình. Nơi đây lưu giữ nhiều câu chuyện dân gian, kỷ niệm và tình cảm của người dân đối với quê hương. Đối với nhiều người, hình ảnh núi Đá Trắng đã trở thành một phần không thể thiếu trong ký ức tuổi thơ.",
+          "Ngày nay, núi Đá Trắng là địa điểm thích hợp cho những ai yêu thích khám phá thiên nhiên và tìm hiểu vẻ đẹp bản địa. Từ trên các triền núi, du khách có thể ngắm nhìn toàn cảnh đồng bằng xã Phước Hữu và Ninh Phước cùng những cánh đồng xanh mướt trải dài."
+        ]
+      },
+      {
+        id: "tram-4",
+        number: "04",
+        categoryTag: "Đền tháp Thế kỷ XVII • Vị vua Cuối cùng",
+        title: "Đền tháp Po Ramê - Dấu ấn vương triều và trung tâm lễ hội Katê",
+        content: [
+          "Ninh Thuận là vùng đất lưu giữ nhiều giá trị văn hóa đặc sắc của dân tộc Chăm. Trong số những di tích lịch sử, văn hóa nổi tiếng của địa phương, đền tháp Po Ramê là một công trình kiến trúc độc đáo, mang đậm dấu ấn của nền văn minh Champa và có ý nghĩa quan trọng trong đời sống tín ngưỡng của cộng đồng người Chăm.",
+          "Đền tháp Po Ramê tọa lạc trên đồi thuộc làng Hậu Sanh, xã Phước Hữu, tỉnh Ninh Thuận. Công trình được xây dựng vào khoảng thế kỷ XVII để thờ vua Po Ramê, vị vua cuối cùng có nhiều đóng góp cho sự phát triển của vương quốc Champa. Theo lịch sử và truyền thuyết của người Chăm, Po Ramê là một vị vua tài giỏi, có công trong việc phát triển nông nghiệp, xây dựng các công trình thủy lợi và chăm lo đời sống nhân dân. Sau khi qua đời, ông được nhân dân tôn kính và thờ phụng như một vị thần.",
+          "Tháp Po Ramê là một trong những công trình kiến trúc tiêu biểu của nghệ thuật xây dựng Champa. Tháp được xây dựng bằng gạch nung đỏ với kỹ thuật ghép gạch tinh xảo mà đến nay vẫn còn nhiều điều bí ẩn. Mặc dù có quy mô nhỏ hơn tháp Po Klaong Garay, nhưng ngôi tháp Po Ramê vẫn mang vẻ đẹp cổ kính và uy nghiêm. Các hoa văn, họa tiết trang trí trên thân tháp được chạm khắc công phu, thể hiện trình độ nghệ thuật điêu luyện của người Chăm xưa.",
+          "Bên trong tháp hiện còn lưu giữ nhiều hiện vật có giá trị về lịch sử và văn hóa. Đặc biệt, nơi đây còn bảo tồn các biểu tượng tín ngưỡng gắn liền với cuộc đời và sự nghiệp của vua Po Ramê. Đây là những tư liệu quý giúp các nhà nghiên cứu tìm hiểu về lịch sử, tôn giáo và văn hóa của cộng đồng người Chăm.",
+          "Hằng năm, nơi đây diễn ra nhiều nghi lễ và hoạt động văn hóa truyền thống, đặc biệt là lễ hội Katê. Trong dịp lễ, người dân tập trung về tháp để dâng lễ, cầu mong mưa thuận gió hòa, mùa màng bội thu và cuộc sống bình an. Những điệu múa truyền thống, tiếng trống Ginang, kèn Saranai cùng các nghi thức cổ truyền tạo nên không khí trang nghiêm nhưng cũng rất sôi động."
+        ]
+      },
+      {
+        id: "tram-5",
+        number: "05",
+        categoryTag: "Làng nghề Thổ cẩm • Tinh hoa Nữ thần Mẹ Xứ Sở",
+        title: "Nghề dệt thổ cẩm Chăm làng Mỹ Nghiệp - Sợi chỉ luồn văn hóa Katê",
+        content: [
+          "Ninh Thuận là vùng đất giàu bản sắc văn hóa với nhiều làng nghề truyền thống độc đáo của đồng bào Chăm. Trong số đó, làng dệt thổ cẩm Mỹ Nghiệp là một địa danh nổi tiếng, không chỉ góp phần lưu giữ nghề thủ công truyền thống mà còn thể hiện nét đẹp văn hóa lâu đời của dân tộc Chăm.",
+          "Làng dệt thổ cẩm Mỹ Nghiệp nằm ở thôn Mỹ Nghiệp, thị trấn Phước Dân (xã Ninh Phước xưa), tỉnh Ninh Thuận. Đây là một trong những làng nghề dệt thổ cẩm lâu đời nhất của người Chăm ở Việt Nam. Theo truyền thuyết của người Chăm, nghề dệt được truyền lại từ nữ thần Po Ina Nagar, vị thần được xem là người dạy dân nghề trồng trọt, dệt vải và nhiều nghề thủ công khác. Vì vậy, nghề dệt không chỉ là một hoạt động sản xuất mà còn mang ý nghĩa văn hóa và tâm linh sâu sắc.",
+          "Từ bao đời nay, nghề dệt thổ cẩm ở Mỹ Nghiệp chủ yếu do phụ nữ Chăm đảm nhiệm. Để tạo ra một tấm thổ cẩm hoàn chỉnh, người thợ phải trải qua nhiều công đoạn công phu như kéo sợi, nhuộm màu, mắc khung và dệt hoa văn. Trước đây, màu nhuộm chủ yếu được lấy từ các nguyên liệu tự nhiên như lá cây, vỏ cây và rễ cây. Ngày nay, dù đã có sự hỗ trợ của một số phương tiện hiện đại, nhiều nghệ nhân vẫn giữ gìn các kỹ thuật truyền thống nhằm bảo tồn nét độc đáo của nghề dệt cổ.",
+          "Điểm nổi bật của sản phẩm thổ cẩm Mỹ Nghiệp là những hoa văn tinh xảo, mang đậm bản sắc văn hóa Chăm. Các họa tiết thường lấy cảm hứng từ thiên nhiên, cuộc sống lao động và tín ngưỡng của cộng đồng như hình tháp Chăm, sóng nước, chim muông, cây cỏ hay các biểu tượng thần linh. Mỗi sản phẩm đều thể hiện sự khéo léo, kiên nhẫn và óc sáng tạo của người thợ dệt.",
+          "Ngày nay, làng dệt Mỹ Nghiệp đã trở thành điểm du lịch văn hóa hấp dẫn. Đến đây, du khách được tận mắt chứng kiến những nghệ nhân thao tác trên khung cửi, tìm hiểu quy trình dệt thổ cẩm và mua sắm các sản phẩm thủ công độc đáo."
+        ]
+      },
+      {
+        id: "tram-6",
+        number: "06",
+        categoryTag: "Di sản Phi vật thể Nhân loại UNESCO (2022)",
+        title: "Làng nghề gốm thủ công Bàu Trúc - Kỹ nghệ không bàn xoay độc bản",
+        content: [
+          "Ninh Thuận không chỉ nổi tiếng với những đền tháp Chăm cổ kính mà còn là nơi lưu giữ nhiều làng nghề truyền thống độc đáo của đồng bào Chăm. Trong số đó, nghề làm gốm ở làng Bàu Trúc là một di sản văn hóa đặc sắc, được xem là một trong những nghề gốm cổ xưa nhất ở Đông Nam Á còn tồn tại đến ngày nay.",
+          "Làng gốm Bàu Trúc thuộc thị trấn Phước Dân, huyện Ninh Phước, tỉnh Ninh Thuận. Theo truyền thuyết của người Chăm, nghề gốm nơi đây được truyền dạy bởi tổ nghề vợ chồng Po Klaong Can. Trải qua hàng trăm năm lịch sử, nghề làm gốm đã trở thành một phần không thể thiếu trong đời sống văn hóa và kinh tế của cộng đồng người Chăm ở địa phương.",
+          "Điểm đặc biệt của gốm Bàu Trúc là kỹ thuật chế tác hoàn toàn thủ công. Không giống nhiều làng gốm khác sử dụng bàn xoay, các nghệ nhân Bàu Trúc tạo hình sản phẩm bằng đôi tay khéo léo kết hợp với những dụng cụ đơn giản. Người thợ vừa đi vòng quanh khối đất sét vừa nắn, vuốt để tạo nên hình dáng mong muốn. Đây là kỹ thuật độc đáo được truyền từ thế hệ này sang thế hệ khác và vẫn được duy trì cho đến ngày nay.",
+          "Một nét độc đáo khác của gốm Bàu Trúc là phương pháp nung ngoài trời. Sau khi phơi khô, sản phẩm được xếp trên bãi đất trống rồi phủ củi, rơm và các vật liệu dễ cháy để nung. Nhiệt độ và thời gian nung được điều chỉnh dựa trên kinh nghiệm của người thợ. Chính phương pháp nung truyền thống này đã tạo cho sản phẩm những màu sắc tự nhiên đặc trưng như đỏ gạch, vàng nâu hoặc đen xám, mang vẻ đẹp mộc mạc nhưng rất riêng biệt.",
+          "Năm 2022, nghề làm gốm của người Chăm ở Bàu Trúc đã được tổ chức UNESCO ghi danh vào danh sách Di sản văn hóa phi vật thể cần bảo vệ khẩn cấp của nhân loại. Đây là niềm tự hào to lớn của dân tộc Việt Nam, đồng thời khẳng định giá trị độc đáo của nghề thủ công truyền thống này trên trường quốc tế."
+        ]
+      },
+      {
+        id: "tram-7",
+        number: "07",
+        categoryTag: "Tín ngưỡng Mẫu hệ • Đền thờ Nữ thần",
+        title: "Di tích đền thờ Po Ina Nagar ở Hữu Đức - Tôn vinh Người Mẹ Xứ Sở",
+        content: [
+          "Ninh Thuận là vùng đất giàu truyền thống văn hóa của đồng bào Chăm, nơi còn lưu giữ nhiều công trình tín ngưỡng mang giá trị lịch sử và văn hóa đặc sắc. Trong số đó, đền thờ Po Ina Nagar ở làng Hữu Đức, xã Phước Hữu là một địa điểm linh thiêng, gắn bó mật thiết với đời sống tinh thần của cộng đồng người Chăm địa phương.",
+          "Đền thờ Po Ina Nagar tọa lạc tại làng Hữu Đức, một trong những làng Chăm cổ nổi tiếng của tỉnh Ninh Thuận. Đây là nơi thờ phụng nữ thần Po Ina Nagar, người Mẹ Xứ Sở được người Chăm tôn kính như đấng sáng tạo và bảo hộ cho con người. Theo truyền thuyết dân gian, Po Ina Nagar là người đã dạy dân trồng lúa, dệt vải, làm gốm và nhiều nghề thủ công khác, giúp con người có cuộc sống ấm no, hạnh phúc.",
+          "Ngôi đền mang nét kiến trúc truyền thống của người Chăm, tuy không đồ sộ như các cụm tháp Chăm cổ nhưng vẫn toát lên vẻ trang nghiêm và cổ kính. Công trình được xây dựng hài hòa với cảnh quan thiên nhiên xung quanh, tạo nên một không gian thanh tịnh và linh thiêng. Bên trong đền là nơi đặt tượng thờ và các vật phẩm phục vụ cho các nghi lễ tín ngưỡng của người dân địa phương.",
+          "Đặc biệt, vào các dịp lễ hội lớn của người Chăm như lễ hội Katê, đền thờ trở nên nhộn nhịp hơn bao giờ hết. Người dân trong vùng tập trung về đây để tham gia các hoạt động tín ngưỡng, biểu diễn văn nghệ dân gian, múa truyền thống và giao lưu cộng đồng. Những tiếng trống Ginang, tiếng kèn Saranai cùng các điệu múa uyển chuyển đã tạo nên không khí lễ hội đặc sắc, thể hiện nét đẹp văn hóa lâu đời của dân tộc Chăm.",
+          "Đền thờ Po Ina Nagar ở làng Hữu Đức là một công trình tín ngưỡng có ý nghĩa sâu sắc đối với đời sống văn hóa và tinh thần của đồng bào Chăm. Với giá trị lịch sử, văn hóa và tâm linh đặc biệt, nơi đây góp phần làm phong phú thêm bản sắc văn hóa vùng đất Panduranga."
+        ]
+      },
+      {
+        id: "tram-8",
+        number: "08",
+        categoryTag: "Du lịch Cộng đồng • Giao thoa Chăm - Kinh",
+        title: "Làng Văn hóa Chăm Palei Baoh Dana - Nơi khởi nguồn du lịch di sản",
+        content: [
+          "Ninh Thuận là địa phương có đông đồng bào Chăm sinh sống nhất cả nước. Trải qua nhiều thế kỷ, người Chăm nơi đây vẫn gìn giữ được những giá trị văn hóa truyền thống đặc sắc, tạo nên bản sắc riêng cho vùng đất này. Trong số các làng Chăm, làng Chất Thường - Palei Baoh Dana thuộc xã Phước Hậu là một địa danh tiêu biểu, phản ánh rõ nét đời sống văn hóa, tín ngưỡng và phong tục tập quán của cộng đồng.",
+          "Palei Baoh Dana - Làng Chất Thường nằm ở xã Phước Hậu, huyện Ninh Phước, tỉnh Ninh Thuận. Đây là một trong những ngôi làng có lịch sử hình thành lâu đời, nơi người Chăm sinh sống tập trung qua nhiều thế hệ. Cũng như nhiều làng Chăm khác trong vùng, Chất Thường mang đậm dấu ấn văn hóa truyền thống với những ngôi nhà đặc trưng, các công trình tín ngưỡng và nếp sống cộng đồng được bảo tồn khá nguyên vẹn.",
+          "Người dân trong làng chủ yếu sống bằng nghề nông, chăn nuôi và các nghề thủ công truyền thống. Nhờ sự cần cù, chịu khó, họ đã thích nghi với điều kiện khí hậu khô hạn của quê hương để phát triển sản xuất, xây dựng cuộc sống ổn định. Bên cạnh đó, nhiều giá trị văn hóa truyền thống vẫn được duy trì và truyền lại cho các thế hệ trẻ.",
+          "Một trong những nét nổi bật của làng Chất Thường là đời sống văn hóa và tín ngưỡng phong phú. Người Chăm nơi đây vẫn tổ chức nhiều lễ hội truyền thống mang ý nghĩa tâm linh sâu sắc như Katê, Rija Nagar. Trong những ngày lễ hội, mọi người mặc trang phục truyền thống, thực hiện các nghi thức cúng tế, múa hát và giao lưu văn hóa trong không khí vui tươi, trang trọng.",
+          "Palei Baoh Dana - làng Chăm Chất Thường ở xã Phước Hậu là một địa phương giàu truyền thống văn hóa và lịch sử. Với những nét đẹp về phong tục tập quán, tín ngưỡng và đời sống cộng đồng, ngôi làng không chỉ là nơi sinh sống của đồng bào Chăm mà còn có một bộ phận người Kinh di dân đến cộng cư tạo nên một phần quan trọng trong kho tàng văn hóa đa dạng trong mối quan hệ Chăm - Kinh. Việc giữ gìn và phát huy những giá trị ấy sẽ góp phần làm phong phú thêm bản sắc văn hóa dân tộc và quảng bá hình ảnh quê hương đến với mọi người."
+        ]
+      }
+    ],
+    keyTakeaways: [
+      "Hành trình kết nối liên hoàn 8 điểm di sản tiêu biểu: Đền tháp Po Klaong Garay, Đập Nha Trinh, Núi Đá Trắng Cek Yang Patao, Tháp Po Ramê, Làng dệt Mỹ Nghiệp, Làng gốm Bàu Trúc UNESCO, Đền thờ Po Ina Nagar Hữu Đức và Làng Văn hóa Palei Baoh Dana.",
+      "Toàn bộ tư liệu được khảo sát và thuyết minh bởi chính con em, nghệ nhân và bô lão cộng đồng Chăm bản địa.",
+      "Du lịch cộng đồng gắn liền với bảo tồn bền vững, tôn trọng phong tục tập quán và hoàn lưu sinh kế cho người dân địa phương."
+    ],
+    relatedSlugs: ["po-klong-garai-brick", "khai-mac-dai-le-kate-2025", "khanh-thanh-khong-gian-gom-bau-truc"]
+  },
   "po-klong-garai-brick": {
     id: "po-klong-garai-brick",
     slug: "po-klong-garai-brick",

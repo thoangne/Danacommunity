@@ -9,7 +9,6 @@ import {
   FileText,
   Flame,
   HandMetal,
-  HeartHandshake,
   MapPin,
   MessageSquare,
   Minus,
@@ -27,12 +26,18 @@ import {
   X,
   ChevronLeft,
   Loader2,
+  Sparkles,
 } from "lucide-react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import BottomNav from "../components/BottomNav";
 import AudioPlayerBar from "../components/AudioPlayerBar";
 import { TOURS } from "../data/champaData";
+import {
+  BAOH_DANA_TOUR_STATIONS,
+  type TourGuideStation,
+} from "../data/baohDanaTourGuideData";
+import HeritageCommentaryModal from "../components/HeritageCommentaryModal";
 import { toast } from "../components/ui/sonner";
 import { useAuth } from "../context/AuthContext";
 
@@ -62,6 +67,11 @@ export default function TourDetailPage() {
 
   // State Audio trích đoạn văn hóa cục bộ của tour
   const [isPlayingLocalAudio, setIsPlayingLocalAudio] = useState(false);
+
+  // State mở Modal Thuyết minh di sản
+  const [selectedStationModal, setSelectedStationModal] =
+    useState<TourGuideStation | null>(null);
+  const [isCommentaryModalOpen, setIsCommentaryModalOpen] = useState(false);
 
   // State mở Modal Lightbox
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
@@ -151,7 +161,7 @@ export default function TourDetailPage() {
         const code = data.data?.bookingCode || data.data?.booking?.booking_code;
         setConfirmedBookingCode(code);
         toast.success("Đặt giữ chỗ thành công!", {
-          description: `Mã đặt chỗ: ${code} • ${adults} người lớn, ${children} trẻ em • Ngày ${selectedDate}. Điều phối viên Dana sẽ liên hệ qua Zalo/SĐT ${customerPhone} ngay.`,
+          description: `Mã yêu cầu đặt tour: ${code} • ${adults} người lớn, ${children} trẻ em • Ngày ${selectedDate}. Điều phối viên Dana sẽ liên hệ báo giá qua Zalo/SĐT ${customerPhone} ngay.`,
         });
       } else {
         toast.error(data.message || "Không thể đặt tour. Vui lòng kiểm tra lại thông tin.");
@@ -206,9 +216,6 @@ export default function TourDetailPage() {
               </span>
               <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-[11px] font-semibold tracking-wider uppercase">
                 <Users className="h-3.5 w-3.5" /> Tối đa 8 khách
-              </span>
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-[11px] font-semibold tracking-wider uppercase">
-                <HeartHandshake className="h-3.5 w-3.5" /> 70% Hoàn Lưu Làng Nghề
               </span>
             </div>
 
@@ -396,6 +403,9 @@ export default function TourDetailPage() {
               </a>
               <a className="text-on-surface-variant hover:text-primary transition-colors pb-1" href="#lich-trinh">
                 Lịch trình 5 chặng
+              </a>
+              <a className="text-on-surface-variant hover:text-primary transition-colors pb-1" href="#thuyet-minh-di-san">
+                Thuyết minh 8 điểm di sản
               </a>
               <a className="text-on-surface-variant hover:text-primary transition-colors pb-1" href="#nguoi-giu-lua">
                 Người giữ lửa (Muk Nghệ nhân)
@@ -689,6 +699,87 @@ export default function TourDetailPage() {
                 </div>
               </div>
 
+              {/* 8 Heritage Waypoints Commentary Section */}
+              <div className="flex flex-col gap-space-md pt-space-md" id="thuyet-minh-di-san">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-6 h-0.5 bg-primary"></span>
+                    <span className="font-label-sm text-xs uppercase tracking-widest text-primary font-bold flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-primary" />
+                      Cẩm Nang Thuyết Minh Tuyến Điểm
+                    </span>
+                  </div>
+                  <h2 className="font-serif text-2xl sm:text-3xl text-on-surface mt-1 font-semibold">
+                    8 Điểm Chạm Tuyến Du Lịch Cộng Đồng Chăm - Palei Baoh Dana
+                  </h2>
+                  <p className="font-body-md text-sm text-on-surface-variant leading-relaxed">
+                    Nội dung thuyết minh chuyên sâu được cộng đồng Chăm Palei Baoh Dana biên soạn,
+                    giúp du khách thấu hiểu nguồn gốc lịch sử, bí thuật kiến trúc và nếp sống mẫu hệ thiêng liêng.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {BAOH_DANA_TOUR_STATIONS.map((st) => (
+                    <div
+                      key={st.id}
+                      className="p-4 rounded-2xl bg-surface-container-lowest border border-outline-variant/30 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group"
+                    >
+                      <div className="space-y-2.5">
+                        <div className="relative h-44 rounded-xl overflow-hidden bg-stone-100">
+                          <img
+                            src={st.image}
+                            alt={st.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src =
+                                "https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?auto=format&fit=crop&w=600&q=80";
+                            }}
+                          />
+                          <div className="absolute top-2.5 left-2.5">
+                            <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider ${st.badgeClass}`}>
+                              Trạm 0{st.order}
+                            </span>
+                          </div>
+                          <div className="absolute bottom-2 left-2.5 right-2 text-white text-[11px] bg-black/60 backdrop-blur-xs px-2 py-1 rounded-lg">
+                            <span className="truncate block font-medium">{st.ancientName} • {st.district}</span>
+                          </div>
+                        </div>
+
+                        <div>
+                          <h4 className="font-serif text-base font-bold text-on-surface group-hover:text-primary transition-colors">
+                            {st.title}
+                          </h4>
+                          <p className="text-xs text-primary font-medium italic mt-0.5 line-clamp-1">
+                            "{st.tagline}"
+                          </p>
+                          <p className="text-xs text-on-surface-variant mt-1.5 line-clamp-2 leading-relaxed">
+                            {st.summary}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="mt-3 pt-3 border-t border-surface-container flex items-center justify-between">
+                        <span className="text-[11px] text-stone-500 flex items-center gap-1">
+                          <MapPin className="w-3 h-3 text-stone-400" />
+                          <span>{st.distance}</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedStationModal(st);
+                            setIsCommentaryModalOpen(true);
+                          }}
+                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-primary text-white text-xs font-semibold hover:bg-primary/90 transition-all cursor-pointer shadow-xs"
+                        >
+                          <FileText className="w-3 h-3" />
+                          <span>Đọc thuyết minh</span>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               {/* Meet The Artisan (Người giữ lửa) */}
               <div
                 className="p-space-lg rounded-2xl bg-surface-container-low shadow-sm flex flex-col md:flex-row gap-space-lg items-center border border-outline-variant/30"
@@ -721,7 +812,7 @@ export default function TourDetailPage() {
                   </p>
                   <div className="pt-space-xs flex items-center gap-space-sm">
                     <span className="inline-flex items-center gap-1 text-primary font-label-md text-xs font-bold">
-                      <HeartHandshake className="h-4 w-4" /> Cam kết Hoàn lưu Sinh kế 70%
+                      <ShieldCheck className="h-4 w-4" /> Bảo tồn & Phát huy Di sản Làng nghề
                     </span>
                   </div>
                 </div>
@@ -862,21 +953,20 @@ export default function TourDetailPage() {
                 <div className="flex items-baseline justify-between">
                   <div>
                     <span className="font-label-sm text-xs uppercase tracking-widest text-on-surface-variant block">
-                      Giá trọn gói 1 ngày
+                      Chi phí trải nghiệm trọn gói
                     </span>
                     <div className="flex items-baseline gap-1 mt-1">
-                      <span className="font-serif text-3xl text-primary font-bold">
-                        {adultPrice.toLocaleString("vi-VN")}đ
+                      <span className="font-serif text-2xl sm:text-3xl text-primary font-bold">
+                        Liên hệ báo giá
                       </span>
-                      <span className="font-body-sm text-xs text-on-surface-variant">/ khách lớn</span>
                     </div>
                   </div>
                   <div className="text-right">
                     <span className="px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-xs font-semibold uppercase">
-                      Nhóm Nhỏ
+                      Tour Thiết Kế Riêng
                     </span>
                     <span className="font-body-sm text-xs text-on-surface-variant block mt-1">
-                      Trẻ em: {childPrice.toLocaleString("vi-VN")}đ
+                      Theo quy mô đoàn
                     </span>
                   </div>
                 </div>
@@ -1035,37 +1125,29 @@ export default function TourDetailPage() {
                     </div>
 
                     {/* Price Breakdown Summary */}
-                    <div className="p-space-sm rounded-xl bg-surface-container-low flex flex-col gap-1 text-on-surface-variant font-body-sm text-xs mt-1 border border-outline-variant/20">
+                    <div className="p-space-sm rounded-xl bg-surface-container-low flex flex-col gap-1.5 text-on-surface-variant font-body-sm text-xs mt-1 border border-outline-variant/20">
                       <div className="flex justify-between">
-                        <span>
-                          Người lớn ({adults} khách × {adultPrice.toLocaleString("vi-VN")}đ)
-                        </span>
-                        <span className="text-on-surface font-medium">
-                          {(adults * adultPrice).toLocaleString("vi-VN")}đ
+                        <span>Số lượng du khách đăng ký:</span>
+                        <span className="text-on-surface font-semibold">
+                          {adults} người lớn{children > 0 ? `, ${children} trẻ em` : ""}
                         </span>
                       </div>
-                      {children > 0 && (
-                        <div className="flex justify-between">
-                          <span>
-                            Trẻ em ({children} khách × {childPrice.toLocaleString("vi-VN")}đ)
-                          </span>
-                          <span className="text-on-surface font-medium">
-                            {(children * childPrice).toLocaleString("vi-VN")}đ
-                          </span>
-                        </div>
-                      )}
                       <div className="flex justify-between">
-                        <span>Workshop gốm & tác phẩm mang về</span>
+                        <span>Workshop nặn gốm & dệt thổ cẩm</span>
                         <span className="text-secondary font-medium">Đã bao gồm</span>
                       </div>
                       <div className="flex justify-between">
-                        <span>Bữa trưa gia đình Chăm 6 món</span>
+                        <span>Bữa trưa đặc sản Chăm truyền thống</span>
+                        <span className="text-secondary font-medium">Đã bao gồm</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Xe đưa đón & HDV bản địa Chăm</span>
                         <span className="text-secondary font-medium">Đã bao gồm</span>
                       </div>
                       <div className="w-full h-px bg-surface-variant/60 my-1"></div>
-                      <div className="flex justify-between font-serif text-base text-on-surface font-bold">
-                        <span>Tổng chi phí:</span>
-                        <span className="text-primary text-lg">{totalPrice.toLocaleString("vi-VN")}đ</span>
+                      <div className="flex justify-between font-serif text-base text-on-surface font-bold items-center">
+                        <span>Chi phí ước tính:</span>
+                        <span className="text-primary text-base font-bold">Liên hệ báo giá</span>
                       </div>
                     </div>
 
@@ -1078,12 +1160,12 @@ export default function TourDetailPage() {
                       {isBookingSubmitting ? (
                         <>
                           <Loader2 className="h-4 w-4 animate-spin" />
-                          <span>Đang gửi xác nhận...</span>
+                          <span>Đang gửi yêu cầu...</span>
                         </>
                       ) : (
                         <>
                           <CheckCircle className="h-4 w-4" />
-                          <span>Đặt Giữ Chỗ Ngay</span>
+                          <span>Gửi Yêu Cầu Nhận Báo Giá</span>
                         </>
                       )}
                     </button>
@@ -1105,14 +1187,12 @@ export default function TourDetailPage() {
                   <div className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-secondary shrink-0" />
                     <span>
-                      <strong>Hủy miễn phí</strong> trước 48 giờ khởi hành
+                      <strong>Hủy linh hoạt</strong> theo thỏa thuận khi liên hệ
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-secondary shrink-0" />
-                    <span>
-                      <strong>70% hoàn lưu sinh kế</strong> trực tiếp đến gia đình nghệ nhân
-                    </span>
+                    <span>Đồng hành và hỗ trợ sinh kế trực tiếp cho gia đình nghệ nhân bản địa</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-secondary shrink-0" />
@@ -1341,6 +1421,14 @@ export default function TourDetailPage() {
           </div>
         </div>
       )}
+
+      {/* Heritage Commentary Modal for 8 Stations */}
+      <HeritageCommentaryModal
+        isOpen={isCommentaryModalOpen}
+        station={selectedStationModal}
+        onClose={() => setIsCommentaryModalOpen(false)}
+        onSelectStation={(st) => setSelectedStationModal(st)}
+      />
 
       <Footer />
       <AudioPlayerBar />

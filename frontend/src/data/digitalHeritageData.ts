@@ -100,6 +100,66 @@ export const DIGITAL_SITES: DigitalSite[] = [
       'Một trong những cụm tháp cổ kính bậc nhất Đông Dương còn giữ vẹn nguyên các mảng hoa văn vòm cửa cuốn chạm khắc tinh xảo trực tiếp trên gạch.',
     artifactsCount: 18,
   },
+  {
+    id: 'site-5',
+    name: 'Đập thuỷ lợi Nha Trinh',
+    ancientName: 'Banưng Chaklin Nha Trinh',
+    century: 'Thế kỷ XIII - XIV',
+    district: 'Sông Dinh, Xã Nhơn Sơn & Đô Vinh',
+    coords: [11.612, 108.931],
+    preservationStatus: 'Đang bảo tồn tốt',
+    scanResolution: 'Drone Orthomosaic 4K',
+    image:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuBUfYzm1NZ4arEZYOjXP-ADVRrL2xvxRYpA11bkxwybvUPyaLDDHcbzdna3ORWQdNhRZ691hmCL8NhJzSAjGU5gLcf6loBzxm9LlDDjY-bDf5UiEUEa8dCbgRQO5NwMElBhJX6SjLnotVvZ4SesvgT8Thywsaeywlcgwf1tW1jO8xFQbtJMa3R7BXOwL3MrVqNKr5Y-maFTUq9d3YpEzE5Uvj6QVImJxg-rCyKTWSyfkqmmjoELc7hWkA',
+    description:
+      'Công trình thủy lợi đá cổ kính điều tiết dòng nước sông Dinh do vua Po Klaong Garay tổ chức thi công.',
+    artifactsCount: 8,
+  },
+  {
+    id: 'site-6',
+    name: 'Núi Đá Trắng - Cek Yang Patao',
+    ancientName: 'Cek Yang Patao (Núi Thần Vua)',
+    century: 'Địa mạo hàng triệu năm',
+    district: 'Thôn Như Bình, Xã Phước Hữu',
+    coords: [11.512, 108.889],
+    preservationStatus: 'Đang bảo tồn tốt',
+    scanResolution: 'DEM Elevation Map 1m',
+    image:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuBXnVPS6oUU6URxfP4TdxHq-UsUwE04_gnpvwkrptd7BS9dXmx1ChJ7WMISmS784kI32f0t8UQRf6k-MDPPx_XQJ664Ju5dHKtYkiO-EGDM0AHxY3pwwfDkogXvFWI_HnsiYVujgmtrvXQitBbSLyAF2U3jmzcl-P6-1W9bb78_xcGU8fN1JZ7J8spZY0Xv9IkZsFQ2keAyI_isVwMyrwg1DzRYwMwraJ8pgS3d9giKmqo58fEtRvN1RA',
+    description:
+      'Thắng cảnh núi đá hoa cương trắng tự nhiên gắn với huyền tích Yang Patao giữa đồng bằng Ninh Phước.',
+    artifactsCount: 6,
+  },
+  {
+    id: 'site-7',
+    name: 'Đền thờ Po Ina Nagar Hữu Đức',
+    ancientName: 'Paley Hamu Tanran',
+    century: 'Cổ truyền qua nhiều thế hệ',
+    district: 'Làng Hữu Đức, Xã Phước Hữu',
+    coords: [11.505, 108.905],
+    preservationStatus: 'Đang bảo tồn tốt',
+    scanResolution: 'Photogrammetry 3D Spatial Audio',
+    image:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuAp5oGIUVAeSJNWnmsriAoE7Rx-gdVHGigsy1epg2Fah3OzIXtn7INt9avN5y3DYyr_5mgSbawDhhdB6AVM-eYtjoRZfxrq27rRi1-chffHIx6soB1QRX5R3xTS8gl_eF19cPeH7hONAuA5dgaNxeEG4JYrWaLNmlFYWVg8fXjwigzILTDoZgUaOHe27pOw-PL1DfizD5qy-ARG-iBr0tq2l090mbglxQI-yq7RDH_u_9aIirJEjUmV9Q',
+    description:
+      'Nơi gìn giữ hòm Y trang thiêng liêng của Nữ thần Mẹ Xứ Sở và trung tâm khởi phát tiếng trống hội Katê.',
+    artifactsCount: 15,
+  },
+  {
+    id: 'site-8',
+    name: 'Làng Văn hóa Chăm Palei Baoh Dana',
+    ancientName: 'Paley Baoh Dana (Chất Thường)',
+    century: 'Định cư liên tục qua nhiều thế kỷ',
+    district: 'Thôn Chất Thường, Xã Phước Hậu',
+    coords: [11.545, 108.925],
+    preservationStatus: 'Đang bảo tồn tốt',
+    scanResolution: 'Virtual Tour 360 Panorama',
+    image:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuByRjv3i0FgHFxRrA7jzb_vp4kh7-P-4NrSYq9Zkk1lt5uKtg0Nqhq3LnRPLql0yHGiNMjL6ZdJ4bvwAco_jKoi5cKVVQyrhDXC_CtMT08OA5ogzdkhkYr96QFa4Jly_q9fjQIvrK6GcFT1JJlUR6bxy0yVImxdXGO8N5wDrB4tcuYiFJUP6SevjiPWkYr2orVSIoCNJDpVkrUBSCZVndc03_Kqs_3OkB2XPFgcw_7FdSU08jQAjDT5ZQ',
+    description:
+      'Trái tim du lịch cộng đồng Dana, nơi giao thoa văn hóa Chăm - Kinh và bảo tồn kiến trúc nhà mẫu hệ cổ truyền.',
+    artifactsCount: 20,
+  },
 ];
 
 export const MODELS_3D: Model3DItem[] = [

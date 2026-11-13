@@ -12,6 +12,19 @@ class AuthService {
     // Bộ nhớ in-memory dev fallback nếu chưa cấu hình Supabase credentials thật
     this.mockUsers = new Map([
       [
+        "admin@danacommunity.vn",
+        {
+          id: "00000000-0000-0000-0000-000000000001",
+          email: "admin@danacommunity.vn",
+          password: "Admin@123456",
+          fullName: "Quản Trị Viên Di Sản Champa",
+          avatarUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80",
+          provider: "email",
+          role: "admin",
+          createdAt: new Date().toISOString(),
+        },
+      ],
+      [
         "admin@champaweb.vn",
         {
           id: "00000000-0000-0000-0000-000000000001",
@@ -233,11 +246,11 @@ class AuthService {
       }
 
       // 2. Cơ chế đăng nhập ưu tiên cho tài khoản quản trị hệ thống
-      if (cleanEmail === "admin@champaweb.vn" && password === "Admin@123456") {
+      if ((cleanEmail === "admin@champaweb.vn" || cleanEmail === "admin@danacommunity.vn") && password === "Admin@123456") {
         return {
           user: {
             id: "00000000-0000-0000-0000-000000000001",
-            email: "admin@champaweb.vn",
+            email: cleanEmail,
             fullName: "Quản Trị Viên Di Sản Champa",
             avatarUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80",
             provider: "email",

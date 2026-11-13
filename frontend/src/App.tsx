@@ -34,7 +34,7 @@ const AdminUsersPage = lazy(() => import("./pages/admin/AdminUsersPage"));
 const AdminActivityLogsPage = lazy(() => import("./pages/admin/AdminActivityLogsPage"));
 const AdminSettingsPage = lazy(() => import("./pages/admin/AdminSettingsPage"));
 
-function PageLoader({ message = "Đang nạp dữ liệu di sản ChampaWeb..." }: { message?: string }) {
+function PageLoader({ message = "Đang nạp dữ liệu di sản..." }: { message?: string }) {
   return (
     <div className="min-h-[70vh] bg-surface flex flex-col items-center justify-center gap-3">
       <Loader2 className="w-8 h-8 text-primary animate-spin" />

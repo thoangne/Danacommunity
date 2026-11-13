@@ -6,7 +6,7 @@
 
 ### GIAI ĐOẠN 1: THỰC ĐỊA TẠI NHÀ CỔ BAOH DANA (LÀNG CHẤT THƯỜNG)
 - [ ] **1.1. Khảo sát & Ký kết với chủ nhà cổ:**  
-  Gặp gia đình tại [Google Maps Baoh Dana](https://maps.app.goo.gl/VBgaLS7bNm7icXCN7). Thống nhất lịch đón khách (khung giờ, tối đa 8 khách/đoàn) và cơ chế chia sẻ doanh thu (60% cho gia đình/làng).
+  Gặp gia đình tại [Google Maps Baoh Dana](https://maps.app.goo.gl/FWVdoPUTFZDaNBZW8). Thống nhất lịch đón khách (khung giờ, tối đa 8 khách/đoàn) và cơ chế chia sẻ doanh thu (60% cho gia đình/làng).
 - [ ] **1.2. Chụp bộ ảnh thực tế (15 - 20 tấm chất lượng cao):**  
   - 3 tấm toàn cảnh sân vườn & 4 gian nhà (Thang Tôn, Thang Yơ, Thang Ging, Thang Mơng).
   - 5 tấm đặc tả kiến trúc: Chân cột gỗ kê đá tảng, vì kèo mộng gỗ, vách đất trộn rơm, mái ngói phong rêu.

@@ -38,7 +38,7 @@ export default function OAuthCallbackPage() {
         if (token) {
           const user = await handleAuthSuccess(token);
           toast.success("Đăng nhập thành công!", {
-            description: `Chào mừng ${user?.fullName || "bạn"} đến với ChampaWeb.`,
+            description: `Chào mừng ${user?.fullName || "bạn"} đến với Dana Community.`,
           });
 
           setTimeout(() => {

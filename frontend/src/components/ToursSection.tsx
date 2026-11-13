@@ -22,11 +22,11 @@ export default function ToursSection() {
               Sản Phẩm Trải Nghiệm Cốt Lõi • Dana Community
             </span>
             <h2 className="font-serif text-3xl xl:text-4xl text-on-surface font-semibold">
-              Dana Tour: Hành Trình Di Sản Panduranga
+              Dana Tour: Hành Trình 8 Điểm Chạm Palei Baoh Dana
             </h2>
             <p className="font-body-md text-sm sm:text-base text-on-surface-variant mt-space-xs leading-relaxed">
-              Mô hình du lịch cộng đồng độc bản duy nhất: kết nối trọn vẹn kiến trúc đền tháp,
-              nghệ thuật gốm Bàu Trúc UNESCO, khung dệt thổ cẩm Mỹ Nghiệp và ẩm thực Chăm cổ truyền.
+              Mô hình du lịch cộng đồng độc bản: kết nối trọn vẹn 8 điểm di tích đền tháp Po Klaong Garay, Po Ramê,
+              kỳ tích đập Nha Trinh, thắng cảnh Núi Đá Trắng, làng gốm Bàu Trúc UNESCO, dệt Mỹ Nghiệp và nếp sống làng Palei Baoh Dana.
             </p>
           </div>
 
@@ -169,12 +169,9 @@ export default function ToursSection() {
                   <span className="text-[11px] text-on-surface-variant block">
                     Chi phí trọn gói bảo tồn & trải nghiệm:
                   </span>
-                  <div className="flex items-baseline gap-2">
+                  <div className="flex items-baseline gap-2 mt-0.5">
                     <span className="font-serif text-2xl sm:text-3xl font-bold text-primary">
-                      {danaTour.price}
-                    </span>
-                    <span className="text-xs text-on-surface-variant">
-                      / Người lớn • Trẻ em: 550.000đ
+                      Liên hệ báo giá
                     </span>
                   </div>
                 </div>
@@ -184,7 +181,7 @@ export default function ToursSection() {
                     to="/tour"
                     className="px-5 py-2.5 rounded-xl bg-primary text-white text-xs font-bold hover:bg-primary/90 transition-all flex items-center gap-1.5 shadow-md"
                   >
-                    <span>Đặt tour ngay</span>
+                    <span>Liên hệ đặt tour</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>

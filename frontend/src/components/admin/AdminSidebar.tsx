@@ -45,7 +45,7 @@ export default function AdminSidebar({
   const { user } = useAuth();
 
   const userRole = user?.role || "customer";
-  const isAdminOrSuper = userRole === "admin" || userRole === "super_admin" || user?.email === "admin@champaweb.vn";
+  const isAdminOrSuper = userRole === "admin" || userRole === "super_admin" || user?.email === "admin@champaweb.vn" || user?.email === "admin@danacommunity.vn";
 
   const navGroups: NavGroup[] = [
     {
@@ -167,7 +167,7 @@ export default function AdminSidebar({
             {!isCollapsed && (
               <div className="flex flex-col truncate">
                 <span className="font-serif font-bold text-sm tracking-wide text-[#24231F] leading-tight">
-                  ChampaWeb
+                  Dana Heritage
                 </span>
                 <span className="text-[10px] font-semibold text-[#8F4E00] tracking-wider uppercase">
                   CMS Di Sản

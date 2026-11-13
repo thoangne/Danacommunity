@@ -122,6 +122,20 @@ export const BLOG_PILLARS: BlogPillar[] = [
 
 export const BLOG_ARTICLES: BlogArticle[] = [
   {
+    id: 'post-heritage-baoh-dana',
+    mainCategory: 'van-hoa',
+    category: 'archaeology',
+    badge: 'Thuyết Minh Tuyến Điểm',
+    badgeClass: 'bg-primary text-on-primary',
+    fieldLocation: 'Tuyến Di Sản Palei Baoh Dana',
+    readTime: '15 phút đọc',
+    author: 'Cộng đồng Chăm Palei Baoh Dana',
+    title: 'Bài Thuyết Minh Tuyến Du Lịch Cộng Đồng Chăm: Hành Trình 8 Điểm Chạm Di Sản Palei Baoh Dana',
+    desc: 'Tập hợp toàn văn thuyết minh lịch sử, kiến trúc, văn hóa và nếp sống của 8 điểm đến: Đền tháp Po Klaong Garay, Đập Nha Trinh, Núi Đá Trắng, Tháp Po Ramê, Làng dệt Mỹ Nghiệp, Làng gốm Bàu Trúc, Đền Po Ina Nagar và Làng Chất Thường.',
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBWzz5wVWN2Rre_bf3lzTZ89szZW61A19gyuIM1D6eHB2bgjSvLJ2IjqYRR2_FvWNOaiuYH_mZKTaaCYHyrAo6Y-MHZRm5QMjTQqVYlWO-UTZpP7j-38TvaXGvTC0E43MbjaK6OcYizspkYPA97vZ7ux2qQedU074FLdyFMB7zxmwJM_GGaJUJxVOmC--t3UtTdUYuMj2PhxbPFLX9SyKZLF-p5BPhi_fHZpOUSInajqnNWFka72rYwew',
+    slug: 'thuyet-minh-du-lich-cong-dong-palei-baoh-dana',
+  },
+  {
     id: 'post-news-1',
     mainCategory: 'tin-tuc',
     category: 'ritual',

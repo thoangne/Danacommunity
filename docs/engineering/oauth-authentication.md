@@ -129,13 +129,13 @@ BACKEND_URL=http://localhost:5000
 2. Chọn hoặc tạo dự án mới (ví dụ: `ChampaWeb-Heritage`).
 3. Đi tới **APIs & Services** > **OAuth consent screen**:
    - Chọn User Type: **External**.
-   - App name: `ChampaWeb - Dana Community Tourism`.
+   - App name: `Dana Community Tourism`.
    - User support email: Email quản trị của bạn.
    - Scopes: Chọn `openid`, `.../auth/userinfo.email`, `.../auth/userinfo.profile`.
 4. Đi tới **APIs & Services** > **Credentials**:
    - Nhấn **Create Credentials** > **OAuth client ID**.
    - Application type: **Web application**.
-   - Name: `ChampaWeb Web Client`.
+   - Name: `Dana Community Tourism`.
    - **Authorized JavaScript origins**:
      - Local: `http://localhost:5000`, `http://localhost:5173`
      - Production: `https://your-domain.vn`

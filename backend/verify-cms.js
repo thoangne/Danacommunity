@@ -59,7 +59,7 @@ async function runCmsVerification() {
     category_id: testCat.id,
     tags: ["Tháp Chàm Test", "Khảo cổ học"],
     status: "published",
-    seoTitle: "Kiến trúc Po Klong Garai | ChampaWeb",
+    seoTitle: "Kiến trúc Po Klong Garai | Dana Community",
     seoDescription: "Khảo cứu nghệ thuật kiến trúc Champa cổ.",
   }, testActor);
   console.log("Đã tạo bài viết:", newArticle.id, "Slug:", newArticle.slug);
@@ -165,10 +165,10 @@ async function runCmsVerification() {
   const oldSiteInfo = currentSettings.site_info || {};
   await adminService.updateSettings("site_info", {
     ...oldSiteInfo,
-    site_title: "ChampaWeb - Tinh Hoa Di Sản Chăm Pa (Test)",
+    site_title: "Dana Community - Tinh Hoa Di Sản Chăm Pa (Test)",
   }, testActor);
   const updatedSettings = await adminService.getSettings();
-  if (!updatedSettings.site_info || updatedSettings.site_info.site_title !== "ChampaWeb - Tinh Hoa Di Sản Chăm Pa (Test)") {
+  if (!updatedSettings.site_info || updatedSettings.site_info.site_title !== "Dana Community - Tinh Hoa Di Sản Chăm Pa (Test)") {
     throw new Error("Cập nhật cài đặt hệ thống không thành công!");
   }
   // Khôi phục lại

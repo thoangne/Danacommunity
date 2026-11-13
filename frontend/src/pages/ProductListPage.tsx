@@ -300,20 +300,18 @@ export default function ProductListPage() {
                   <button
                     key={cat.id}
                     onClick={() => handleCategoryChange(cat.id)}
-                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all border shrink-0 flex items-center gap-1.5 ${
-                      isActive
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all border shrink-0 flex items-center gap-1.5 ${isActive
                         ? "bg-primary text-white border-primary shadow-xs"
                         : "bg-surface-container-low text-on-surface-variant border-outline-variant/40 hover:bg-surface-container hover:text-on-surface"
-                    }`}
+                      }`}
                     type="button"
                   >
                     <span>{cat.label}</span>
                     <span
-                      className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                        isActive
+                      className={`text-[10px] px-1.5 py-0.2 rounded-full ${isActive
                           ? "bg-white/20 text-white"
                           : "bg-surface-container-high text-on-surface-variant"
-                      }`}
+                        }`}
                     >
                       {cat.count}
                     </span>
@@ -420,15 +418,15 @@ export default function ProductListPage() {
                 selectedArtisanId !== null ||
                 selectedBadge !== "all" ||
                 searchQuery !== "") && (
-                <button
-                  onClick={handleResetFilters}
-                  className="flex items-center gap-1 text-xs text-secondary hover:underline font-semibold"
-                  type="button"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  <span>Đặt lại bộ lọc</span>
-                </button>
-              )}
+                  <button
+                    onClick={handleResetFilters}
+                    className="flex items-center gap-1 text-xs text-secondary hover:underline font-semibold"
+                    type="button"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>Đặt lại bộ lọc</span>
+                  </button>
+                )}
             </div>
 
             {/* Empty state */}
@@ -669,7 +667,7 @@ export default function ProductListPage() {
                   Bạn muốn chế tác tác phẩm độc bản riêng hoặc ghé thăm xưởng làng nghề?
                 </h2>
                 <p className="text-xs sm:text-sm text-white/80 mt-space-sm leading-relaxed">
-                  Đội ngũ ChampaWeb kết nối trực tiếp bạn với các nghệ nhân ưu tú tại Bàu Trúc,
+                  Đội ngũ DanaCommunity kết nối trực tiếp bạn với các nghệ nhân ưu tú tại Bàu Trúc,
                   Mỹ Nghiệp và Hữu Đức để tạo tác kích thước riêng hoặc sắp xếp trải nghiệm học nghề.
                 </p>
 
@@ -740,11 +738,10 @@ export default function ProductListPage() {
                       <button
                         key={idx}
                         onClick={() => setActiveImageIndex(idx)}
-                        className={`w-16 h-16 rounded-xl overflow-hidden border-2 shrink-0 transition-all ${
-                          activeImageIndex === idx
+                        className={`w-16 h-16 rounded-xl overflow-hidden border-2 shrink-0 transition-all ${activeImageIndex === idx
                             ? "border-primary scale-105 shadow-xs"
                             : "border-outline-variant/40 opacity-70 hover:opacity-100"
-                        }`}
+                          }`}
                         type="button"
                       >
                         <img

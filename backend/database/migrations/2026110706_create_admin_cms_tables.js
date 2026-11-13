@@ -79,7 +79,7 @@ exports.up = async function (knex) {
       {
         key: "site_info",
         value: JSON.stringify({
-          siteName: "ChampaWeb • Dana Community",
+          siteName: "Dana Community",
           tagline: "Bảo tồn & phát huy giá trị di sản văn hóa Champa",
           description: "Cổng thông tin chuyên sâu về khảo cứu lịch sử, kiến trúc đền tháp Kalan, làng nghề gốm cổ Bàu Trúc, dệt thổ cẩm Mỹ Nghiệp và du lịch di sản cộng đồng Chăm.",
           contactEmail: "admin@danacommunity.vn",
@@ -91,7 +91,7 @@ exports.up = async function (knex) {
       {
         key: "seo_defaults",
         value: JSON.stringify({
-          metaTitle: "ChampaWeb | Di sản & Văn hóa Champa",
+          metaTitle: "Dana Community | Di sản & Văn hóa Champa",
           metaDescription: "Khám phá chiều sâu văn hóa Champa qua khảo cứu lịch sử, đền tháp Kalan và du lịch di sản cộng đồng.",
           ogImage: "https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?auto=format&fit=crop&w=1200&q=80",
           keywords: "Champa, Panduranga, Tháp Chàm, Gốm Bàu Trúc, Dệt Mỹ Nghiệp, Baoh Dana, Po Klong Garai",
@@ -103,7 +103,7 @@ exports.up = async function (knex) {
         value: JSON.stringify({
           facebook: "https://facebook.com/champaheritage",
           youtube: "https://youtube.com/@champaheritage",
-          zalo: "https://zalo.me/champaweb",
+          zalo: "https://zalo.me/danacommunity",
           instagram: "https://instagram.com/champaheritage",
         }),
         description: "Kênh mạng xã hội chính thức",
@@ -131,7 +131,7 @@ exports.up = async function (knex) {
     // Seed log ban đầu
     await knex("activity_logs").insert({
       actor_name: "Hệ Thống",
-      actor_email: "system@champaweb.vn",
+      actor_email: "system@danacommunity.vn",
       action: "SYSTEM_INIT",
       target_type: "system",
       target_id: "cms-core",

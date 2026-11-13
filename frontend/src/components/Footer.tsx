@@ -24,7 +24,7 @@ interface SocialLinks {
 }
 
 const DEFAULT_SITE_INFO: SiteInfo = {
-  siteName: "ChampaWeb • Dana Community",
+  siteName: "Dana Community",
   tagline: "Bảo tồn & phát huy giá trị di sản văn hóa Champa",
   description:
     "Cổng thông tin chuyên sâu về khảo cứu lịch sử, kiến trúc đền tháp Kalan, làng nghề gốm cổ Bàu Trúc, dệt thổ cẩm Mỹ Nghiệp và du lịch di sản cộng đồng Chăm.",
@@ -115,7 +115,7 @@ export default function Footer() {
             <div className="flex items-center gap-space-sm">
               <img
                 src={LOGO_URL}
-                alt="Logo ChampaWeb - Dana Community"
+                alt="Logo Dana Community"
                 className="h-10 w-auto object-contain shrink-0"
               />
               <div className="flex flex-col">
@@ -294,7 +294,7 @@ export default function Footer() {
             </span>
             <span>•</span>
             <span className="hover:text-primary transition-colors cursor-pointer">
-              Bảo tồn Làng nghề Bàu Trúc & Mỹ Nghiệp
+              Bảo tồn Làng nghề
             </span>
             <span>•</span>
             <Link to="/admin" className="hover:text-primary text-stone-400 transition-colors">

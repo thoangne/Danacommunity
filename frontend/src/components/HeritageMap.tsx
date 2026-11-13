@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
+import { ExternalLink, MapPin } from "lucide-react";
 
 const DefaultIcon = L.icon({
   iconUrl: icon,
@@ -20,48 +21,74 @@ interface Station {
   lng: number;
   district: string;
   desc: string;
+  googleMapsUrl?: string;
 }
 
 const STATIONS: Station[] = [
   {
     id: 1,
-    name: "Tháp Po Klong Garai",
-    lat: 11.5833,
-    lng: 108.9667,
+    name: "Đền tháp Po Klaong Garay",
+    lat: 11.6033,
+    lng: 108.9482,
     district: "Đô Vinh",
-    desc: "Cụm tháp Kalan gạch nung sừng sững trên Đồi Trầu.",
+    desc: "Đỉnh cao kiến trúc gạch nung thế kỷ XIII trên đỉnh Đồi Trầu.",
   },
   {
     id: 2,
-    name: "Làng Gốm Bàu Trúc",
-    lat: 11.5333,
-    lng: 108.9167,
-    district: "Phước Dân",
-    desc: "Nơi đất sét kết hợp cát mịn, nung lộ thiên không men.",
+    name: "Đập thuỷ lợi Nha Trinh",
+    lat: 11.612,
+    lng: 108.931,
+    district: "Sông Dinh",
+    desc: "Kỳ tích trị thủy cổ do vua Po Klaong Garay khởi dựng.",
   },
   {
     id: 3,
-    name: "Làng Dệt Mỹ Nghiệp",
-    lat: 11.5167,
-    lng: 108.9333,
-    district: "Ninh Phước",
-    desc: "Gìn giữ kỹ nghệ dệt thủ công hoa văn kỷ hà.",
+    name: "Núi Đá Trắng - Cek Yang Patao",
+    lat: 11.512,
+    lng: 108.889,
+    district: "Phước Hữu",
+    desc: "Khối đá hoa cương trắng tự nhiên gắn với huyền tích linh thiêng.",
   },
   {
     id: 4,
-    name: "Tháp Thiêng Po Rome",
-    lat: 11.4667,
-    lng: 108.9833,
+    name: "Đền tháp Po Ramê",
+    lat: 11.5178,
+    lng: 108.9205,
     district: "Hậu Sanh",
-    desc: "Tháp cuối cùng của vương triều Champa độc lập.",
+    desc: "Ngôi tháp thế kỷ XVII thờ vị vua cuối cùng được phong thánh.",
   },
   {
     id: 5,
-    name: "Bảo tàng Văn hóa Chăm",
-    lat: 11.5667,
-    lng: 108.9833,
-    district: "Phan Rang",
-    desc: "Trưng bày hơn 1.000 hiện vật khảo cổ học quý giá.",
+    name: "Làng Dệt Thổ cẩm Mỹ Nghiệp",
+    lat: 11.5167,
+    lng: 108.9333,
+    district: "Ninh Phước",
+    desc: "Làng dệt cổ xưa nhất nơi lưu giữ tinh hoa khung cửi Katê.",
+  },
+  {
+    id: 6,
+    name: "Làng Gốm Bàu Trúc (UNESCO)",
+    lat: 11.5312,
+    lng: 108.9567,
+    district: "Phước Dân",
+    desc: "Kỹ nghệ nặn gốm không bàn xoay, di sản phi vật thể nhân loại.",
+  },
+  {
+    id: 7,
+    name: "Đền thờ Po Ina Nagar Hữu Đức",
+    lat: 11.505,
+    lng: 108.905,
+    district: "Hữu Đức",
+    desc: "Nơi tôn thờ Người Mẹ Xứ Sở và lưu giữ hòm Y trang thánh.",
+  },
+  {
+    id: 8,
+    name: "Nhà cổ Chăm - Palei Baoh Dana",
+    lat: 11.5844183,
+    lng: 108.9116267,
+    district: "Chất Thường, Phước Hậu",
+    desc: "Không gian nhà cổ mẫu hệ Chăm nguyên bản, trụ sở tiếp đón cộng đồng Dana Community.",
+    googleMapsUrl: "https://maps.app.goo.gl/FWVdoPUTFZDaNBZW8",
   },
 ];
 
@@ -112,12 +139,34 @@ export default function HeritageMap({
             }}
           >
             <Popup>
-              <div className="p-1">
-                <span className="text-[10px] uppercase font-bold text-primary">
-                  Trạm 0{station.id} • {station.district}
-                </span>
-                <h5 className="font-bold text-sm">{station.name}</h5>
-                <p className="text-xs text-gray-600 mt-1">{station.desc}</p>
+              <div className="p-1.5 min-w-[210px] space-y-1.5">
+                <div className="flex items-center justify-between gap-1">
+                  <span className="text-[10px] uppercase font-bold text-primary px-1.5 py-0.5 rounded bg-primary/10">
+                    Trạm 0{station.id} • {station.district}
+                  </span>
+                  {station.id === 8 && (
+                    <span className="text-[9px] uppercase font-bold text-emerald-800 bg-emerald-100 px-1.5 py-0.5 rounded">
+                      Nhà cổ Baoh Dana
+                    </span>
+                  )}
+                </div>
+                <h5 className="font-bold text-sm text-stone-900 leading-snug">{station.name}</h5>
+                <p className="text-xs text-stone-600 leading-relaxed">{station.desc}</p>
+                <div className="flex items-center gap-1 text-[11px] font-mono text-stone-500 pt-1 border-t border-stone-200/80">
+                  <MapPin className="w-3 h-3 text-stone-400 shrink-0" />
+                  <span>{station.lat.toFixed(6)}, {station.lng.toFixed(6)}</span>
+                </div>
+                {station.googleMapsUrl && (
+                  <a
+                    href={station.googleMapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-1.5 w-full py-1 px-2 rounded-lg bg-primary hover:bg-primary/90 text-white text-[11px] font-bold shadow-xs transition-colors"
+                  >
+                    <span>Mở Google Maps chỉ đường</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                )}
               </div>
             </Popup>
           </Marker>

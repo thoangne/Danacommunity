@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS public.blog_articles (
     field_location VARCHAR(150),
     read_time VARCHAR(30) DEFAULT '5 phút đọc',
     author_id UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
-    author_name VARCHAR(100) DEFAULT 'Ban Nghiên cứu ChampaWeb',
+    author_name VARCHAR(100) DEFAULT 'Ban Nghiên cứu Di sản Dana',
     author_avatar TEXT,
     summary TEXT,
     content TEXT NOT NULL,

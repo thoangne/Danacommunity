@@ -38,7 +38,7 @@ export default function DanaHome() {
         {/* Section: Nghệ nhân */}
         <ArtisansSection />
 
-        {/* Section: Các hình ảnh của Champa Community (3 hàng chạy xen kẽ từ phải sang trái) */}
+        {/* Section: Thư viện ảnh Champa Community (3 hàng chạy xen kẽ từ phải sang trái) */}
         <ChampaCommunityGallery />
       </main>
 

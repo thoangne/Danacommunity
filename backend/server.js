@@ -1,6 +1,7 @@
 require("dotenv").config();
 const { validateEnv, PORT, NODE_ENV } = require("./src/config/env");
 const { testConnection, closeConnection } = require("./src/config/db");
+const { runDatabaseMigrations } = require("./src/config/migrationRunner");
 const app = require("./app");
 
 async function startServer() {
@@ -14,6 +15,8 @@ async function startServer() {
 
     if (dbStatus.connected) {
       console.log(`✅ Kết nối PostgreSQL thành công! Cơ sở dữ liệu: "${dbStatus.database}" lúc ${dbStatus.timestamp}`);
+      // Tự động kiểm tra và chạy migration với cơ chế Distributed Lock chống race-condition
+      await runDatabaseMigrations();
     } else {
       if (NODE_ENV === "production") {
         console.error(`❌ [FATAL] Không thể kết nối cơ sở dữ liệu Production: ${dbStatus.error}`);

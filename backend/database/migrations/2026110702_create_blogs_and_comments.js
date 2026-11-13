@@ -28,7 +28,7 @@ exports.up = async function (knex) {
     table.string("field_location", 150).nullable();
     table.string("read_time", 30).defaultTo("5 phút đọc");
     table.uuid("author_id").references("id").inTable("profiles").onDelete("SET NULL");
-    table.string("author_name", 100).defaultTo("Ban Nghiên cứu ChampaWeb");
+    table.string("author_name", 100).defaultTo("Ban Nghiên cứu Di sản Dana");
     table.text("author_avatar").nullable();
     table.text("summary").nullable();
     table.text("content").notNullable();

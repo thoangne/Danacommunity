@@ -1,7 +1,7 @@
 # KẾ HOẠCH CHIẾN DỊCH: TẬP TRUNG XÂY DỰNG & QUẢNG BÁ NHÀ CỔ CHAMPA (BAOH DANA)
 **Điểm đến trọng điểm:** Nhà Cổ Chăm - Baoh Dana  
 **Vị trí thực địa:** Palei Baoh Dana (Làng Chất Thường), Xã Phước Hậu, Huyện Ninh Phước, Tỉnh Ninh Thuận  
-**Tọa độ Google Maps:** [Nhà cổ Chăm - Baoh Dana (11.5844235, 108.9116267)](https://maps.app.goo.gl/VBgaLS7bNm7icXCN7)  
+**Tọa độ Google Maps:** [Nhà cổ Chăm - Baoh Dana (11.5844235, 108.9116267)](https://maps.app.goo.gl/FWVdoPUTFZDaNBZW8)  
 **Đơn vị thực hiện:** Business Team, Content & Product Team Dana Champa Heritage  
 
 ---
@@ -76,7 +76,7 @@ Business và Content team thực hiện phân phối nội dung vào hệ thốn
 | **Hero Section** | `HeroSection.tsx` | Cập nhật Tagline phụ: *"Khám phá không gian sống nguyên bản tại Nhà Cổ Baoh Dana cùng người bản xứ"*. Thêm nút CTA: *"Xem trải nghiệm Nhà Cổ"*. |
 | **Triết lý Dana** | `ManifestoSection.tsx` | Nhấn mạnh triết lý: Di sản Champa không chỉ có đền tháp của vua chúa, mà cốt lõi nằm ở nếp nhà, góc bếp và lời ru của những người Mẹ trong ngôi nhà cổ. |
 | **Danh sách Tour** | `champaData.ts` (`TOURS`) | Đưa tour *"Trầm tích Baoh Dana: Nửa ngày dưới nếp nhà cổ mẫu hệ"* lên vị trí ưu tiên số 1 trên trang chủ và trang `TourListPage.tsx`. |
-| **Bản đồ Điểm dừng** | `champaData.ts` (`WAYPOINTS`) | Bổ sung Trạm **Palei Baoh Dana (Làng Chất Thường)** trên bản đồ tuyến khảo cổ, gắn link chỉ đường Google Maps: `https://maps.app.goo.gl/VBgaLS7bNm7icXCN7`. |
+| **Bản đồ Điểm dừng** | `champaData.ts` (`WAYPOINTS`) | Bổ sung Trạm **Palei Baoh Dana (Làng Chất Thường)** trên bản đồ tuyến khảo cổ, gắn link chỉ đường Google Maps: `https://maps.app.goo.gl/FWVdoPUTFZDaNBZW8`. |
 | **Chuyên mục Blog** | `blogData.ts` & `blogDetailData.ts` | Xuất bản bài khảo cứu thực nghiệm độc quyền: *"Đi tìm nếp nhà cổ Champa ở Palei Baoh Dana: Bí mật kiến trúc cột gỗ kê đá chống chọi gió cát sa mạc"*. |
 | **Di sản số / Ngôn ngữ** | `languageData.ts` | Bổ sung bộ từ vựng chủ đề "Ngôi nhà & Gia đình": *Sang* (Nhà), *Thang Tôn* (Nhà tổ), *Thang Ging* (Nhà bếp), *Ama* (Cha), *Amư* (Mẹ), *Anak* (Con). |
 
@@ -84,7 +84,7 @@ Business và Content team thực hiện phân phối nội dung vào hệ thốn
 
 ## V. CHECKLIST CÔNG VIỆC THỰC ĐỊA CHO BUSINESS TEAM TẠI TOẠ ĐỘ BAOH DANA
 
-Để hoàn tất tư liệu trước ngày lên bài, Business team cử nhân sự đến tận nơi tại [Google Maps Baoh Dana](https://maps.app.goo.gl/VBgaLS7bNm7icXCN7) thực hiện các đầu việc:
+Để hoàn tất tư liệu trước ngày lên bài, Business team cử nhân sự đến tận nơi tại [Google Maps Baoh Dana](https://maps.app.goo.gl/FWVdoPUTFZDaNBZW8) thực hiện các đầu việc:
 
 ### 1. Khảo sát & Ký kết hợp tác với chủ nhà cổ
 - [ ] Gặp gỡ đại diện gia đình/chủ nhân ngôi nhà cổ tại làng Chất Thường.

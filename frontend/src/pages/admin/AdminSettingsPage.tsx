@@ -37,7 +37,7 @@ export interface CarouselSlideItem {
 }
 
 const DEFAULT_SITE_INFO = {
-  siteName: "ChampaWeb • Dana Community",
+  siteName: "Dana Community",
   tagline: "Bảo tồn & phát huy giá trị di sản văn hóa Champa",
   description:
     "Cổng thông tin chuyên sâu về khảo cứu lịch sử, kiến trúc đền tháp Kalan, làng nghề gốm cổ Bàu Trúc, dệt thổ cẩm Mỹ Nghiệp và du lịch di sản cộng đồng Chăm.",
@@ -96,7 +96,7 @@ export default function AdminSettingsPage() {
         if (data.success && data.data) {
           const s = data.data;
           if (s.site_info) {
-            const isPlaceholder = s.site_info.contactEmail === "contact@champaweb.vn";
+            const isPlaceholder = s.site_info.contactEmail === "contact@champaweb.vn" || (s.site_info.siteName && s.site_info.siteName.includes("ChampaWeb"));
             setSiteName(isPlaceholder ? DEFAULT_SITE_INFO.siteName : (s.site_info.siteName || DEFAULT_SITE_INFO.siteName));
             setTagline(isPlaceholder ? DEFAULT_SITE_INFO.tagline : (s.site_info.tagline || DEFAULT_SITE_INFO.tagline));
             setDescription(isPlaceholder ? DEFAULT_SITE_INFO.description : (s.site_info.description || DEFAULT_SITE_INFO.description));
@@ -229,14 +229,14 @@ export default function AdminSettingsPage() {
           .map((item) =>
             item.id === editingSlide.id
               ? {
-                  ...item,
-                  title: slideTitle.trim(),
-                  subtitle: slideSubtitle.trim(),
-                  image: slideImage.trim(),
-                  link: slideLink.trim(),
-                  order: Number(slideOrder) || 1,
-                  isActive: slideIsActive,
-                }
+                ...item,
+                title: slideTitle.trim(),
+                subtitle: slideSubtitle.trim(),
+                image: slideImage.trim(),
+                link: slideLink.trim(),
+                order: Number(slideOrder) || 1,
+                isActive: slideIsActive,
+              }
               : item
           )
           .sort((a, b) => (a.order || 0) - (b.order || 0))
@@ -342,11 +342,10 @@ export default function AdminSettingsPage() {
           <button
             type="button"
             onClick={() => setActiveTab("carousel")}
-            className={`pb-3 text-xs font-semibold uppercase tracking-wider flex items-center gap-2 border-b-2 transition-all cursor-pointer shrink-0 ${
-              activeTab === "carousel"
-                ? "border-[#8F4E00] text-[#8F4E00]"
-                : "border-transparent text-stone-500 hover:text-stone-800"
-            }`}
+            className={`pb-3 text-xs font-semibold uppercase tracking-wider flex items-center gap-2 border-b-2 transition-all cursor-pointer shrink-0 ${activeTab === "carousel"
+              ? "border-[#8F4E00] text-[#8F4E00]"
+              : "border-transparent text-stone-500 hover:text-stone-800"
+              }`}
           >
             <SlidersHorizontal className="w-4 h-4" />
             <span>Carousel Trang Chủ ({carouselSlides.length})</span>
@@ -354,11 +353,10 @@ export default function AdminSettingsPage() {
           <button
             type="button"
             onClick={() => setActiveTab("site")}
-            className={`pb-3 text-xs font-semibold uppercase tracking-wider flex items-center gap-2 border-b-2 transition-all cursor-pointer shrink-0 ${
-              activeTab === "site"
-                ? "border-[#8F4E00] text-[#8F4E00]"
-                : "border-transparent text-stone-500 hover:text-stone-800"
-            }`}
+            className={`pb-3 text-xs font-semibold uppercase tracking-wider flex items-center gap-2 border-b-2 transition-all cursor-pointer shrink-0 ${activeTab === "site"
+              ? "border-[#8F4E00] text-[#8F4E00]"
+              : "border-transparent text-stone-500 hover:text-stone-800"
+              }`}
           >
             <Building className="w-4 h-4" />
             <span>Thông tin Website</span>
@@ -366,11 +364,10 @@ export default function AdminSettingsPage() {
           <button
             type="button"
             onClick={() => setActiveTab("seo")}
-            className={`pb-3 text-xs font-semibold uppercase tracking-wider flex items-center gap-2 border-b-2 transition-all cursor-pointer shrink-0 ${
-              activeTab === "seo"
-                ? "border-[#8F4E00] text-[#8F4E00]"
-                : "border-transparent text-stone-500 hover:text-stone-800"
-            }`}
+            className={`pb-3 text-xs font-semibold uppercase tracking-wider flex items-center gap-2 border-b-2 transition-all cursor-pointer shrink-0 ${activeTab === "seo"
+              ? "border-[#8F4E00] text-[#8F4E00]"
+              : "border-transparent text-stone-500 hover:text-stone-800"
+              }`}
           >
             <Globe className="w-4 h-4" />
             <span>Cấu hình SEO Mặc định</span>
@@ -378,11 +375,10 @@ export default function AdminSettingsPage() {
           <button
             type="button"
             onClick={() => setActiveTab("social")}
-            className={`pb-3 text-xs font-semibold uppercase tracking-wider flex items-center gap-2 border-b-2 transition-all cursor-pointer shrink-0 ${
-              activeTab === "social"
-                ? "border-[#8F4E00] text-[#8F4E00]"
-                : "border-transparent text-stone-500 hover:text-stone-800"
-            }`}
+            className={`pb-3 text-xs font-semibold uppercase tracking-wider flex items-center gap-2 border-b-2 transition-all cursor-pointer shrink-0 ${activeTab === "social"
+              ? "border-[#8F4E00] text-[#8F4E00]"
+              : "border-transparent text-stone-500 hover:text-stone-800"
+              }`}
           >
             <Share2 className="w-4 h-4" />
             <span>Kênh Mạng Xã Hội</span>
@@ -438,11 +434,10 @@ export default function AdminSettingsPage() {
                   {carouselSlides.map((slide, idx) => (
                     <div
                       key={slide.id}
-                      className={`flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-xl border transition-all ${
-                        slide.isActive
-                          ? "bg-[#FAF9F6] border-stone-200 hover:border-[#8F4E00]/50"
-                          : "bg-stone-50/70 border-stone-200 opacity-60"
-                      }`}
+                      className={`flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-xl border transition-all ${slide.isActive
+                        ? "bg-[#FAF9F6] border-stone-200 hover:border-[#8F4E00]/50"
+                        : "bg-stone-50/70 border-stone-200 opacity-60"
+                        }`}
                     >
                       {/* Left: Reorder buttons & Thumbnail */}
                       <div className="flex items-center gap-3">
@@ -506,11 +501,10 @@ export default function AdminSettingsPage() {
                         <button
                           type="button"
                           onClick={() => handleToggleSlideActive(slide.id)}
-                          className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium cursor-pointer transition-colors ${
-                            slide.isActive
-                              ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-                              : "bg-stone-200 text-stone-600 hover:bg-stone-300"
-                          }`}
+                          className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium cursor-pointer transition-colors ${slide.isActive
+                            ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                            : "bg-stone-200 text-stone-600 hover:bg-stone-300"
+                            }`}
                           title={slide.isActive ? "Đang hiển thị - Bấm để ẩn" : "Đang ẩn - Bấm để hiện"}
                         >
                           {slide.isActive ? (
@@ -564,7 +558,7 @@ export default function AdminSettingsPage() {
                       required
                       value={siteName}
                       onChange={(e) => setSiteName(e.target.value)}
-                      placeholder="ChampaWeb • Dana Community"
+                      placeholder="Dana Community"
                       className="w-full px-4 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:border-[#8F4E00]"
                     />
                   </div>
@@ -650,7 +644,7 @@ export default function AdminSettingsPage() {
                       type="text"
                       value={metaTitle}
                       onChange={(e) => setMetaTitle(e.target.value)}
-                      placeholder="ChampaWeb | Di sản & Văn hóa Champa"
+                      placeholder="Dana Community | Di sản & Văn hóa Champa"
                       className="w-full px-4 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:border-[#8F4E00]"
                     />
                   </div>

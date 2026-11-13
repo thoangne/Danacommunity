@@ -137,7 +137,7 @@ export default function AdminDashboardPage() {
           <div className="relative z-10 max-w-2xl space-y-2">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-xs text-white text-xs font-semibold tracking-wider uppercase border border-white/20">
               <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-              <span>Trung tâm Quản trị CMS ChampaWeb</span>
+              <span>Trung tâm Quản trị CMS Dana Community</span>
             </div>
             <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight">
               Xin chào, {user?.fullName || "Quản trị viên"}!

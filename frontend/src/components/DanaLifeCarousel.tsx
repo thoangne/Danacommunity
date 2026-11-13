@@ -52,8 +52,8 @@ const DEFAULT_PHOTO_SLIDES: PhotoSlide[] = [
   {
     id: 5,
     image: "/images/dana-life/IMG_3237.JPG",
-    title: "Đồng Cừu An Hải & Đồi Cát Nam Cương Trầm Mặc",
-    subtitle: "Cảnh sắc thiên nhiên Panduranga nguyên sơ đầy quyến rũ",
+    title: "Nhà cổ Dana",
+    subtitle: "Không gian kiến trúc truyền thống & nhịp sống thanh bình Palei Baoh Dana",
     link: "/tour",
   },
 ];
@@ -370,7 +370,7 @@ export default function DanaLifeCarousel() {
           role="dialog"
           aria-modal="true"
           aria-label="Xem ảnh toàn màn hình"
-          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col justify-between p-4 sm:p-8 animate-in fade-in duration-200"
+          className="fixed inset-0 z-[150] bg-black/95 backdrop-blur-md flex flex-col justify-between p-4 sm:p-8 animate-in fade-in duration-200"
           onClick={() => setIsLightboxOpen(false)}
         >
           <div

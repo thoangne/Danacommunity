@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Maximize2, X, MapPin, Camera, Sparkles } from "lucide-react";
+import { Maximize2, X, MapPin, Camera } from "lucide-react";
 
 export interface GalleryItem {
   id: string;
@@ -284,24 +284,9 @@ export default function ChampaCommunityGallery() {
   );
 
   return (
-    <section className="relative w-full py-12 sm:py-16 lg:py-20 bg-surface overflow-hidden hover-pause-marquee">
+    <section className="relative w-full py-8 sm:py-12 lg:py-16 bg-surface overflow-hidden hover-pause-marquee">
       {/* ========================================================
-          1. HEADER SECTION
-      ======================================================== */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-8 sm:mb-12">
-        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-2 sm:mb-3">
-          <Sparkles className="h-3.5 w-3.5" />
-          <span>Kho Tàng Tư Liệu Điền Dã</span>
-        </div>
-
-        {/* Phụ đề tôn vinh nét văn hóa */}
-        <p className="font-body-md text-xs sm:text-sm lg:text-base text-on-surface-variant max-w-3xl mx-auto leading-relaxed">
-          Nhịp thở di sản sống động qua từng góc máy — Từ sắc đỏ đền tháp ngàn năm, làn khói thơm lò gốm Bàu Trúc đến nụ cười hiền hậu của cộng đồng Panduranga bản địa.
-        </p>
-      </div>
-
-      {/* ========================================================
-          2. 3 HÀNG ẢNH CHẠY TỪ PHẢI SANG TRÁI, XẾP XEN KẼ (MARQUEE)
+          3 HÀNG ẢNH CHẠY TỪ PHẢI SANG TRÁI, XẾP XEN KẼ (MARQUEE)
       ======================================================== */}
       <div className="relative w-full flex flex-col gap-3 sm:gap-4 lg:gap-5 overflow-hidden">
         {/* Lớp mờ chuyển tiếp hai bên mép màn hình (Edge Gradient Masks) */}
@@ -342,7 +327,7 @@ export default function ChampaCommunityGallery() {
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex flex-col justify-between p-4 sm:p-8 animate-in fade-in duration-200 select-none"
+          className="fixed inset-0 z-[150] bg-black/95 backdrop-blur-xl flex flex-col justify-between p-4 sm:p-8 animate-in fade-in duration-200 select-none"
           onClick={() => setSelectedPhoto(null)}
         >
           {/* Header Lightbox */}

@@ -423,8 +423,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const isSuperAdmin = Boolean(user && user.role === "super_admin");
   const isEditor = Boolean(user && (user.role === "editor" || user.role === "admin" || user.role === "super_admin"));
-  const isAdmin = Boolean(user && (user.role === "admin" || user.role === "super_admin" || user.email === "admin@champaweb.vn"));
-  const isAuthorizedCMS = Boolean(user && (["super_admin", "admin", "editor"].includes(user.role || "") || user.email === "admin@champaweb.vn"));
+  const isAdmin = Boolean(user && (user.role === "admin" || user.role === "super_admin" || user.email === "admin@champaweb.vn" || user.email === "admin@danacommunity.vn"));
+  const isAuthorizedCMS = Boolean(user && (["super_admin", "admin", "editor"].includes(user.role || "") || user.email === "admin@champaweb.vn" || user.email === "admin@danacommunity.vn"));
 
   return (
     <AuthContext.Provider

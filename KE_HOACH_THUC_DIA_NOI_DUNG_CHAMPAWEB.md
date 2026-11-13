@@ -19,7 +19,7 @@
 - **Minh bạch (Commercial clarity):** Thông tin tour rõ ràng, giá tiền, dịch vụ bao gồm, đóng góp cộng đồng thể hiện bằng cơ chế cụ thể chứ không dừng ở khẩu hiệu.
 
 > 🔴 **CHIẾN DỊCH TIÊU ĐIỂM ƯU TIÊN SỐ 1 THEO BUSINESS TEAM:**  
-> Toàn bộ đội ngũ tập trung nguồn lực xây dựng & quảng bá sản phẩm **Nhà Cổ Chăm - Baoh Dana** (Làng Chất Thường, Phước Hậu, Ninh Phước - [Xem vị trí Google Maps](https://maps.app.goo.gl/VBgaLS7bNm7icXCN7)).  
+> Toàn bộ đội ngũ tập trung nguồn lực xây dựng & quảng bá sản phẩm **Nhà Cổ Chăm - Baoh Dana** (Làng Chất Thường, Phước Hậu, Ninh Phước - [Xem vị trí Google Maps](https://maps.app.goo.gl/FWVdoPUTFZDaNBZW8)).  
 > 👉 Xem kế hoạch hành động riêng biệt tại: [KE_HOACH_CHIEN_DICH_NHA_CO_BAOH_DANA.md](file:///d:/clone/ChampaWeb/KE_HOACH_CHIEN_DICH_NHA_CO_BAOH_DANA.md)
 
 ---

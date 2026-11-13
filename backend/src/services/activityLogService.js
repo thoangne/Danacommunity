@@ -19,7 +19,7 @@ class ActivityLogService {
   }) {
     const actorId = actor?.id && actor.id.startsWith("usr-") ? null : actor?.id || null;
     const actorName = actor?.fullName || actor?.email || "Quản trị viên";
-    const actorEmail = actor?.email || "admin@champaweb.vn";
+    const actorEmail = actor?.email || "admin@danacommunity.vn";
 
     const logEntry = {
       actor_id: actorId,

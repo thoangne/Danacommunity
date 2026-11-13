@@ -121,12 +121,6 @@ export default function HeroSection({
                   Đồng hành cùng 100% Nghệ nhân bản địa
                 </span>
               </div>
-              <div className="flex items-center gap-space-xs">
-                <HeartHandshake className="h-4 w-4 text-secondary" />
-                <span className="font-body-sm text-body-sm">
-                  70% Hoàn lưu Sinh kế & Trùng tu
-                </span>
-              </div>
             </div>
           </div>
 

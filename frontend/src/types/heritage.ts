@@ -70,6 +70,7 @@ export interface Waypoint {
   badgeClass?: string;
   openHours?: string;
   distance?: string;
+  googleMapsUrl?: string;
 }
 
 export interface Artisan {

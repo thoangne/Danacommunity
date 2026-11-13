@@ -604,7 +604,7 @@ export default function RichArticleEditor({
             {/* Google Snippet Preview */}
             <div className="rounded-xl border border-stone-200 p-3 bg-stone-50/50 space-y-1">
               <p className="text-[10px] text-stone-400 font-mono">
-                https://champaweb.vn/bai-viet/{slug || "duong-dan"}
+                https://danacommunity.vn/bai-viet/{slug || "duong-dan"}
               </p>
               <p className="text-xs font-bold text-blue-800 line-clamp-1">
                 {seoTitle || title || "Tiêu đề bài viết trên Google"}
