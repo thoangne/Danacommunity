@@ -286,21 +286,16 @@ export default function ChampaCommunityGallery() {
   return (
     <section className="relative w-full py-12 sm:py-16 lg:py-20 bg-surface overflow-hidden hover-pause-marquee">
       {/* ========================================================
-          1. HEADER SECTION (THEO ĐÚNG YÊU CẦU CỦA USER)
+          1. HEADER SECTION
       ======================================================== */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-8 sm:mb-12">
-        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-3">
+        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-2 sm:mb-3">
           <Sparkles className="h-3.5 w-3.5" />
           <span>Kho Tàng Tư Liệu Điền Dã</span>
         </div>
 
-        {/* Tiêu đề chính xác theo yêu cầu */}
-        <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-on-surface tracking-tight leading-tight">
-          Các hình ảnh của Champa Community
-        </h2>
-
         {/* Phụ đề tôn vinh nét văn hóa */}
-        <p className="font-body-md text-xs sm:text-sm lg:text-base text-on-surface-variant max-w-3xl mx-auto mt-2.5 sm:mt-3 leading-relaxed">
+        <p className="font-body-md text-xs sm:text-sm lg:text-base text-on-surface-variant max-w-3xl mx-auto leading-relaxed">
           Nhịp thở di sản sống động qua từng góc máy — Từ sắc đỏ đền tháp ngàn năm, làn khói thơm lò gốm Bàu Trúc đến nụ cười hiền hậu của cộng đồng Panduranga bản địa.
         </p>
       </div>
