@@ -37,7 +37,7 @@ export interface CarouselSlideItem {
 }
 
 const DEFAULT_SITE_INFO = {
-  siteName: "Dana Community",
+  siteName: "Dana Community Tourism",
   tagline: "Bảo tồn & phát huy giá trị di sản văn hóa Champa",
   description:
     "Cổng thông tin chuyên sâu về khảo cứu lịch sử, kiến trúc đền tháp Kalan, làng nghề gốm cổ Bàu Trúc, dệt thổ cẩm Mỹ Nghiệp và du lịch di sản cộng đồng Chăm.",

@@ -24,7 +24,7 @@ interface SocialLinks {
 }
 
 const DEFAULT_SITE_INFO: SiteInfo = {
-  siteName: "Dana Community",
+  siteName: "Dana Community Tourism",
   tagline: "Bảo tồn & phát huy giá trị di sản văn hóa Champa",
   description:
     "Cổng thông tin chuyên sâu về khảo cứu lịch sử, kiến trúc đền tháp Kalan, làng nghề gốm cổ Bàu Trúc, dệt thổ cẩm Mỹ Nghiệp và du lịch di sản cộng đồng Chăm.",
@@ -120,7 +120,7 @@ export default function Footer() {
               />
               <div className="flex flex-col">
                 <span className="font-serif text-2xl font-bold text-primary leading-tight">
-                  Dana Community
+                  Dana Community Tourism
                 </span>
                 <span className="font-label-sm text-[10px] uppercase tracking-widest text-secondary font-semibold">
                   Panduranga Living Heritage
