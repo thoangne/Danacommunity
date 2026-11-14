@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Header from "../components/Header";
-import ManifestoSection from "../components/ManifestoSection";
 import DanaLifeCarousel from "../components/DanaLifeCarousel";
+import AboutDanaSection from "../components/AboutDanaSection";
+import ManifestoSection from "../components/ManifestoSection";
 import ToursSection from "../components/ToursSection";
 import WaypointsSection from "../components/WaypointsSection";
 import ArtisansSection from "../components/ArtisansSection";
@@ -22,6 +23,9 @@ export default function DanaHome() {
       <main className="w-full pt-16 xl:pt-20 bg-surface flex flex-col">
         {/* BANNER SLIDER FULL-WIDTH NẰM NGAY ĐẦU TRANG */}
         <DanaLifeCarousel />
+
+        {/* Section: Giới thiệu Về Palei Dana & Không Gian Nhà Cổ Chăm */}
+        <AboutDanaSection />
 
         {/* Section: Triết lý Di sản */}
         <ManifestoSection />

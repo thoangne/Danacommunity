@@ -16,11 +16,7 @@ import {
   Calendar,
   Sparkles,
   Camera,
-  Play,
-  Pause,
   X,
-  Maximize2,
-  HelpCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "../../context/AuthContext";
@@ -1063,8 +1059,8 @@ export default function AdminBannersPage() {
         <MediaPickerModal
           isOpen={isMediaPickerOpen}
           onClose={() => setIsMediaPickerOpen(false)}
-          onSelect={(media) => {
-            setFormData((prev) => ({ ...prev, image_url: media.url }));
+          onSelect={(mediaUrl) => {
+            setFormData((prev) => ({ ...prev, image_url: mediaUrl }));
             setIsMediaPickerOpen(false);
             toast.success("Đã chọn ảnh từ thư viện Media!");
           }}

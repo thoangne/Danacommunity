@@ -7,48 +7,46 @@ const storageService = require("./storageService");
 const DEFAULT_CAROUSEL_SLIDES = [
   {
     id: 1,
-    title: "Tháp Cổ Po Klong Garai - Đỉnh Cao Nghệ Thuật Champa",
-    subtitle: "Kalan ngàn năm trên đồi Trầu - Đô thành Panduranga",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuBWzz5wVWN2Rre_bf3lzTZ89szZW61A19gyuIM1D6eHB2bgjSvLJ2IjqYRR2_FvWNOaiuYH_mZKTaaCYHyrAo6Y-MHZRm5QMjTQqVYlWO-UTZpP7j-38TvaXGvTC0E43MbjaK6OcYizspkYPA97vZ7ux2qQedU074FLdyFMB7zxmwJM_GGaJUJxVOmC--t3UtTdUYuMj2PhxbPFLX9SyKZLF-p5BPhi_fHZpOUSInajqnNWFka72rYwew=s0",
-    link: "/kham-pha/thap-po-klong-garai",
+    title: "Nhà Cổ Chăm Baoh Dana - Dấu Ấn Trăm Năm Panduranga",
+    subtitle: "Ngôi nhà cổ kết hợp kiến trúc Chăm - Pháp hơn trăm năm tuổi độc đáo tại Palei Dana (thôn Chất Thường)",
+    image: "/images/dana-life/nha_co_dana.png",
+    link: "#ve-dana",
     order: 1,
     isActive: true,
   },
   {
     id: 2,
-    title: "Làng Gốm Bàu Trúc - Kỹ Nghệ Đất Nung Không Bàn Xoay",
-    subtitle: "Di sản văn hóa phi vật thể đại diện nhân loại UNESCO",
-    image: "/images/dana-life/IMG_9911.JPG",
-    link: "/san-pham?village=bau-truc",
+    title: "Cấu Trúc Mộc Kê Đá & Hàng Hiên Làng Cổ",
+    subtitle: "Palei Dana - vùng đất 'gah praong' trù phú ngàn đời gắn liền con đập Nha Trinh huyền thoại",
+    image: "/images/dana-life/nha_co_dana2.png",
+    link: "#ve-dana",
     order: 2,
     isActive: true,
   },
   {
     id: 3,
-    title: "Làng Dệt Thổ Cẩm Mỹ Nghiệp - Sợi Chỉ Vàng Katê",
-    subtitle: "Hoa văn cổ hoàng cung dệt từ thảo mộc thiên nhiên",
-    image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDXDHM6yk37AcZTWKD2kHI9jPGZKP1I4JY5yxSnfX4BbftErgSz5JHk80zz2TUzC_obO4A9NMXDFx8yx6BPBGmoGhCEaCXQvDZl1oXbqVoWkpJ3biH8-ERIAfE760E73pitqQdKh1Cszx9wZVscKNWrs_AhSvA-Knlo8t0FpNAlnZWyKlwoQFLeUtM0rrVeqUM5MhUYT5g8PyjacjFmVVYeo1XjeHE7PUh2mJzLoBrzGxvfV-vafEjkXA=s0",
-    link: "/san-pham?village=my-nghiep",
+    title: "Gian Nội Thất Ấm Cúng & Nếp Nhà Mẫu Hệ",
+    subtitle: "Nơi hội tụ các dòng tộc lớn và là cái nôi nuôi dưỡng nhiều thế hệ trí thức Chăm ưu tú",
+    image: "/images/dana-life/nha_co_dana3.png",
+    link: "#ve-dana",
     order: 3,
     isActive: true,
   },
   {
     id: 4,
-    title: "Đền Tháp Po Rome - Vị Vua Cuối Cùng Trên Đồi Đá",
-    subtitle: "Dấu ấn vương triều và nghi thức tế lễ cổ truyền",
+    title: "Vệ Tinh Khám Phá: Đền Tháp Po Klong Garai",
+    subtitle: "Di tích quốc gia đặc biệt kết nối trong hành trình du lịch từ Nhà cổ Baoh Dana",
     image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuAzljZH7__gmKglHYhA2NZtHh2wp1_j6eufhB24fW5dLEg6Q3iVPhcklfXTyfQfftG0s3kkeFa45XwJi0fI0t965d-lV9hy3Bp86bWdiRgQjJMFwqoPZzvC1Puek_bg_vu8Hy90bDTysgtbAXLReE5kLRMopjTkjh5Fgl-uWE2PDhyzuKEA3B_xFsrORw9XqbKdNdrSvBBD0BLP1ezotbfBBmrZCZNeWb86lbUY2kjNCncvJkPSIpv7pA=s0",
-    link: "/bai-viet",
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuBWzz5wVWN2Rre_bf3lzTZ89szZW61A19gyuIM1D6eHB2bgjSvLJ2IjqYRR2_FvWNOaiuYH_mZKTaaCYHyrAo6Y-MHZRm5QMjTQqVYlWO-UTZpP7j-38TvaXGvTC0E43MbjaK6OcYizspkYPA97vZ7ux2qQedU074FLdyFMB7zxmwJM_GGaJUJxVOmC--t3UtTdUYuMj2PhxbPFLX9SyKZLF-p5BPhi_fHZpOUSInajqnNWFka72rYwew=s0",
+    link: "/tour",
     order: 4,
     isActive: true,
   },
   {
     id: 5,
-    title: "Nhà cổ Dana",
-    subtitle: "Không gian kiến trúc truyền thống & nhịp sống thanh bình Palei Baoh Dana",
-    image: "/images/dana-life/IMG_3237.JPG",
+    title: "Vệ Tinh Khám Phá: Làng Gốm Bàu Trúc & Dệt Mỹ Nghiệp",
+    subtitle: "Di sản phi vật thể nhân loại UNESCO cách Palei Baoh Dana chỉ ít phút di chuyển",
+    image: "/images/dana-life/IMG_9911.JPG",
     link: "/tour",
     order: 5,
     isActive: true,
@@ -56,13 +54,14 @@ const DEFAULT_CAROUSEL_SLIDES = [
 ];
 
 const DEFAULT_SITE_INFO = {
-  siteName: "Dana Community",
-  tagline: "Bảo tồn & phát huy giá trị di sản văn hóa Champa",
+  siteName: "Nhà cổ Chăm - Baoh Dana",
+  tagline: "Kiến trúc Mộc Chăm - Pháp & Nếp sống Mẫu hệ Palei Dana",
   description:
-    "Cổng thông tin chuyên sâu về khảo cứu lịch sử, kiến trúc đền tháp Kalan, làng nghề gốm cổ Bàu Trúc, dệt thổ cẩm Mỹ Nghiệp và du lịch di sản cộng đồng Chăm.",
+    "Không gian bảo tồn Nhà cổ Chăm - Baoh Dana tại thôn Chất Thường (xã Phước Hậu, Ninh Phước). Điểm đến trải nghiệm văn hóa bản địa, ẩm thực truyền thống và giao lưu cộng đồng.",
   contactEmail: "admin@danacommunity.vn",
   contactPhone: "0976 029 004",
-  address: "Thôn Chất Thường, Xã Phước Hậu, Huyện Ninh Phước, Tỉnh Ninh Thuận",
+  address: "Thôn Chất Thường (Palei Baoh Dana), Xã Phước Hậu, Huyện Ninh Phước, Tỉnh Ninh Thuận",
+};
 };
 
 class AdminService {

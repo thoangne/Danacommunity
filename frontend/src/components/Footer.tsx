@@ -24,13 +24,13 @@ interface SocialLinks {
 }
 
 const DEFAULT_SITE_INFO: SiteInfo = {
-  siteName: "Dana Community",
-  tagline: "Bảo tồn & phát huy giá trị di sản văn hóa Champa",
+  siteName: "Nhà cổ Chăm - Baoh Dana",
+  tagline: "Kiến trúc Mộc Chăm - Pháp & Nếp sống Mẫu hệ Palei Dana",
   description:
-    "Cổng thông tin chuyên sâu về khảo cứu lịch sử, kiến trúc đền tháp Kalan, làng nghề gốm cổ Bàu Trúc, dệt thổ cẩm Mỹ Nghiệp và du lịch di sản cộng đồng Chăm.",
+    "Không gian bảo tồn Nhà cổ Chăm - Baoh Dana tại thôn Chất Thường (xã Phước Hậu, Ninh Phước). Điểm đến trải nghiệm văn hóa bản địa, ẩm thực truyền thống và giao lưu cộng đồng.",
   contactEmail: "admin@danacommunity.vn",
   contactPhone: "0976 029 004",
-  address: "Thôn Chất Thường, Xã Phước Hậu, Huyện Ninh Phước, Tỉnh Ninh Thuận",
+  address: "Thôn Chất Thường (Palei Baoh Dana), Xã Phước Hậu, Huyện Ninh Phước, Tỉnh Ninh Thuận",
 };
 
 export default function Footer() {
@@ -120,10 +120,10 @@ export default function Footer() {
               />
               <div className="flex flex-col">
                 <span className="font-serif text-2xl font-bold text-primary leading-tight">
-                  Dana Community
+                  Nhà cổ Baoh Dana
                 </span>
                 <span className="font-label-sm text-[10px] uppercase tracking-widest text-secondary font-semibold">
-                  Panduranga Living Heritage
+                  Palei Dana • Phước Hậu
                 </span>
               </div>
             </div>

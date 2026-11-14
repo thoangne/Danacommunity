@@ -333,6 +333,7 @@ export const NAV_ITEMS: NavItem[] = [
 
 export const PC_NAV_LINKS: PcNavLink[] = [
   { href: '/', label: 'Trang chủ' },
+  { href: '/#ve-dana', label: 'Về Dana' },
   { href: '/tour', label: 'Dana Tour' },
   { href: '/san-pham', label: 'Sản phẩm' },
   { href: '/nghe-nhan', label: 'Chân dung nghệ nhân' },

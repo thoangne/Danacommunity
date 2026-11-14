@@ -34,6 +34,7 @@ interface HeaderProps {
 
 // Từ điển đa ngữ cho Navigation Header (Tiếng Việt & Tiếng Anh)
 const NAV_LABELS: Record<string, { vi: string; en: string }> = {
+  "/#ve-dana": { vi: "Về Dana", en: "About Dana" },
   "/tour": { vi: "Dana Tour", en: "Dana Tour" },
   "/san-pham": { vi: "Sản phẩm", en: "Crafts & Products" },
   "/nghe-nhan": { vi: "Chân dung nghệ nhân", en: "Master Artisans" },
@@ -256,10 +257,10 @@ export default function Header({ onToggleAudio, isAudioPlaying }: HeaderProps) {
             />
             <div className="flex flex-col text-left min-w-0">
               <span className="text-[13px] sm:text-[15px] xl:text-[16px] text-[#24231F] font-bold tracking-tight leading-snug group-hover:text-[#8F4E00] transition-colors truncate">
-                Dana Community<span className="hidden sm:inline"> Tourism</span>
+                Nhà cổ Chăm<span className="hidden sm:inline"> • Baoh Dana</span>
               </span>
               <span className="hidden sm:inline font-serif text-[11px] xl:text-[13px] text-[#77716A] leading-tight font-normal italic mt-0.5 tracking-wide truncate">
-                Panduranga Heritage
+                Palei Dana • Ninh Phước
               </span>
             </div>
           </Link>
