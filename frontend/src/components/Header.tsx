@@ -257,10 +257,10 @@ export default function Header({ onToggleAudio, isAudioPlaying }: HeaderProps) {
             />
             <div className="flex flex-col text-left min-w-0">
               <span className="text-[13px] sm:text-[15px] xl:text-[16px] text-[#24231F] font-bold tracking-tight leading-snug group-hover:text-[#8F4E00] transition-colors truncate">
-                Nhà cổ Chăm<span className="hidden sm:inline"> • Baoh Dana</span>
+                Dana Community<span className="hidden sm:inline"> Tourism</span>
               </span>
               <span className="hidden sm:inline font-serif text-[11px] xl:text-[13px] text-[#77716A] leading-tight font-normal italic mt-0.5 tracking-wide truncate">
-                Palei Dana • Ninh Phước
+                Panduranga Heritage
               </span>
             </div>
           </Link>

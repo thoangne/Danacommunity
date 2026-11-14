@@ -54,13 +54,13 @@ const DEFAULT_CAROUSEL_SLIDES = [
 ];
 
 const DEFAULT_SITE_INFO = {
-  siteName: "Nhà cổ Chăm - Baoh Dana",
-  tagline: "Kiến trúc Mộc Chăm - Pháp & Nếp sống Mẫu hệ Palei Dana",
+  siteName: "Dana Community",
+  tagline: "Bảo tồn & phát huy giá trị di sản văn hóa Champa",
   description:
-    "Không gian bảo tồn Nhà cổ Chăm - Baoh Dana tại thôn Chất Thường (xã Phước Hậu, Ninh Phước). Điểm đến trải nghiệm văn hóa bản địa, ẩm thực truyền thống và giao lưu cộng đồng.",
+    "Cổng thông tin chuyên sâu về khảo cứu lịch sử, kiến trúc đền tháp Kalan, làng nghề gốm cổ Bàu Trúc, dệt thổ cẩm Mỹ Nghiệp và du lịch di sản cộng đồng Chăm.",
   contactEmail: "admin@danacommunity.vn",
   contactPhone: "0976 029 004",
-  address: "Thôn Chất Thường (Palei Baoh Dana), Xã Phước Hậu, Huyện Ninh Phước, Tỉnh Ninh Thuận",
+  address: "Thôn Chất Thường, Xã Phước Hậu, Huyện Ninh Phước, Tỉnh Ninh Thuận",
 };
 
 class AdminService {
