@@ -42,9 +42,9 @@ function resolveSslConfig(url, env) {
 function buildConnectionConfig() {
   if (!DATABASE_URL) {
     if (NODE_ENV === "production") {
-      throw new Error("DATABASE_URL is required in production environment.");
+      console.warn("⚠️ [DATABASE WARNING] DATABASE_URL is not set in production. Database operations will fail until configured.");
     }
-    // Development fallback using individual DB_* parameters if present
+    // Development/Safe fallback using individual DB_* parameters if present
     return {
       host: process.env.DB_HOST || "localhost",
       port: parseInt(process.env.DB_PORT, 10) || 5432,

@@ -5,38 +5,25 @@ const { runDatabaseMigrations } = require("./src/config/migrationRunner");
 const app = require("./app");
 
 async function startServer() {
+  let server;
+
   try {
-    // 1. Kiểm tra tính hợp lệ của biến môi trường (Fail fast nếu thiếu trong Production)
-    validateEnv();
-
-    // 2. Kiểm tra kết nối PostgreSQL khi khởi động
-    console.log(`⏳ Đang kiểm tra kết nối PostgreSQL cho môi trường [${NODE_ENV}]...`);
-    const dbStatus = await testConnection();
-
-    if (dbStatus.connected) {
-      console.log(`✅ Kết nối PostgreSQL thành công! Cơ sở dữ liệu: "${dbStatus.database}" lúc ${dbStatus.timestamp}`);
-      // Tự động kiểm tra và chạy migration với cơ chế Distributed Lock chống race-condition
-      await runDatabaseMigrations();
-    } else {
-      if (NODE_ENV === "production") {
-        console.error(`❌ [FATAL] Không thể kết nối cơ sở dữ liệu Production: ${dbStatus.error}`);
-        process.exit(1);
-      } else {
-        console.warn(`⚠️ [WARNING] Chưa thể kết nối PostgreSQL local: ${dbStatus.error}`);
-        console.warn(`ℹ️ Chạy lệnh "npm run db:up" hoặc "docker compose up -d postgres" để khởi chạy PostgreSQL.`);
-      }
-    }
-
-    // 3. Khởi chạy HTTP server
-    const server = app.listen(PORT, "0.0.0.0", () => {
-      console.log(`🚀 Dana Champa Server đang chạy tại cổng ${PORT} [${NODE_ENV}]`);
+    // 1. KHỞI CHẠY HTTP SERVER NGAY LẬP TỨC
+    // Cloud Run yêu cầu container phải bind vào cổng PORT (mặc định 8080) tức thì
+    // để vượt qua bước dò cổng khởi động (startup probe / port detection).
+    server = app.listen(PORT, "0.0.0.0", () => {
+      console.log(`🚀 Dana Champa Server đang lắng nghe tại 0.0.0.0:${PORT} [${NODE_ENV}]`);
       console.log(`📡 API Endpoints sẵn sàng tại /api (Health check: http://localhost:${PORT}/api/health)`);
     });
+  } catch (listenErr) {
+    console.error(`❌ [FATAL] Không thể lắng nghe trên cổng ${PORT}:`, listenErr.message);
+    process.exit(1);
+  }
 
-    // 4. Cơ chế Graceful Shutdown an toàn
-    const handleShutdown = async (signal) => {
-      console.log(`\n🛑 Nhận tín hiệu ${signal}. Bắt đầu quy trình tắt server an toàn...`);
-
+  // 2. Cơ chế Graceful Shutdown an toàn
+  const handleShutdown = async (signal) => {
+    console.log(`\n🛑 Nhận tín hiệu ${signal}. Bắt đầu quy trình tắt server an toàn...`);
+    if (server) {
       server.close(async () => {
         console.log("🔒 HTTP Server đã ngừng tiếp nhận yêu cầu mới.");
         try {
@@ -47,20 +34,43 @@ async function startServer() {
         }
         process.exit(0);
       });
+    } else {
+      process.exit(0);
+    }
 
-      // Buộc dừng nếu timeout vượt quá 10 giây
-      setTimeout(() => {
-        console.error("⚠️ Quá thời gian chờ shutdown an toàn (10s), buộc dừng tiến trình.");
-        process.exit(1);
-      }, 10000);
-    };
+    setTimeout(() => {
+      console.error("⚠️ Quá thời gian chờ shutdown an toàn (10s), buộc dừng tiến trình.");
+      process.exit(1);
+    }, 10000);
+  };
 
-    process.on("SIGTERM", () => handleShutdown("SIGTERM"));
-    process.on("SIGINT", () => handleShutdown("SIGINT"));
+  process.on("SIGTERM", () => handleShutdown("SIGTERM"));
+  process.on("SIGINT", () => handleShutdown("SIGINT"));
 
-  } catch (error) {
-    console.error("❌ Lỗi nghiêm trọng khi khởi động server:", error.message);
-    process.exit(1);
+  // 3. Kiểm tra tính hợp lệ của biến môi trường
+  try {
+    validateEnv();
+  } catch (envErr) {
+    console.error("⚠️ [CONFIG VALIDATION ERROR]:", envErr.message);
+  }
+
+  // 4. Kiểm tra kết nối cơ sở dữ liệu và tự động chạy migration
+  try {
+    console.log(`⏳ Đang kiểm tra kết nối PostgreSQL cho môi trường [${NODE_ENV}]...`);
+    const dbStatus = await testConnection();
+
+    if (dbStatus.connected) {
+      console.log(`✅ Kết nối PostgreSQL thành công! Cơ sở dữ liệu: "${dbStatus.database}" lúc ${dbStatus.timestamp}`);
+      // Tự động kiểm tra và chạy migration với cơ chế Distributed Lock chống race-condition
+      await runDatabaseMigrations();
+    } else {
+      console.error(`❌ [DATABASE ERROR] Chưa thể kết nối cơ sở dữ liệu: ${dbStatus.error}`);
+      if (NODE_ENV === "production") {
+        console.warn("⚠️ Server vẫn tiếp tục hoạt động phục vụ Frontend và Health Check, nhưng các API truy vấn Database sẽ thông báo lỗi.");
+      }
+    }
+  } catch (dbErr) {
+    console.error("❌ [DATABASE EXCEPTION] Lỗi khi kết nối hoặc chạy migration:", dbErr.message);
   }
 }
 

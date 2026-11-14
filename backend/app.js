@@ -46,6 +46,11 @@ app.use(
   express.static(uploadsPath)
 );
 
+// Lightweight health/ping endpoint for Cloud Run and container orchestration probes
+app.get(["/healthz", "/ping", "/livez"], (req, res) => {
+  res.status(200).json({ status: "OK", timestamp: new Date().toISOString() });
+});
+
 // Định tuyến API chính
 app.use("/api", routes);
 

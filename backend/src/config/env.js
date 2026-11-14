@@ -81,11 +81,12 @@ function validateEnv() {
   if (errors.length > 0) {
     const errorMsg = `\n❌ [FATAL CONFIGURATION ERROR] Environment validation failed:\n  - ${errors.join("\n  - ")}\n`;
     console.error(errorMsg);
-    throw new Error(errorMsg);
+    return false;
   }
+  return true;
 }
 
-// Run initial validation on require
+// Run initial validation on require (non-blocking for Cloud Run port binding)
 validateEnv();
 
 module.exports = {

@@ -62,7 +62,6 @@ const DEFAULT_SITE_INFO = {
   contactPhone: "0976 029 004",
   address: "Thôn Chất Thường (Palei Baoh Dana), Xã Phước Hậu, Huyện Ninh Phước, Tỉnh Ninh Thuận",
 };
-};
 
 class AdminService {
   constructor() {
